@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 
@@ -13,8 +13,10 @@ if (isDev) {
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1100,
+    height: 800,
+    minWidth: 800,
+    minHeight: 600,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -71,3 +73,7 @@ app.on("activate", () => {
 
 // The code above has been adapted from a starter example in the Electron docs:
 // https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file
+
+ipcMain.on("test", (e, a)=>{
+  console.log(a);
+});
