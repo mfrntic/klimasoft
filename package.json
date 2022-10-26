@@ -1,0 +1,11 @@
+{
+  "name": "klimasoft",
+  "version": "1.0.0",
+  "description": "Izrada klimatskih dijagrama po Walteru i ostali pokazatelji klime",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Monachus",
+  "license": "ISC"
+}
