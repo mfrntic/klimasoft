@@ -1,0 +1,19 @@
+{
+  "name": "klimasoft",
+  "version": "1.0.0",
+  "description": "Izrada klimatskih dijagrama po Walteru i ostali pokazatelji klime",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mfrntic/klimasoft.git"
+  },
+  "author": "Monachus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mfrntic/klimasoft/issues"
+  },
+  "homepage": "https://github.com/mfrntic/klimasoft#readme"
+}
