@@ -1,26 +1,10 @@
-exports.round = function (num, places) {
-    const multiplier = Number("1" + "0".repeat(places));
-    if (places > 0) {
-        return Math.round(num * multiplier + Number.EPSILON) / multiplier;
-    }
-    else {
-        return Math.round(num);
-    }
-}
+const { round, average, sum, max, min } = require("./mathUtils");
 
-exports.aridityIndexDeMartonne = function (annual_perc, annual_mean_temp) {
-
-    //ako nije array pretvori u array sa jednim članom (dakle radi se već o prosjecima)
-    if (!Array.isArray(annual_perc)) {
-        annual_perc = [annual_perc];
-    }
-    if (!Array.isArray(annual_mean_temp)) {
-        annual_mean_temp = [annual_mean_temp];
-    }
+exports.aridityIndexDeMartonne = function (perc, mean_temp) {
 
     //izračunaj prosjek
-    const annualPerc = annual_perc.reduce((a, b) => a + b, 0);
-    const meanTemp = annual_mean_temp.reduce((a, b) => a + b, 0) / annual_mean_temp.length;
+    const annualPerc = sum(perc);
+    const meanTemp = average(mean_temp);
 
     // console.log(annualPerc, meanTemp);
     //result
@@ -31,7 +15,7 @@ exports.aridityIndexDeMartonne = function (annual_perc, annual_mean_temp) {
     }
 
     //result description
-    res.value = Math.abs(exports.round(annualPerc / (meanTemp + 10), 2));
+    res.value = Math.abs(round(annualPerc / (meanTemp + 10), 2));
     if (res.value <= 20) {
         res.result = "aridno";
     }
@@ -42,19 +26,11 @@ exports.aridityIndexDeMartonne = function (annual_perc, annual_mean_temp) {
     return res;
 }
 
-exports.aridityIndexGracanin = function (perc, temp) {
-
-    //ako nije array pretvori u array sa jednim članom (dakle radi se već o prosjecima)
-    if (!Array.isArray(perc)) {
-        perc = [perc];
-    }
-    if (!Array.isArray(temp)) {
-        temp = [temp];
-    }
+exports.aridityIndexGracanin = function (perc, mean_temp) {
 
     //izračunaj prosjek
-    const annualPerc = perc.reduce((a, b) => a + b, 0);
-    const meanTemp = temp.reduce((a, b) => a + b, 0) / temp.length;
+    const annualPerc = sum(perc);
+    const meanTemp = average(mean_temp);
 
     // console.log(annualPerc, meanTemp);
     //result
@@ -65,7 +41,7 @@ exports.aridityIndexGracanin = function (perc, temp) {
     }
 
     //result description
-    res.value = Math.abs(exports.round(annualPerc / meanTemp, 1));
+    res.value = Math.abs(round(annualPerc / meanTemp, 1));
     if (res.value < 3.3) {
         res.result = "aridno";
     }
@@ -85,3 +61,40 @@ exports.aridityIndexGracanin = function (perc, temp) {
     return res;
 }
 
+exports.ellenbergCQ = function (perc, mean_temp) {
+
+    //izračunaj prosjek
+    const annualPerc = sum(perc);
+    const temp = max(mean_temp);
+
+    //result
+    const res = {
+        value: null,
+        result: "",
+        formulaDescription: "Računanje Ellenbergovog klimatskog kvocjenta (EQ = T_warmest_month / AnnualPercipitation * 1000)"
+    }
+
+    res.value = round(temp / annualPerc * 1000, 2);
+    res.result = res.value.toString();
+
+    return res;
+}
+
+exports.embergerPluviotermicQuotient = function (perc, mean_temp) {
+    //izračunaj prosjek
+    const annualPerc = sum(perc);
+    const temp_max = max(mean_temp);
+    const temp_min = min(mean_temp);
+
+    //result
+    const res = {
+        value: null,
+        result: "",
+        formulaDescription: "Računanje Embergerovog pluviotermičkog kvocjenta (Pg = Srednja godišnja količina padalina, Mmax = srednja maksimalna temperatura najtoplijeg mjeseca, Mmin = srednja minimalna temp. najhladnijeg mjeseca)"
+    }
+
+    res.value = round(annualPerc / (Math.pow(temp_max, 2) - Math.pow(temp_min, 2)) * 100, 2);
+    res.result = res.value.toString();
+
+    return res;
+}
