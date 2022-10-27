@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { aridityIndexDeMartonne, aridityIndexGracanin, ellenbergCQ, embergerPluviotermicQuotient } = require("../src/lib/formulas");
+const { aridityIndexDeMartonne, aridityIndexGracanin, ellenbergCQ, embergerPluviotermicQuotient } = require("../src/lib/klimatskeformule");
 const { sum, average } = require("../src/lib/mathUtils");
 
 //puntjarka
