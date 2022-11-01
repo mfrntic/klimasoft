@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-color: whitesmoke; */
+  /* background-color: #f1f1f1; */
 }
 
 code {
@@ -13,3 +13,49 @@ code {
     monospace;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  padding-right: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 2px grey;  */
+  background: #f1f1f1;
+  border-radius: 5px;
+
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #4f8edc; 
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: royalblue; 
+}
+
+/* buttons */
+button {
+  background-color: #343434;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  margin-left: 0.5em;
+}
+
+button:hover {
+  /* background-color: #676767; */
+  opacity: 0.8;
+}
+
+button:disabled {
+  background-color: #9a9a9a;
+  cursor: not-allowed;
+  color: whitesmoke;
+}

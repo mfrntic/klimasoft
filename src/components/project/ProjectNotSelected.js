@@ -10,7 +10,7 @@ function ProjectNotSelected() {
                 <h2><MdEngineering /></h2>
             </IconContext.Provider>
             <IconContext.Provider value={{ style: { verticalAlign: "bottom" } }}>
-                Kreirajte <a href="#"><IoAdd /> novi projekt</a> ili <a href="#"><IoFolderOpen /> učitajte datoteku</a> s podacima...
+                Kreirajte <span className={style.link}><IoAdd />novi projekt</span> ili <span className={style.link} onClick={window.api.openFileDialog}><IoFolderOpen /> učitajte datoteku</span> s podacima...
             </IconContext.Provider>
         </div>
     );

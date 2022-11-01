@@ -9,6 +9,15 @@ import ProjectReport from "./pages/ProjectReport";
 import Stations from "./pages/Stations";
 
 function App() {
+
+  //file open dialog handler (učitavnje projekta iz datoteke)
+  window.api.openFileDialogHandler((e, res) => {
+    if (!res.canceled) {
+      const file = res.filePaths[0];
+      console.log("open-dialog", file);
+    }
+  });
+
   return (
     <Routes>
       <Route path="/data" element={<ProjectData />} />

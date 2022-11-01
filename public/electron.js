@@ -1,7 +1,7 @@
-const { app, BrowserWindow, ipcMain, Menu } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, ipcRenderer } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const { openStations } = require("../electron/actions");
+const { openStations, closeStations, openFileDialog } = require("../electron/actions");
 
 const menuTemplate = require("../electron/menuTemplate");
 
@@ -91,6 +91,11 @@ ipcMain.on("open-stations", (e, a) => {
   openStations();
 });
 
-// exports.getMainWindow = () => {
-//   return mainWindow;
-// }
+ipcMain.on("close-stations", (e, a) => {
+  closeStations();
+});
+
+ipcMain.on("open-dialog", async (e, a) => {
+  openFileDialog(mainWindow);
+  // e.reply("open-dialog", res)
+});

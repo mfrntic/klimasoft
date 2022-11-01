@@ -6,3 +6,10 @@
   color: #111;
   overflow: hidden;
 }
+
+.body {
+  margin-top: 45px;
+  padding: 5px 10px;
+  overflow: auto;
+  height: calc(100vh - 55px);
+}

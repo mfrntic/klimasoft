@@ -1,0 +1,36 @@
+.item {
+  padding: 8px;
+  border: 1px solid lightgray;
+  border-radius: 1;
+  background-color: whitesmoke;
+  margin: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.item:hover {
+  border-color: gray;
+  /* color: #4f8edc; */
+  background-color: #e8e8e8;
+}
+
+.item:hover .icon {
+  color: #111;
+}
+
+.item .type {
+  font-size: 0.7em;
+  text-transform: uppercase;
+  margin-right: 2em;
+  background-color: #4f8edc;
+  color: white;
+  border-radius: 5px;
+  padding: 3px 6px;
+  float: right;
+}
+
+.item .icon {
+  vertical-align: middle;
+  float: right;
+  color: gray;
+}

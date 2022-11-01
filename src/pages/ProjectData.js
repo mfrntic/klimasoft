@@ -6,9 +6,9 @@ import style from "./ProjectData.module.css";
 function ProjectData() {
     return (
         <Layout>
-        <div className={style.page}>
-            <ProjectNotSelected />
-        </div>
+            <div className={style.page}>
+                <ProjectNotSelected />
+            </div>
         </Layout>
     )
 }
