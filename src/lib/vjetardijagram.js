@@ -1,4 +1,4 @@
-﻿const WD = {
+const WD = {
     version: "0.1.0",
     Diagram: function (canvas, options) {
         let default_options = {

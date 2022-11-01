@@ -1,4 +1,4 @@
-[
+export const StationsHR = [
   {
     "IDStation": 1,
     "StationName": "Adamovec",

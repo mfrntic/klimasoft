@@ -1,9 +1,13 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
+const { openStations } = require("../electron/actions");
+
+const menuTemplate = require("../electron/menuTemplate");
 
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension, REACT_DEVELOPER_TOOLS;
+
 
 if (isDev) {
   const devTools = require("electron-devtools-installer");
@@ -11,12 +15,17 @@ if (isDev) {
   REACT_DEVELOPER_TOOLS = devTools.REACT_DEVELOPER_TOOLS;
 }
 
+let mainWindow;
+
+
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
+    title: "Klimasoft",
     width: 1100,
     height: 800,
     minWidth: 800,
     minHeight: 600,
+    icon: path.join(__dirname, "favicon.ico"),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -24,6 +33,10 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+
+  const menu = Menu.buildFromTemplate(menuTemplate(mainWindow))
+  Menu.setApplicationMenu(menu)
 
   // Load from localhost if in development
   // Otherwise load index.html file
@@ -74,6 +87,10 @@ app.on("activate", () => {
 // The code above has been adapted from a starter example in the Electron docs:
 // https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file
 
-ipcMain.on("test", (e, a)=>{
-  console.log(a);
+ipcMain.on("open-stations", (e, a) => {
+  openStations();
 });
+
+// exports.getMainWindow = () => {
+//   return mainWindow;
+// }

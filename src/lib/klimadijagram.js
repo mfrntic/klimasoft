@@ -1,4 +1,4 @@
-﻿import moment from "moment";
+import moment from "moment";
 
 
 CanvasRenderingContext2D.prototype.dashedLine = function (x1, y1, x2, y2, dashLen) {
