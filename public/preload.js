@@ -9,6 +9,14 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.send("close-stations");
     },
 
+    openNewProject: () =>{
+        ipcRenderer.send("open-new-project");
+    },
+
+    closeNewProject: () =>{
+        ipcRenderer.send("close-new-project");
+    },
+
     openFileDialog: () => {
         ipcRenderer.send("open-dialog");
     },

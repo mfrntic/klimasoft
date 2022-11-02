@@ -35,7 +35,7 @@ body {
   padding-left: 40px;
   /* margin: 5px; */
   /* outline-color: silver; */
-  border: 1px solid lightgray;
+  border: 1px solid #d2d3d6;
   border-radius: 5px;
 }
 
@@ -55,8 +55,9 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  border-top: 1px silver solid;
+  border-top: 1px #d2d3d6 solid;
   text-align: right;
+  background-color: #edeef0;
 }
 
 .stations footer button {

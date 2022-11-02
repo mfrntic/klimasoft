@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, Menu, ipcRenderer } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const { openStations, closeStations, openFileDialog } = require("../electron/actions");
+const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject } = require("../electron/actions");
 
 const menuTemplate = require("../electron/menuTemplate");
 
@@ -88,7 +88,7 @@ app.on("activate", () => {
 // https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file
 
 ipcMain.on("open-stations", (e, a) => {
-  openStations();
+  openStations(mainWindow);
 });
 
 ipcMain.on("close-stations", (e, a) => {
@@ -98,4 +98,12 @@ ipcMain.on("close-stations", (e, a) => {
 ipcMain.on("open-dialog", async (e, a) => {
   openFileDialog(mainWindow);
   // e.reply("open-dialog", res)
+});
+
+ipcMain.on("open-new-project", (e, a) => {
+  openNewProject(mainWindow);
+});
+
+ipcMain.on("close-new-project", (e, a) => {
+  closeNewProject();
 });

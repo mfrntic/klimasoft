@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-color: #f1f1f1; */
+  background-color: #f7f8fa;
 }
 
 code {
@@ -49,7 +49,7 @@ button {
   margin-left: 0.5em;
 }
 
-button:hover {
+button:not(:disabled):hover {
   /* background-color: #676767; */
   opacity: 0.8;
 }

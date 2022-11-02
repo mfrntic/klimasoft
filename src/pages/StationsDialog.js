@@ -1,10 +1,10 @@
 import { StationsHR } from "../data/StationsHR";
-import style from "./Stations.module.css";
+import style from "./StationsDialog.module.css";
 import { IconContext } from "react-icons";
 import { IoSearch, IoAdd } from 'react-icons/io5';
 import StationListItem from "../components/stations/StationListItem";
 
-function Stations() {
+function StationsDialog() {
 
     function closeHandler() {
         console.log(window);
@@ -30,4 +30,4 @@ function Stations() {
     </div>
 }
 
-export default Stations;
+export default StationsDialog;

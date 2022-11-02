@@ -1,0 +1,74 @@
+.projectForm h2 {
+    margin-top: 0;
+    padding-top: 10px;
+    font-size: 16px;
+    padding: 10px;
+    color: #4f8edc;
+    border-bottom: 1px solid silver;
+    ;
+}
+
+.projectForm form{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 65px;
+    overflow-y: auto;
+}
+
+.projectForm .row {
+  padding: 5px 10px;
+}
+
+.projectForm .row label {
+  display: block;
+  margin: 5px 0;
+}
+
+.projectForm .row input,
+.projectForm .row select,
+.projectForm .row textarea {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+.projectForm .row select {
+  width: 100% !important;
+}
+
+.year {
+  display: inline-block !important;
+  width: 100px !important;
+  margin: 0 10px;
+}
+
+.periodLabel {
+  display: inline-block !important;
+  width: auto !important;
+  padding-right: 40px;
+}
+
+
+.projectForm footer {
+    height: 60px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px #d2d3d6 solid;
+    text-align: right;
+    background-color: #edeef0;
+  }
+  
+  .projectForm footer button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 12px;
+    background-color: #111;
+    color: white;
+    border: none;
+  }

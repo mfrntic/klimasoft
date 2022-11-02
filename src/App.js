@@ -6,7 +6,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import ProjectReport from "./pages/ProjectReport";
-import Stations from "./pages/Stations";
+import StationsDialog from "./pages/StationsDialog";
+import NewProjectDialog from "./pages/NewProjectDialog";
 
 function App() {
 
@@ -22,7 +23,8 @@ function App() {
     <Routes>
       <Route path="/data" element={<ProjectData />} />
       <Route path="/report" element={<ProjectReport />} />
-      <Route path="/stations" element={<Stations />} />
+      <Route path="/stations" element={<StationsDialog />} />
+      <Route path="/newproject" element={<NewProjectDialog />} />
       <Route path="*" element={<Navigate to="/data" replace />} />
     </Routes>
   );

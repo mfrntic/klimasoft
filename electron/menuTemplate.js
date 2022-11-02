@@ -1,4 +1,4 @@
-const { openStations, openFileDialog } = require("../electron/actions");
+const { openStations, openFileDialog, openNewProject } = require("../electron/actions");
 
 const isMac = process.platform === 'darwin';
 const isDev = require("electron-is-dev");
@@ -24,12 +24,8 @@ const menuTemplate = (window) => {
         {
             label: "Datoteka",
             submenu: [
-                { id: "new", label: "Novi projekt", accelerator: "Ctrl+N" },
-                {
-                    id: "open", label: "Otvori projekt...", accelerator: "Ctrl+O", click: () => {
-                        openFileDialog(window);
-                    }
-                },
+                { id: "new", label: "Novi projekt", accelerator: "Ctrl+N", click: () => { openNewProject(window); } },
+                { id: "open", label: "Otvori projekt...", accelerator: "Ctrl+O", click: () => { openFileDialog(window); } },
                 { id: "options", label: "Postavke projekta...", enabled: false },
                 { type: 'separator' },
                 { id: "stations", label: "Lokacije / Postaje...", accelerator: "Ctrl+P", click: () => { openStations(window) } },

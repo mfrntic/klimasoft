@@ -1,11 +1,11 @@
- 
+
 import { IconContext } from "react-icons";
 import { IoBarChart, IoApps, IoFolderOpen, IoAdd, IoSettings } from 'react-icons/io5';
 import { NavLink } from "react-router-dom";
 import style from "./ProjectMenu.module.css";
 
 function ProjectMenu(props) {
- 
+
     return (
         <IconContext.Provider value={{ size: "1.25em", className: style.icons }}>
             <ul className={style.topnav}>
@@ -14,7 +14,7 @@ function ProjectMenu(props) {
                         [ ODABERITE PROJEKT (*.cld) ]
                     </div>
                     <div className={style.commands}>
-                        <button type="button" title="Novi projekt" >
+                        <button type="button" title="Novi projekt" onClick={window.api.openNewProject}>
                             <IoAdd />
                         </button>
                         <button type="button" title="Otvori projekt (*.cld)" onClick={window.api.openFileDialog}>
