@@ -1,0 +1,101 @@
+.stationForm h2 {
+  margin-top: 10px;
+  padding-top: 10px;
+  font-size: 16px;
+  padding: 10px;
+  color: #4f8edc;
+  border-bottom: 1px solid silver;
+}
+
+.stationForm form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 65px;
+  overflow-y: auto;
+}
+
+.stationForm .row {
+  padding: 5px 10px;
+}
+
+.stationForm .row label {
+  display: block;
+  margin: 5px 0;
+  color: dimgray;
+}
+
+.stationForm .row input,
+.stationForm .row textarea {
+  display: block;
+  width: calc(100% - 10px);
+  padding: 5px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+.stationForm .row select {
+  display: inline-block;
+  width: calc(100% - 165px);
+  padding: 5px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+.stationForm footer {
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px #d2d3d6 solid;
+  text-align: right;
+  background-color: #edeef0;
+}
+
+.stationForm footer button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 12px 10px 12px 5px ;
+  background-color: #111;
+  color: white;
+  border: none;
+}
+
+.smallInline {
+  display: inline-block !important;
+  width: 100px !important;
+  margin: 0 10px;
+  text-align: center;
+}
+
+.labelInline {
+  display: inline-block !important;
+  width: 140px !important;
+  /* padding-right: 40px; */
+}
+
+.labelInline.nmv {
+  width: 165px !important;
+}
+
+.primaryButton{
+    background-color: #4f8edc !important;
+}
+
+.deleteButton{
+    color: #a81515 !important;
+    background-color: transparent !important;
+    float: left;
+    margin-left: 10px !important;
+    padding-right: 10px !important;
+    padding-left: 15px !important;
+
+}
+
+.icons {
+    vertical-align: bottom;
+    margin: 0;
+    padding-right: 5px;
+  }

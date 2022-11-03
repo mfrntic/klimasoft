@@ -8,6 +8,7 @@ import {
 import ProjectReport from "./pages/ProjectReport";
 import StationsDialog from "./pages/StationsDialog";
 import NewProjectDialog from "./pages/NewProjectDialog";
+import StationForm from "./components/stations/StationForm";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
       <Route path="/data" element={<ProjectData />} />
       <Route path="/report" element={<ProjectReport />} />
       <Route path="/stations" element={<StationsDialog />} />
+      <Route path="/stations/:id" element={<StationForm />} />
       <Route path="/newproject" element={<NewProjectDialog />} />
       <Route path="*" element={<Navigate to="/data" replace />} />
     </Routes>

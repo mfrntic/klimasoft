@@ -47,6 +47,7 @@ button {
   padding: 5px;
   cursor: pointer;
   margin-left: 0.5em;
+  font-size: 14px;
 }
 
 button:not(:disabled):hover {
@@ -58,4 +59,11 @@ button:disabled {
   background-color: #9a9a9a;
   cursor: not-allowed;
   color: whitesmoke;
+}
+
+input, select, textarea{
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  font-size: 16px;
 }

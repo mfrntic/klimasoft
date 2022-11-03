@@ -4510,3 +4510,7 @@ export const StationsHR = [
     "GSN": false
   }
 ]
+
+export function getStations() {
+  return StationsHR.sort((a, b) => a.StationName > b.StationName ? 1 : -1);
+}

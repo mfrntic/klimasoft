@@ -11,12 +11,12 @@ exports.openStations = function (mainWindow) {
         ? "http://localhost:3000#/stations"
         : `file://${path.join(path.basename(__dirname), "../build/index.html#/stations")}`;
 
-    // console.log("openStations", mainWindow);
+    const mainBounds = mainWindow.getBounds();
 
     stations = new BrowserWindow({
         title: "Lokacije / Meteorološke postaje",
-        width: isDev ? 1000 : 600, //ovo je radi dev toolsa
-        height: 600,
+        width: 600, 
+        height: 550,
         minWidth: 400,
         minHeight: 400,
         maxWidth: 1200,
@@ -24,6 +24,8 @@ exports.openStations = function (mainWindow) {
         minimizable: false,
         maximizable: false,
         parent: mainWindow,
+        x: mainBounds.x + (mainBounds.width / 2 - 300),
+        y: mainBounds.y + (mainBounds.height / 2 - 300),
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
@@ -66,19 +68,22 @@ exports.openNewProject = function (mainWindow) {
         : `file://${path.join(path.basename(__dirname), "../build/index.html#/newproject")}`;
 
     // console.log("openStations", mainWindow);
+    const mainBounds = mainWindow.getBounds();
 
     newproject = new BrowserWindow({
         title: "Novi projekt",
-        width: 800, //ovo je radi dev toolsa
-        height: 600,
-        minWidth: 600,
+        width: 600, //ovo je radi dev toolsa
+        height: 550,
+        minWidth: 400,
         minHeight: 400,
-        maxWidth:1200,
+        maxWidth: 1200,
         maxHeight: 800,
         minimizable: false,
         maximizable: false,
         parent: mainWindow,
         modal: true,
+        x: mainBounds.x + (mainBounds.width / 2 - 300),
+        y: mainBounds.y + (mainBounds.height / 2 - 300),
         icon: null,
         webPreferences: {
             nodeIntegration: false,
