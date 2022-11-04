@@ -1,14 +1,11 @@
 import { IconContext } from "react-icons";
-import { IoCaretForwardCircleOutline } from 'react-icons/io5';
-import { useNavigate } from "react-router-dom";
+import { IoCaretForwardCircleOutline } from 'react-icons/io5'; 
 import style from "./StationListItem.module.css";
 
-function StationListItem({ station }) {
-
-    const navigate = useNavigate();
-
+function StationListItem({ station, onSelected }) {
+ 
     function onItemClickHandler(){
-        navigate(`/stations/${station.IDStation}`);
+        onSelected(station)
     }
 
     return (

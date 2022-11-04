@@ -16,7 +16,7 @@ exports.openStations = function (mainWindow) {
     stations = new BrowserWindow({
         title: "Lokacije / Meteorološke postaje",
         width: 600, 
-        height: 550,
+        height: 575,
         minWidth: 400,
         minHeight: 400,
         maxWidth: 1200,
@@ -73,7 +73,7 @@ exports.openNewProject = function (mainWindow) {
     newproject = new BrowserWindow({
         title: "Novi projekt",
         width: 600, //ovo je radi dev toolsa
-        height: 550,
+        height: 575,
         minWidth: 400,
         minHeight: 400,
         maxWidth: 1200,

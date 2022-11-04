@@ -1,13 +1,16 @@
-const { app, BrowserWindow, ipcMain, Menu, ipcRenderer } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject } = require("../electron/actions");
 
 const menuTemplate = require("../electron/menuTemplate");
+const { getStations, initStations } = require("../src/data/StationsHR");
 
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension, REACT_DEVELOPER_TOOLS;
 
+//lang
+app.commandLine.appendSwitch('lang', 'hr');
 
 if (isDev) {
   const devTools = require("electron-devtools-installer");
@@ -17,6 +20,7 @@ if (isDev) {
 
 let mainWindow;
 
+// console.log("userData", app.getPath("userData"));
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -107,3 +111,7 @@ ipcMain.on("open-new-project", (e, a) => {
 ipcMain.on("close-new-project", (e, a) => {
   closeNewProject();
 });
+
+if (getStations().length === 0) {
+  initStations();
+}

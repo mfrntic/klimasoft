@@ -1,4 +1,4 @@
-export const StationsHR = [
+exports.StationsHR = [
   {
     "IDStation": 1,
     "StationName": "Adamovec",
@@ -4511,6 +4511,56 @@ export const StationsHR = [
   }
 ]
 
-export function getStations() {
-  return StationsHR.sort((a, b) => a.StationName > b.StationName ? 1 : -1);
+const Store = require("electron-store");
+const store = new Store({
+  name: "stations",
+  defaults: []
+});
+
+exports.initStations = function () {
+  if (store.has("items")) {
+    store.delete("items");
+  }
+  store.set("items", exports.StationsHR);
+  // for(const station of exports.StationsHR){
+  //   store.set(station.IDStation, station);
+  // }
+}
+
+exports.getStations = function () {
+  let stations = store.get("items");
+  if (!stations || stations.length === 0) {
+    exports.initStations();
+    stations = store.get("items");
+  }
+  return stations.sort((a, b) => a.StationName > b.StationName ? 1 : -1);
+}
+
+exports.saveStation = function (station) {
+  let stations = exports.getStations();
+  if (station.isNew) {
+    delete station.isNew;
+    stations.push(station);
+  }
+  else {
+
+    stations = stations.map(a => {
+      if (a.IDStation.toString() === station.IDStation) {
+        delete station.isNew;
+        return station;
+      }
+      else {
+        return a;
+      }
+    });
+  }
+  
+  store.set("items", stations);
+  console.log("STATION SAVED", station);
+}
+
+exports.deleteStation = function (station) {
+  let stations = exports.getStations();
+  stations = stations.filter(a => a.IDStation !== station.IDStation);
+  store.set("items", stations);
 }

@@ -11,7 +11,7 @@ function ProjectMenu(props) {
             <ul className={style.topnav}>
                 <li className={style.title}>
                     <div title="Otvori projekt (*.cld)" onClick={window.api.openFileDialog}>
-                        [ ODABERITE PROJEKT (*.cld) ]
+                        [ KLIMASOFT PROJEKT (*.cld) ]
                     </div>
                     <div className={style.commands}>
                         <button type="button" title="Novi projekt" onClick={window.api.openNewProject}>

@@ -1,20 +1,19 @@
 .projectForm h2 {
-    margin-top: 10px;
-    padding-top: 10px;
-    font-size: 16px;
-    padding: 10px;
-    color: #4f8edc;
-    border-bottom: 1px solid silver;
-    ;
+  margin-top: 10px;
+  padding-top: 10px;
+  font-size: 16px;
+  padding: 10px;
+  color: #4f8edc;
+  border-bottom: 1px solid silver;
 }
 
-.projectForm form{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 65px;
-    overflow-y: auto;
+.projectForm form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 65px;
+  overflow-y: auto;
 }
 
 .projectForm .row {
@@ -28,17 +27,28 @@
 }
 
 .projectForm .row input,
-.projectForm .row select,
 .projectForm .row textarea {
   display: block;
-  width: calc(100% - 10px);
-  padding: 5px;
+  width: calc(100% - 16px);
+  padding: 8px;
   border: 1px solid lightgray;
   border-radius: 5px;
 }
 
 .projectForm .row select {
   width: 100% !important;
+  padding: 0px !important;
+}
+
+.projectForm .row .error {
+  border: 1px tomato solid !important;
+  border-radius: 4px;
+  background-color: #ffe6e6 !important;
+}
+
+.projectForm .row .error div {
+  border: none;
+  background-color: #ffe6e6 !important;
 }
 
 .year {
@@ -54,44 +64,56 @@
   padding-right: 40px;
 }
 
-
 .projectForm footer {
-    height: 60px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-top: 1px #d2d3d6 solid;
-    text-align: right;
-    background-color: #edeef0;
-  }
-  
-  .projectForm footer button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin: 12px 10px 12px 5px ;
-    background-color: #111;
-    color: white;
-    border: none;
-  }
-
-  
-.primaryButton{
-    background-color: #4f8edc !important;
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px #d2d3d6 solid;
+  text-align: right;
+  background-color: #edeef0;
 }
 
-.deleteButton{
-    color: #a81515 !important;
-    background-color: transparent !important;
-    float: left;
-    margin-left: 10px !important;
-    padding-right: 10px !important;
-    padding-left: 15px !important;
+.projectForm footer button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 12px 10px 12px 5px;
+  background-color: #111;
+  color: white;
+  border: none;
+}
 
+.primaryButton {
+  background-color: #4f8edc !important;
+}
+
+.deleteButton {
+  color: #a81515 !important;
+  background-color: transparent !important;
+  float: left;
+  margin-left: 10px !important;
+  padding-right: 10px !important;
+  padding-left: 15px !important;
 }
 
 .icons {
-    vertical-align: bottom;
-    margin: 0;
-    padding-right: 5px;
-  }
+  vertical-align: bottom;
+  margin: 0;
+  padding-right: 5px;
+}
+
+.coordinates {
+  color: gray;
+  float: right;
+}
+
+.stationtype {
+  margin-left: 10px;
+  text-transform: uppercase;
+  /* background-color: silver; */
+  color: gray;
+  font-size: 0.7em;
+  border-radius: 3px;
+  padding: 4px 8px;
+}

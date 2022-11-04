@@ -29,8 +29,8 @@
 .stationForm .row input,
 .stationForm .row textarea {
   display: block;
-  width: calc(100% - 10px);
-  padding: 5px;
+  width: calc(100% - 16px);
+  padding: 8px;
   border: 1px solid lightgray;
   border-radius: 5px;
 }
@@ -38,9 +38,14 @@
 .stationForm .row select {
   display: inline-block;
   width: calc(100% - 165px);
-  padding: 5px;
+  padding: 8px;
   border: 1px solid lightgray;
   border-radius: 5px;
+}
+
+.stationForm .row input.validationError{
+  border:  1px tomato solid !important;
+  background-color: #ffe6e6 !important;
 }
 
 .stationForm footer {
@@ -88,9 +93,12 @@
     color: #a81515 !important;
     background-color: transparent !important;
     float: left;
-    margin-left: 10px !important;
-    padding-right: 10px !important;
-    padding-left: 15px !important;
+    margin-left: 10px !important; 
+    padding: 7px 10px !important;
+    /* padding-right: 10px !important;*/
+    padding-left: 15px !important; 
+    font-size: 18px;
+    text-align: center;
 
 }
 
