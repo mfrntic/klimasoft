@@ -29,16 +29,11 @@ class KlimasoftProject {
         "GSN": false
     };
 
-    period = {
-        from: null,
-        to: null
-    };
-
     YearFrom = null;
     YearTo = null;
-    YearsObservation = null;
-    YearsObservationPerc = null;
-    YearsObservationTemp = null;
+    // YearsObservation = null;
+    // YearsObservationPerc = null;
+    // YearsObservationTemp = null;
 
     ProcessedData = {
         "YearFrom": null,

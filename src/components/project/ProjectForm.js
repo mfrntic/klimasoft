@@ -1,17 +1,21 @@
 import { Fragment, useRef, useState } from "react";
 import { IconContext } from "react-icons";
 import { IoCheckmark, IoTrash, IoLocation } from 'react-icons/io5';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Select from 'react-select';
 import style from "./ProjectForm.module.css";
+import { projectActions } from "../../store/projectSlice";
 
 function ProjectForm() {
 
-    const [selectedLokacija, setSelectedLokacija] = useState();
+
+    const data = useSelector(a => a.project.header);
+    const dispatch = useDispatch();
+
+    const [selectedLokacija, setSelectedLokacija] = useState(data.station);
     const [hasError, setHasError] = useState(false);
 
     const stations = useSelector(state => state.stations.items);
-
     const refPeriodOd = useRef();
     const refPeriodDo = useRef();
     const refNaziv = useRef();
@@ -53,7 +57,17 @@ function ProjectForm() {
 
     function onConfirmHandler() {
         if (isValid()) {
-            console.log("Spremanje...");
+            const header = {
+                projectName: refNaziv.current.value,
+                period: {
+                    from: refPeriodOd.current.value,
+                    to: refPeriodDo.current.value
+                },
+                station: selectedLokacija,
+                description: refNotes.current.value
+            }
+            console.log("header", header);
+            dispatch(projectActions.setHeader(header));
             //close
             window.api.closeNewProject();
         }
@@ -96,7 +110,7 @@ function ProjectForm() {
                         }}
                             placeholder=""
                             getOptionValue={(v) => v.text}
-                            // defaultValue={selectedLokacija}
+                            defaultValue={selectedLokacija}
                             onChange={onValidateHandler}
                             options={stations.map(s => {
                                 return {
@@ -108,17 +122,17 @@ function ProjectForm() {
                     </div>
                     <div className={style.row}>
                         <label className={style.periodLabel}>Razdoblje motrenja:</label>
-                        <small>od</small> <input ref={refPeriodOd} type="number" className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} />
-                        <small>do</small> <input ref={refPeriodDo} type="number" className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} /> <small>god.</small>
+                        <small>od</small> <input ref={refPeriodOd} type="number" defaultValue={data.period.from} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} />
+                        <small>do</small> <input ref={refPeriodDo} type="number" defaultValue={data.period.to} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} /> <small>god.</small>
                     </div>
                     <div className={style.row}>
                         <label>Naziv projekta:</label>
-                        <input ref={refNaziv} onChange={onValidateHandler} />
+                        <input ref={refNaziv} defaultValue={data.projectName} onChange={onValidateHandler} />
                     </div>
                     <h2>Dodani podaci o projektu</h2>
                     <div className={style.row}>
                         <label>Opis projekta:</label>
-                        <textarea ref={refNotes} rows={3}></textarea>
+                        <textarea ref={refNotes} rows={3}>{data.description}</textarea>
                     </div>
                 </form>
                 <footer>

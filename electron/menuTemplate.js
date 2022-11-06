@@ -26,6 +26,7 @@ const menuTemplate = (window) => {
             submenu: [
                 { id: "new", label: "Novi projekt", accelerator: "Ctrl+N", click: () => { openNewProject(window); } },
                 { id: "open", label: "Otvori projekt...", accelerator: "Ctrl+O", click: () => { openFileDialog(window); } },
+                { id: "save", label: "Spremi projekt...", accelerator: "Ctrl+S", enabled: false },
                 { id: "options", label: "Postavke projekta...", enabled: false },
                 { type: 'separator' },
                 { id: "stations", label: "Lokacije / Postaje...", accelerator: "Ctrl+P", click: () => { openStations(window) } },

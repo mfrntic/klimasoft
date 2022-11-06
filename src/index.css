@@ -67,3 +67,9 @@ input, select, textarea{
   sans-serif;
   font-size: 16px;
 }
+
+
+.jexcel tbody td{
+  height: 26px !important;
+  /* background-color: red; */
+}

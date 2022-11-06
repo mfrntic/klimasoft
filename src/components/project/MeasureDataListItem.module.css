@@ -1,0 +1,52 @@
+.measureItem {
+  padding: 8px 16px;
+  margin-bottom: 5px;
+  border: 1px solid #d2d3d6;
+  border-radius: 4px;
+  background-color: #edeef0;
+  width: auto;
+  cursor: pointer;
+}
+
+.measureItem:hover {
+  background-color: lightgray;
+}
+
+.icons {
+  vertical-align: bottom;
+}
+
+.measureItem .title {
+  display: inline-block;
+  width: auto;
+  margin-right: 20px;
+}
+
+.measureItem .done {
+  display: inline-block;
+  width: 30px;
+  color: green;
+}
+
+.measureItem .arrowRight {
+  float: right;
+  color: gray;
+}
+
+.measureItem:hover .arrowRight{
+  color: black;
+}
+
+
+.measureItem.selected {
+  color: whitesmoke;
+  background-color: #4f8edc;
+}
+
+.measureItem.selected .arrowRight {
+  color: whitesmoke;
+}
+
+.measureItem.selected .done {
+  color: whitesmoke;
+}

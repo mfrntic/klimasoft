@@ -1,4 +1,4 @@
-
+ 
 import ProjectData from "./pages/ProjectData";
 import {
   Routes,
@@ -33,6 +33,9 @@ function App() {
       console.log("open-dialog", file);
     }
   });
+
+  //handsontable
+  // registerAllModules();
 
   return (
     <Routes>
