@@ -10,8 +10,8 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.send("close-stations");
     },
 
-    openNewProject: () => {
-        ipcRenderer.send("open-new-project");
+    openNewProject: (loadactive) => {
+        ipcRenderer.send("open-new-project", loadactive);
     },
 
     closeNewProject: () => {
@@ -27,6 +27,14 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.on("open-dialog-handler", callback);
     },
 
+    confirmNewProject: (project) => {
+        ipcRenderer.send("confirm-new-project", project);
+    },
+
+    confirmNewProjectHandler: (callback) => {
+        ipcRenderer.removeAllListeners("new-project-handler")
+        ipcRenderer.on("new-project-handler", callback);
+    },
 
     initStations: () => {
         return initStations();
@@ -42,6 +50,11 @@ contextBridge.exposeInMainWorld("api", {
 
     deleteStation: (station) => {
         deleteStation(station);
+    },
+
+    getActiveProject: () => {
+        const res = ipcRenderer.sendSync("get-active-project")
+        return res;
     }
 });
 

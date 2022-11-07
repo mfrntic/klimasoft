@@ -69,7 +69,35 @@ input, select, textarea{
 }
 
 
-.jexcel tbody td{
+.jexcel > tbody > tr > td{
   height: 26px !important;
   /* background-color: red; */
+}
+
+.jexcel > thead > tr > td{
+  position: unset !important;
+}
+
+.jexcel .highlight-top {
+  border-top: 2px solid goldenrod !important;
+  box-shadow: 0px -1px #ccc !important;
+}
+
+.jexcel .highlight-right {
+  border-right: 2px solid goldenrod !important;
+}
+
+.jexcel .highlight-bottom {
+  border-bottom: 2px solid goldenrod !important;
+}
+ 
+.jexcel .highlight-left  {
+  border-left: 2px solid goldenrod !important;
+  /* box-shadow: 0px -1px #ccc !important; */
+}
+
+.jexcel_corner {
+  
+  background-color: goldenrod !important;
+  
 }

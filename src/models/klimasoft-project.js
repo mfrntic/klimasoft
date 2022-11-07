@@ -1,95 +1,94 @@
-class KlimasoftProject {
+export default class Project {
 
-    constructor(projectName) {
-        this.ProjectName = projectName;
+    constructor(project) {
+        if (!project) return;
+        Object.assign(this, project);
+        this.header = new ProjectHeader(this.header);
+        this.data = new ProjectData(this.data);
     }
 
-    static from = function(object){
-        return Object.assign(new KlimasoftProject(), object);
+    static fromObject(project) {
+        if (!project) return null;
+        const res = Object.assign(new Project(), project);
+        res.header = new ProjectHeader(res.header);
+        res.data = new ProjectData(res.data);
+        return res;
     }
 
-    load = function(object){
-        return Object.assign(this, object);
-    }
+    header = undefined;
 
+    data = undefined;
+}
 
-    ProjectName = "";
-
-    Description = "";
-
-    Station = {
-        "ID": 0,
-        "StationName": "",
-        "Altitude": null,
-        "Latitude": null,
-        "Longitude": null,
-        "IDStationType": 0,
-        "StationTypeName": "",
-        "IDCountryISO": "HR",
-        "GSN": false
-    };
-
-    YearFrom = null;
-    YearTo = null;
-    // YearsObservation = null;
-    // YearsObservationPerc = null;
-    // YearsObservationTemp = null;
-
-    ProcessedData = {
-        "YearFrom": null,
-        "YearTo": null,
-        "Temperature": [],
-        "Percipitation": [],
-        "ZeroTempMonths": [],
-        "MaxAvgTemp": null,
-        "MinAvgTemp": null,
-        "MaxAbsTemp": null,
-        "MinAbsTemp": null,
-        "AmplitudeAvg": null,
-        "AmplitudeAbs": null
-    }
-
-    KlimatogramData = {
-        "YearFrom": null,
-        "YearTo": null,
-        "Items": [
-            {
-                "year": null,
-                "temp": [],
-                "perc": [],
-                "cardinal_temp": {
-                    "abs_min": null,
-                    "abs_max": null,
-                    "avg_min": null,
-                    "avg_max": null
-                },
-                "zero_temp_months": []
-            },
-            {
-                "year": null,
-                "temp": [],
-                "perc": [],
-                "cardinal_temp": {
-                    "abs_min": null,
-                    "abs_max": null,
-                    "avg_min": null,
-                    "avg_max": null
-                },
-                "zero_temp_months": []
-            },
-        ]
-    }
-
-
-    Settings = {
-        "klimadiagram": {
-            "show_aridness": true,
-            "show_vegetation_period": false,
-            "show_months": false,
-            "show_cardinal_temp": false,
-            "show_axis_scales": true,
-            "interactive": false,
-            "ztm": ["s", "s", "a", "a", "", "", "", "", "", "a", "a", "s"]
+export class ProjectHeader {
+    constructor(header) {
+        if (!header) return;
+        Object.assign(this, header);
+        if (header.period) {
+            this.period = new Period(header.period.from, header.period.to);
         }
+    }
+
+    projectName = undefined;
+    period = undefined;
+    station = {};
+    description = undefined;
+
+    isValid = function () {
+        return !!this.projectName && !!this.period && !!this.period.from && !!this.period.to
+            && !!this.station && !!this.station.IDStation;
+    }
+}
+
+export class Period {
+    constructor(from, to) {
+        this.from = from;
+        this.to = to;
+    }
+    from;
+    to;
+
+    getYears = function () {
+        return this.to - this.from + 1;
+    }
+}
+
+
+export class ProjectData {
+    constructor(data) {
+        if (!data) return;
+        Object.assign(this, data);
+    }
+
+    meanTemp = []
+    avgMaxTemp = []
+    avgMinTemp = []
+    absMaxTemp = []
+    absMinTemp = []
+    percipitation = []
+
+    hasData = function (measure) {
+        switch (measure?.toLowerCase()) {
+            case "meantemp":
+                return this.meanTemp && this.meanTemp.length > 0;
+            case "avgmaxtemp":
+                return this.avgMaxTemp && this.avgMaxTemp.length > 0;
+            case "avgmintemp":
+                return this.avgMinTemp && this.avgMinTemp.length > 0;
+            case "absmaxtemp":
+                return this.absMaxTemp && this.absMaxTemp.length > 0;
+            case "absmintemp":
+                return this.absMinTemp && this.absMinTemp.length > 0;
+            case "percipitation":
+                return this.percipitation && this.percipitation.length > 0;
+            default:
+                return this.meanTemp && this.meanTemp.length > 0 &&
+                    this.avgMaxTemp && this.avgMaxTemp.length > 0 &&
+                    this.avgMinTemp && this.avgMinTemp.length > 0 &&
+                    this.absMaxTemp && this.absMaxTemp.length > 0 &&
+                    this.absMinTemp && this.absMinTemp.length > 0 &&
+                    this.percipitation && this.percipitation.length > 0;
+        }
+
     }
 }

@@ -36,6 +36,7 @@ export const projectSlice = createSlice({
             state = initialState;
         },
         setHeader: function (state, action) {
+            console.log("setHeader", action);
             state.header = action.payload;
         },
         setData: function (state, action) {

@@ -3,7 +3,7 @@ import { IconContext } from "react-icons";
 import { IoArrowForwardCircleOutline, IoCheckmarkDone } from 'react-icons/io5';
 
 
-function MeasureDataListItem({ measure, isSelected, isOk, onSelect }) {
+function MeasureDataListItem({ measure, isSelected, hasData, onSelect }) {
 
     function onSelectHandler(){
         onSelect(measure);
@@ -12,8 +12,8 @@ function MeasureDataListItem({ measure, isSelected, isOk, onSelect }) {
     return (
         <div className={`${style.measureItem} ${isSelected && style.selected}`} onClick={onSelectHandler}>
             <IconContext.Provider value={{ className: style.icons, size: "1.25em" }}>
-                <span className={style.done}>{isOk && <IoCheckmarkDone />}</span>
-                <span className={style.title}>{measure.TypeName}</span> 
+                <span className={style.done}>{hasData && <IoCheckmarkDone />}</span>
+                <span className={style.title} title={measure.TypeName}>{measure.TypeName}</span> 
                 <span className={style.arrowRight}> <IoArrowForwardCircleOutline  /></span>
             </IconContext.Provider>
         </div>

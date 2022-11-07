@@ -76,3 +76,11 @@ ul.topnav li.right {
   margin-left: 1em;
 }
 
+button.primary {
+  color: whitesmoke;
+  background-color: #4f8edc;
+}
+
+button.primary:disabled {
+  background-color: silver;
+}

@@ -1,9 +1,9 @@
 import style from "./StationsDialog.module.css";
 import { IconContext } from "react-icons";
 import { IoSearch, IoAdd } from 'react-icons/io5';
-import StationListItem from "../components/stations/StationListItem";
+import StationListItem from "../components/stations-form/StationListItem";
 import { useEffect, useRef, useState } from "react";
-import StationForm from "../components/stations/StationForm";
+import StationForm from "../components/stations-form/StationForm";
 import { useDispatch, useSelector } from "react-redux";
 import { stationsActions } from "../store/stationsSlice";
 import { useDebounce } from "../hooks/useDebounce";

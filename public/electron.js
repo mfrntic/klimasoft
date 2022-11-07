@@ -1,13 +1,13 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject } = require("../electron/actions");
+const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject } = require("../electron/actions");
 
 const menuTemplate = require("../electron/menuTemplate");
 const { getStations, initStations } = require("../src/data/StationsHR");
 
 // Conditionally include the dev tools installer to load React Dev Tools
-let installExtension, REACT_DEVELOPER_TOOLS;
+let installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS;
 
 //lang
 app.commandLine.appendSwitch('lang', 'hr');
@@ -16,9 +16,12 @@ if (isDev) {
   const devTools = require("electron-devtools-installer");
   installExtension = devTools.default;
   REACT_DEVELOPER_TOOLS = devTools.REACT_DEVELOPER_TOOLS;
+  REDUX_DEVTOOLS = devTools.REDUX_DEVTOOLS;
+
 }
 
 let mainWindow;
+let activeProject;
 
 // console.log("userData", app.getPath("userData"));
 
@@ -39,7 +42,7 @@ function createWindow() {
   });
 
 
-  const menu = Menu.buildFromTemplate(menuTemplate(mainWindow))
+  const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, activeProject))
   Menu.setApplicationMenu(menu)
 
   // Load from localhost if in development
@@ -64,6 +67,10 @@ app.whenReady().then(() => {
     installExtension(REACT_DEVELOPER_TOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((error) => console.log(`An error occurred: , ${error}`));
+    installExtension(REDUX_DEVTOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((error) => console.log(`An error occurred: , ${error}`));
+
   }
 
   createWindow();
@@ -105,11 +112,22 @@ ipcMain.on("open-dialog", async (e, a) => {
 });
 
 ipcMain.on("open-new-project", (e, a) => {
-  openNewProject(mainWindow);
+  console.log("open-new-project", a);
+  openNewProject(mainWindow, a);
 });
 
 ipcMain.on("close-new-project", (e, a) => {
   closeNewProject();
+});
+
+ipcMain.on("confirm-new-project", (e, a) => {
+  activeProject = a;
+  confirmNewProject(mainWindow, a);
+
+});
+
+ipcMain.on("get-active-project", (e, a) => {
+  e.returnValue = activeProject;
 });
 
 if (getStations().length === 0) {

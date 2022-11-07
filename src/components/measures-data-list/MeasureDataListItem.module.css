@@ -18,8 +18,11 @@
 
 .measureItem .title {
   display: inline-block;
-  width: auto;
+  width: calc(100% - 75px);
   margin-right: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .measureItem .done {

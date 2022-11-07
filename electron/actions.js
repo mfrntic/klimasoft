@@ -15,7 +15,7 @@ exports.openStations = function (mainWindow) {
 
     stations = new BrowserWindow({
         title: "Lokacije / Meteorološke postaje",
-        width: 600, 
+        width: 600,
         height: 575,
         minWidth: 400,
         minHeight: 400,
@@ -61,11 +61,11 @@ exports.openFileDialog = async (mainWindow) => {
 }
 
 
-exports.openNewProject = function (mainWindow) {
-    // console.log("STATIONS!");
+exports.openNewProject = function (mainWindow, loadactive = true) {
+    console.log("loadactive-", loadactive);
     const url = isDev
-        ? "http://localhost:3000#/newproject"
-        : `file://${path.join(path.basename(__dirname), "../build/index.html#/newproject")}`;
+        ? "http://localhost:3000#/newproject?loadactive=" + loadactive
+        : `file://${path.join(path.basename(__dirname), "../build/index.html#/newproject?loadactive=" + loadactive)}`;
 
     // console.log("openStations", mainWindow);
     const mainBounds = mainWindow.getBounds();
@@ -98,10 +98,16 @@ exports.openNewProject = function (mainWindow) {
     if (isDev) {
         newproject.webContents.toggleDevTools();
     }
+
 }
 
 exports.closeNewProject = function () {
     if (newproject) {
         newproject.close();
     }
+}
+
+exports.confirmNewProject = async (mainWindow, project) => {
+    mainWindow.webContents.send("new-project-handler", project);
+    exports.closeNewProject();
 }

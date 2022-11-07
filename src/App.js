@@ -1,4 +1,4 @@
- 
+
 import ProjectData from "./pages/ProjectData";
 import {
   Routes,
@@ -7,8 +7,9 @@ import {
 } from "react-router-dom";
 import ProjectReport from "./pages/ProjectReport";
 import StationsDialog from "./pages/StationsDialog";
-import NewProjectDialog from "./pages/NewProjectDialog"; 
+import NewProjectDialog from "./pages/NewProjectDialog";
 import { stationsActions } from "./store/stationsSlice";
+import { projectActions } from "./store/projectSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
@@ -23,6 +24,14 @@ function App() {
     // const stations = [];
     // console.log("TU SAM!");
     dispatch(stationsActions.init(stations));
+
+    //load active project
+    const active = window.api.getActiveProject();
+    console.log("active" , active);
+    if (active) {
+      dispatch(projectActions.setHeader(active));
+    }
+
   }, [dispatch]);
 
 
@@ -32,6 +41,13 @@ function App() {
       const file = res.filePaths[0];
       console.log("open-dialog", file);
     }
+  });
+
+  //file open dialog handler (učitavnje projekta iz datoteke)
+  window.api.confirmNewProjectHandler((e, res) => {
+    console.log("confirmNewProject", res);
+    dispatch(projectActions.reset());
+    dispatch(projectActions.setHeader(res));
   });
 
   //handsontable

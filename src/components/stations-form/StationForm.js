@@ -13,7 +13,7 @@ function StationForm({ station, onCancel }) {
 
     const dispatch = useDispatch();
 
-    console.log("Station", station);
+    // console.log("Station", station);
 
     const refNaziv = useRef();
     const refLat = useRef();

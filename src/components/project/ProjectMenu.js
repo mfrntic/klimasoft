@@ -1,10 +1,14 @@
 
 import { IconContext } from "react-icons";
-import { IoBarChart, IoApps, IoFolderOpen, IoAdd, IoSettings } from 'react-icons/io5';
+import { IoBarChart, IoApps, IoFolderOpen, IoAdd, IoSave } from 'react-icons/io5';
 import { NavLink } from "react-router-dom";
 import style from "./ProjectMenu.module.css";
 
-function ProjectMenu(props) {
+function ProjectMenu() {
+
+    function openNewProjectHandler() {
+        window.api.openNewProject(false);
+    }
 
     return (
         <IconContext.Provider value={{ size: "1.25em", className: style.icons }}>
@@ -14,14 +18,14 @@ function ProjectMenu(props) {
                         [ KLIMASOFT PROJEKT (*.cld) ]
                     </div>
                     <div className={style.commands}>
-                        <button type="button" title="Novi projekt" onClick={window.api.openNewProject}>
+                        <button type="button" title="Novi projekt" onClick={openNewProjectHandler}>
                             <IoAdd />
                         </button>
                         <button type="button" title="Otvori projekt (*.cld)" onClick={window.api.openFileDialog}>
                             <IoFolderOpen />
                         </button>
-                        <button type="button" title="Postavke projekta" disabled>
-                            <IoSettings />
+                        <button type="button" title="Spremi" disabled className={style.primary}>
+                            <IoSave />
                         </button>
                     </div>
                 </li>

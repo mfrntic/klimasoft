@@ -1,4 +1,4 @@
-import ProjectForm from "../components/project/ProjectForm";
+import ProjectForm from "../components/project-form/ProjectForm";
 import style from "./NewProjectDialog.module.css";
 
 function NewProjectDialog() {

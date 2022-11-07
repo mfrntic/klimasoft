@@ -1,19 +1,24 @@
 import { Fragment, useRef, useState } from "react";
 import { IconContext } from "react-icons";
 import { IoCheckmark, IoTrash, IoLocation } from 'react-icons/io5';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import Select from 'react-select';
 import style from "./ProjectForm.module.css";
-import { projectActions } from "../../store/projectSlice";
 
 function ProjectForm() {
 
-
-    const data = useSelector(a => a.project.header);
-    const dispatch = useDispatch();
-
-    const [selectedLokacija, setSelectedLokacija] = useState(data.station);
+    const [searchParams] = useSearchParams();
+    const loadactive = searchParams.get("loadactive") === "true";
+    console.log("loadActive", loadactive);
+    let data;
+    if (loadactive) {
+        data = window.api.getActiveProject();
+    }
+    const [selectedLokacija, setSelectedLokacija] = useState(data?.station);
     const [hasError, setHasError] = useState(false);
+
+    // console.log("selectedLokacija", selectedLokacija);
 
     const stations = useSelector(state => state.stations.items);
     const refPeriodOd = useRef();
@@ -57,7 +62,7 @@ function ProjectForm() {
 
     function onConfirmHandler() {
         if (isValid()) {
-            const header = {
+            const projheader = {
                 projectName: refNaziv.current.value,
                 period: {
                     from: refPeriodOd.current.value,
@@ -66,18 +71,20 @@ function ProjectForm() {
                 station: selectedLokacija,
                 description: refNotes.current.value
             }
-            console.log("header", header);
-            dispatch(projectActions.setHeader(header));
+            // console.log("header", projheader);
+
             //close
-            window.api.closeNewProject();
+            window.api.confirmNewProject(projheader);
         }
 
     }
 
 
     function onValidateHandler(e) {
-        setSelectedLokacija(e);
+
         if (e && !e.target) {
+            //station select
+            setSelectedLokacija(stations.find(a => a.IDStation === e.value));
             setHasError(false);
         }
 
@@ -110,7 +117,7 @@ function ProjectForm() {
                         }}
                             placeholder=""
                             getOptionValue={(v) => v.text}
-                            defaultValue={selectedLokacija}
+                            value={{ label: selectedLokacija?.StationName, value: selectedLokacija?.IDStation }}
                             onChange={onValidateHandler}
                             options={stations.map(s => {
                                 return {
@@ -122,17 +129,17 @@ function ProjectForm() {
                     </div>
                     <div className={style.row}>
                         <label className={style.periodLabel}>Razdoblje motrenja:</label>
-                        <small>od</small> <input ref={refPeriodOd} type="number" defaultValue={data.period.from} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} />
-                        <small>do</small> <input ref={refPeriodDo} type="number" defaultValue={data.period.to} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} /> <small>god.</small>
+                        <small>od</small> <input ref={refPeriodOd} type="number" defaultValue={data?.period.from} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} />
+                        <small>do</small> <input ref={refPeriodDo} type="number" defaultValue={data?.period.to} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} /> <small>god.</small>
                     </div>
                     <div className={style.row}>
                         <label>Naziv projekta:</label>
-                        <input ref={refNaziv} defaultValue={data.projectName} onChange={onValidateHandler} />
+                        <input ref={refNaziv} defaultValue={data?.projectName} onChange={onValidateHandler} />
                     </div>
                     <h2>Dodani podaci o projektu</h2>
                     <div className={style.row}>
                         <label>Opis projekta:</label>
-                        <textarea ref={refNotes} rows={3}>{data.description}</textarea>
+                        <textarea ref={refNotes} rows={3} defaultValue={data?.description}></textarea>
                     </div>
                 </form>
                 <footer>
