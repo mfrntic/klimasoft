@@ -6,7 +6,11 @@
   align-items: center;
 }
 
-.page.center{
+.page.fullHeight {
+  height: 100%;
+}
+
+.page.center {
   height: 100%;
 }
 
@@ -20,27 +24,57 @@
 
 .page .grid {
   display: block;
-  font-size: 0.85em; 
+  font-size: 0.85em;
 }
 
-.page .data{
-  width:100%;
+.page .data {
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
-  margin-bottom:15px;
+  margin-bottom: 15px;
 }
 
-.page .data .measuresMenu{
-  padding: 10px;
-
-}
-
-.page .data .measuresData{
+.page .data .measuresMenu {
   padding: 10px;
 }
 
-.page .data .sticky{
+.page .data .measuresData {
+  padding: 10px;
+}
+
+.page .data .sticky {
   position: sticky;
   top: 10px;
+}
+
+.page .data h4 {
+  margin-top: 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #d2d3d6;
+}
+
+.page .data h4 .titleMeasure {
+  color: #4f8edc;
+
+}
+
+.page .data .toolbar{
+  display: block;  
+}
+
+.page .data .toolbar button {
+  outline: none;
+  background-color: transparent;
+  color: #343434;
+}
+
+.clearTable{
+  margin-left: 1.5em;
+  color: tomato !important;
+}
+
+.importData{
+  /* margin-left: 1.5em; */
+  color: royalblue !important;
 }

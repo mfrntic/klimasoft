@@ -50,6 +50,12 @@ function App() {
     dispatch(projectActions.setHeader(res));
   });
 
+  //project deactivated
+  window.api.deactivateProjectHandler((e, res) => {
+    console.log("deactivate project");
+    dispatch(projectActions.reset());
+  });
+
   //handsontable
   // registerAllModules();
 

@@ -1,10 +1,18 @@
 
 import { IconContext } from "react-icons";
 import { IoBarChart, IoApps, IoFolderOpen, IoAdd, IoSave } from 'react-icons/io5';
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import Project from "../../models/klimasoft-project";
 import style from "./ProjectMenu.module.css";
 
 function ProjectMenu() {
+
+    const activeProjectData = useSelector(a => a.project);
+    //console.log("activeProjectData", activeProjectData);
+    const activeProject = Project.fromObject(activeProjectData);
+    // console.log("isValid", activeProject.header.isValid(), activeProject);
+
 
     function openNewProjectHandler() {
         window.api.openNewProject(false);
@@ -24,7 +32,7 @@ function ProjectMenu() {
                         <button type="button" title="Otvori projekt (*.cld)" onClick={window.api.openFileDialog}>
                             <IoFolderOpen />
                         </button>
-                        <button type="button" title="Spremi" disabled className={style.primary}>
+                        <button type="button" title="Spremi" disabled={!activeProject.header.isValid()} className={style.primary}>
                             <IoSave />
                         </button>
                     </div>

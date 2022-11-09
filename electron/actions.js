@@ -2,6 +2,7 @@
 const { BrowserWindow, dialog, app } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
+const global = require("../public/global");
 
 let stations, newproject;
 
@@ -61,8 +62,11 @@ exports.openFileDialog = async (mainWindow) => {
 }
 
 
-exports.openNewProject = function (mainWindow, loadactive = true) {
-    console.log("loadactive-", loadactive);
+exports.openNewProject = async function (mainWindow, loadactive = true) {
+    if (!loadactive && global.activeProject) { //ako je otvaranje potpuno novog projekta prvo deaktiviraj stari
+        if (!await exports.deactivateProjectDialog(mainWindow)) return;
+    }
+    //console.log("loadactive-", loadactive);
     const url = isDev
         ? "http://localhost:3000#/newproject?loadactive=" + loadactive
         : `file://${path.join(path.basename(__dirname), "../build/index.html#/newproject?loadactive=" + loadactive)}`;
@@ -71,7 +75,7 @@ exports.openNewProject = function (mainWindow, loadactive = true) {
     const mainBounds = mainWindow.getBounds();
 
     newproject = new BrowserWindow({
-        title: "Novi projekt",
+        title: loadactive ? "Postavke projekta" : "Novi projekt",
         width: 600, //ovo je radi dev toolsa
         height: 575,
         minWidth: 400,
@@ -110,4 +114,20 @@ exports.closeNewProject = function () {
 exports.confirmNewProject = async (mainWindow, project) => {
     mainWindow.webContents.send("new-project-handler", project);
     exports.closeNewProject();
+}
+
+exports.deactivateProjectDialog = async (mainWindow) => {
+    const res = await dialog.showMessageBox(mainWindow, {
+        type: "none",
+        title: "Aktivni projekt",
+        message: "Da li ste sigurni da želite zatvoriti aktivan projekt?",
+        buttons: ["Deaktiviraj", "Odustani"]
+    });
+    if (res.response === 0) {
+        //deaktivacija projekta
+        global.setActiveProject(null);
+        mainWindow.webContents.send("deactivated-project");
+        return true;
+    }
+    return false;
 }

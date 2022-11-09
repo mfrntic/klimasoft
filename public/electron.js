@@ -1,8 +1,8 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject } = require("../electron/actions");
-
+const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject, deactivateProjectDialog } = require("../electron/actions");
+const global = require("./global");
 const menuTemplate = require("../electron/menuTemplate");
 const { getStations, initStations } = require("../src/data/StationsHR");
 
@@ -21,7 +21,6 @@ if (isDev) {
 }
 
 let mainWindow;
-let activeProject;
 
 // console.log("userData", app.getPath("userData"));
 
@@ -42,7 +41,7 @@ function createWindow() {
   });
 
 
-  const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, activeProject))
+  const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, global.activeProject))
   Menu.setApplicationMenu(menu)
 
   // Load from localhost if in development
@@ -95,9 +94,9 @@ app.on("activate", () => {
   }
 });
 
-// The code above has been adapted from a starter example in the Electron docs:
-// https://www.electronjs.org/docs/tutorial/quick-start#create-the-main-script-file
 
+//-----------------------------------------------
+//stations dialog
 ipcMain.on("open-stations", (e, a) => {
   openStations(mainWindow);
 });
@@ -106,13 +105,15 @@ ipcMain.on("close-stations", (e, a) => {
   closeStations();
 });
 
+//file open dialog
 ipcMain.on("open-dialog", async (e, a) => {
   openFileDialog(mainWindow);
   // e.reply("open-dialog", res)
 });
 
+//new project dialog
 ipcMain.on("open-new-project", (e, a) => {
-  console.log("open-new-project", a);
+
   openNewProject(mainWindow, a);
 });
 
@@ -121,14 +122,20 @@ ipcMain.on("close-new-project", (e, a) => {
 });
 
 ipcMain.on("confirm-new-project", (e, a) => {
-  activeProject = a;
+  global.setActiveProject(a);
   confirmNewProject(mainWindow, a);
-
 });
 
+//get active project
 ipcMain.on("get-active-project", (e, a) => {
-  e.returnValue = activeProject;
+  e.returnValue = global.activeProject;
 });
+
+//deactive project
+ipcMain.on("deactive-project", (e, a) => {
+  deactivateProjectDialog(mainWindow);
+});
+
 
 if (getStations().length === 0) {
   initStations();

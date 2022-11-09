@@ -33,7 +33,8 @@ export const projectSlice = createSlice({
     initialState,
     reducers: {
         reset: function(state){
-            state = initialState;
+            state.header = initialState.header;
+            state.data = initialState.data;
         },
         setHeader: function (state, action) {
             console.log("setHeader", action);

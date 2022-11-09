@@ -57,6 +57,16 @@ function ProjectForm() {
             }
             valid = false;
         }
+        //period godine
+        const pod = parseInt(refPeriodOd.current.value);
+        const pdo = parseInt(refPeriodDo.current.value);
+        if (pod > pdo) {
+            refPeriodOd.current.focus();
+            refPeriodOd.current.classList.add(style.error);
+            // refPeriodDo.current.classList.add(style.error);
+            valid = false;
+        }
+
         return valid;
     }
 

@@ -55,6 +55,15 @@ contextBridge.exposeInMainWorld("api", {
     getActiveProject: () => {
         const res = ipcRenderer.sendSync("get-active-project")
         return res;
+    },
+
+    deactivateProject: () => {
+        ipcRenderer.send("deactivate-project");
+    },
+
+    deactivateProjectHandler: (callback) => {
+        ipcRenderer.removeAllListeners("deactivated-project")
+        ipcRenderer.on("deactivated-project", callback);
     }
 });
 
