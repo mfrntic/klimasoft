@@ -9,14 +9,14 @@ function MeasuresDataList({ selected, onSelect }) {
     const data = useSelector(a => a.project.data);
     const projectData = new ProjectData(data);
 
-    console.log("hasData", selected, projectData.hasData(selected?.IDMeasure));
+    // console.log("hasData", selected, projectData.hasData(selected?.IDMeasure));
 
     return (
         <div className={style.measures}>
             {Measures.map(m => <MeasureDataListItem key={m.IDMeasure}
                 measure={m}
                 hasData={projectData.hasData(m.IDMeasure)}
-                isSelected={m.IDMeasure === selected?.IDMeasure}
+                isSelected={m.IDMeasure ===   selected?.IDMeasure }
                 onSelect={onSelect} />)}
         </div>
     )

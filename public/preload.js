@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 const { getStations, saveStation, initStations, deleteStation } = require("../src/data/StationsHR");
+const { clipboard } = require('electron')
 
 contextBridge.exposeInMainWorld("api", {
     openStations: () => {
@@ -27,8 +28,8 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.on("open-dialog-handler", callback);
     },
 
-    confirmNewProject: (project) => {
-        ipcRenderer.send("confirm-new-project", project);
+    confirmNewProject: (project, loadedActive) => {
+        ipcRenderer.send("confirm-new-project", { project, loadedActive });
     },
 
     confirmNewProjectHandler: (callback) => {
@@ -64,6 +65,14 @@ contextBridge.exposeInMainWorld("api", {
     deactivateProjectHandler: (callback) => {
         ipcRenderer.removeAllListeners("deactivated-project")
         ipcRenderer.on("deactivated-project", callback);
+    },
+
+    saveFileData: (data) => {
+        ipcRenderer.send("save-file", data);
+    },
+
+    getClipboardData: () => {
+        return clipboard.readText();
     }
 });
 

@@ -59,22 +59,3 @@
 
 }
 
-.page .data .toolbar{
-  display: block;  
-}
-
-.page .data .toolbar button {
-  outline: none;
-  background-color: transparent;
-  color: #343434;
-}
-
-.clearTable{
-  margin-left: 1.5em;
-  color: tomato !important;
-}
-
-.importData{
-  /* margin-left: 1.5em; */
-  color: royalblue !important;
-}

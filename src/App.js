@@ -27,7 +27,7 @@ function App() {
 
     //load active project
     const active = window.api.getActiveProject();
-    console.log("active" , active);
+    console.log("active", active);
     if (active) {
       dispatch(projectActions.setHeader(active));
     }
@@ -37,17 +37,19 @@ function App() {
 
   //file open dialog handler (učitavnje projekta iz datoteke)
   window.api.openFileDialogHandler((e, res) => {
-    if (!res.canceled) {
-      const file = res.filePaths[0];
-      console.log("open-dialog", file);
-    }
+    dispatch(projectActions.setHeader(res.project.header));
+    dispatch(projectActions.setData(res.project.data));
+    // console.log("open-dialog", res);
+
   });
 
   //file open dialog handler (učitavnje projekta iz datoteke)
   window.api.confirmNewProjectHandler((e, res) => {
     console.log("confirmNewProject", res);
-    dispatch(projectActions.reset());
-    dispatch(projectActions.setHeader(res));
+    if (!res.loadedActive) {
+      dispatch(projectActions.reset());
+    }
+    dispatch(projectActions.setHeader(res.project));
   });
 
   //project deactivated

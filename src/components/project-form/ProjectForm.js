@@ -13,7 +13,8 @@ function ProjectForm() {
     console.log("loadActive", loadactive);
     let data;
     if (loadactive) {
-        data = window.api.getActiveProject();
+        data = window.api.getActiveProject()?.header;
+        console.log("activeProject", data);
     }
     const [selectedLokacija, setSelectedLokacija] = useState(data?.station);
     const [hasError, setHasError] = useState(false);
@@ -84,7 +85,7 @@ function ProjectForm() {
             // console.log("header", projheader);
 
             //close
-            window.api.confirmNewProject(projheader);
+            window.api.confirmNewProject(projheader, loadactive);
         }
 
     }
@@ -139,8 +140,8 @@ function ProjectForm() {
                     </div>
                     <div className={style.row}>
                         <label className={style.periodLabel}>Razdoblje motrenja:</label>
-                        <small>od</small> <input ref={refPeriodOd} type="number" defaultValue={data?.period.from} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} />
-                        <small>do</small> <input ref={refPeriodDo} type="number" defaultValue={data?.period.to} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} /> <small>god.</small>
+                        <small>od</small> <input ref={refPeriodOd} type="number" defaultValue={data?.period?.from} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} />
+                        <small>do</small> <input ref={refPeriodDo} type="number" defaultValue={data?.period?.to} className={style.year} onChange={onValidateHandler} min={"1900"} max={"2050"} /> <small>god.</small>
                     </div>
                     <div className={style.row}>
                         <label>Naziv projekta:</label>

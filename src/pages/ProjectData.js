@@ -13,85 +13,84 @@ import { useDispatch, useSelector } from "react-redux";
 import { projectActions } from "../store/projectSlice";
 import Project from "../models/klimasoft-project";
 
-import { IconContext } from "react-icons";
-import { FaUndo, FaRedo, FaEraser, FaFileImport } from 'react-icons/fa';
+import { Measures } from "../data/Measures";
+import GridToolbar from "./GridToolbar";
 
 
-function ProjectData({ data }) {
-
-    const jRef = useRef(null);
-    const [selectedMeasure, setSelectedMeasure] = useState();
-    const [currentData, setCurrentData] = useState();
-
+function ProjectData() {
 
     // const activeProject = window.api.getActiveProject();
     const activeProjectData = useSelector(a => a.project);
-    //console.log("activeProjectData", activeProjectData);
     const activeProject = Project.fromObject(activeProjectData);
-    // console.log("isValid", activeProject.header.isValid(), activeProject);
+    console.log("activeProject", activeProject);
+
+    const jRef = useRef(null);
+    const [selectedMeasure, setSelectedMeasure] = useState(Measures[0]);
 
     const dispatch = useDispatch();
 
-    const onGridChange = useCallback(() => {
-        setCurrentData(jRef.current.jspreadsheet.getData());
-    }, []);
+
+
 
     useEffect(() => {
-        // console.log("onGridChange", selectedMeasure, currentData);
-        if (selectedMeasure && currentData) {
-            const d = {};
-            d[selectedMeasure.IDMeasure] = currentData;
-            // console.log("data2dispatch", d);
-            dispatch(projectActions.setData(d));
+        if (activeProject && selectedMeasure) {
+
+            const data = activeProject.data[selectedMeasure.IDMeasure];
+
+            const onGridChange = () => {
+                const d = {};
+                d[selectedMeasure.IDMeasure] = jRef.current.jspreadsheet.getData();
+                dispatch(projectActions.setData(d));
+                console.log("change", d);
+            };
+
+            if (!jRef.current) return;
+            // if (jRef.current.jspreadsheet) {
+            //     jRef.current.jspreadsheet.destroy();
+            // }
+            const d = data.map(a => [...a]); //for deep copy, req. by jspreadsheet
+            if (!jRef.current.jspreadsheet) {
+                const options = {
+                    // data: [...d],
+                    minDimensions: [13, 1],
+                    columns: [
+                        { title: ' ' },
+                        { title: 'sij' },
+                        { title: 'velj' },
+                        { title: 'ožu' },
+                        { title: 'tra' },
+                        { title: 'svi' },
+                        { title: 'lip' },
+                        { title: 'srp' },
+                        { title: 'kol' },
+                        { title: 'ruj' },
+                        { title: 'lis' },
+                        { title: 'stu' },
+                        { title: 'pro' },
+                    ],
+                    contextMenu: false,
+                    minSpareRows: 1
+                };
+
+                jspreadsheet(jRef.current, options);
+                jRef.current.jspreadsheet.hideIndex(0);
+
+            }
+            // console.log("jref", jRef.current.jspreadsheet);
+            jRef.current.jspreadsheet.onafterchanges = onGridChange;
+            jRef.current.jspreadsheet.setData([...d]);
+
+
         }
-    }, [selectedMeasure, currentData, dispatch])
 
-    function initGrid(data) {
-        if (jRef.current.jspreadsheet) {
-            jRef.current.jspreadsheet.destroy();
-        }
-        const d = data.map(a => [...a]); //for deep copy, req. by jspreadsheet
-        const options = {
-            data: [...d],
-            minDimensions: [13, 2],
-            columns: [
-                { title: ' ' },
-                { title: 'sij' },
-                { title: 'velj' },
-                { title: 'ožu' },
-                { title: 'tra' },
-                { title: 'svi' },
-                { title: 'lip' },
-                { title: 'srp' },
-                { title: 'kol' },
-                { title: 'ruj' },
-                { title: 'lis' },
-                { title: 'stu' },
-                { title: 'pro' },
-            ],
-            contextMenu: false,
-            onafterchanges: onGridChange
-        };
-
-
-        jspreadsheet(jRef.current, options);
-        jRef.current.jspreadsheet.hideIndex(0);
-
-    }
+    }, [activeProject, dispatch, selectedMeasure]);
 
     function onSelectedMeasureHandler(measure) {
-        // console.log("selectedMeasure", measure, data);
-        initGrid(activeProject.data[measure.IDMeasure]);
+        console.log("selectedMeasure", measure);
         setSelectedMeasure(measure);
-        setCurrentData(null);
 
     }
 
-    function onClearDataHandler() {
-        if (window.confirm("Da li ste sigurni da želite obrisati sve podatke iz tablice?")) {
-            jRef.current.jspreadsheet.setData([]);
-        }
-    }
 
 
     return (
@@ -106,15 +105,9 @@ function ProjectData({ data }) {
                     </div>
                     <div className={style.measuresData}>
                         {selectedMeasure && <h4>UNOS PODATAKA*: <span className={style.titleMeasure}>{selectedMeasure.TypeName}</span></h4>}
-                        {selectedMeasure && <div className={style.toolbar}>
-                            <IconContext.Provider value={{ className: style.icons, size: "0.95em" }}>
-                                <button type="button" title="Poništi" onClick={() => { jRef.current.jspreadsheet.undo() }}><FaUndo /></button>
-                                <button type="button" title="Ponovi poništeno" onClick={() => { jRef.current.jspreadsheet.redo() }}><FaRedo /></button>
-                                <button type="button" title="Uvoz podataka" className={style.importData}><FaFileImport /></button>
-                                <button type="button" title="Očisti sadržaj tablice" className={style.clearTable} onClick={onClearDataHandler}><FaEraser /></button>
-                            </IconContext.Provider>
-                        </div>}
-                        <div ref={jRef} className={style.grid} />
+                        <div ref={jRef} className={style.grid}>
+                            <GridToolbar jRef={jRef} measure={selectedMeasure} />
+                        </div>
                         {selectedMeasure && <small>* Podatke unosite kao niz godišnjih prosjeka (svaka godina je jedan red, prva kolona sadrži godinu) ili samo kao izračunati višegodišnji prosjek (jedan red ukupno, prva kolona sadrži bilo što, npr tekst "Ukupno")</small>}
                     </div>
                 </div>}

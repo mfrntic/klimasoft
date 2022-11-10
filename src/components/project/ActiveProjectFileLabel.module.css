@@ -1,0 +1,7 @@
+.activeProjectLabel {
+  display: inline-block !important;
+}
+
+.activeProjectLabel:hover {
+  color: #4f8edc;
+}

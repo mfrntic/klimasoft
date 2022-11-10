@@ -3,6 +3,7 @@ const { BrowserWindow, dialog, app } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 const global = require("../public/global");
+const fs = require("fs");
 
 let stations, newproject;
 
@@ -37,9 +38,9 @@ exports.openStations = function (mainWindow) {
     stations.setMenu(null);
     stations.loadURL(url);
 
-    if (isDev) {
-        stations.webContents.toggleDevTools();
-    }
+    // if (isDev) {
+    //     stations.webContents.toggleDevTools();
+    // }
 }
 
 exports.closeStations = function () {
@@ -50,14 +51,23 @@ exports.closeStations = function () {
 
 exports.openFileDialog = async (mainWindow) => {
     const res = await dialog.showOpenDialog(mainWindow, {
-        title: "Otvori datoteku",
+        title: "Otvori projekt",
         defaultPath: app.getPath("documents"),
         filters: [
-            { name: 'Klimasoft', extensions: ['cld', 'kld', 'json'] },
+            { name: 'Klimasoft projekt', extensions: ['cldata'] },
             { name: 'Sve datoteke', extensions: ['*'] }
         ]
     });
-    mainWindow.webContents.send("open-dialog-handler", res);
+    if (!res.canceled) {
+        const proj = JSON.parse(fs.readFileSync(res.filePaths[0]));
+        global.setActiveProject(proj);
+
+        mainWindow.webContents.send("open-dialog-handler", {
+            filePath: res.filePaths[0],
+            project: proj
+        });
+    }
+
     // mainWindow.webContents.send("open-dialog", res);
 }
 
@@ -99,9 +109,9 @@ exports.openNewProject = async function (mainWindow, loadactive = true) {
     newproject.setMenu(null);
     newproject.loadURL(url);
 
-    if (isDev) {
-        newproject.webContents.toggleDevTools();
-    }
+    // if (isDev) {
+    //     newproject.webContents.toggleDevTools();
+    // }
 
 }
 
@@ -111,8 +121,8 @@ exports.closeNewProject = function () {
     }
 }
 
-exports.confirmNewProject = async (mainWindow, project) => {
-    mainWindow.webContents.send("new-project-handler", project);
+exports.confirmNewProject = async (mainWindow, project, loadedActive) => {
+    mainWindow.webContents.send("new-project-handler",{ project, loadedActive});
     exports.closeNewProject();
 }
 
@@ -130,4 +140,23 @@ exports.deactivateProjectDialog = async (mainWindow) => {
         return true;
     }
     return false;
+}
+
+exports.saveFileData = async (mainWindow, fileContents) => {
+    const proj = JSON.parse(fileContents);
+
+    const res = await dialog.showSaveDialog(mainWindow, {
+        title: "Spremi projekt",
+        defaultPath: path.join(app.getPath("documents"), proj.header.projectName + ".cldata"),
+        filters: [
+            { name: 'Klimasoft projekt', extensions: ['cldata'] },
+            { name: 'Sve datoteke', extensions: ['*'] }
+        ]
+    });
+    if (!res.canceled) {
+        const filePath = res.filePath;
+        fs.writeFile(filePath, fileContents, (err) => {
+            if (err) throw err;
+        });
+    }
 }

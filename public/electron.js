@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject, deactivateProjectDialog } = require("../electron/actions");
+const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject, deactivateProjectDialog, saveFileData } = require("../electron/actions");
 const global = require("./global");
 const menuTemplate = require("../electron/menuTemplate");
 const { getStations, initStations } = require("../src/data/StationsHR");
@@ -122,8 +122,9 @@ ipcMain.on("close-new-project", (e, a) => {
 });
 
 ipcMain.on("confirm-new-project", (e, a) => {
-  global.setActiveProject(a);
-  confirmNewProject(mainWindow, a);
+  // console.log("confirm-new-project", a);
+  global.setActiveProject(a.project);
+  confirmNewProject(mainWindow, a.project, a.loadedActive);
 });
 
 //get active project
@@ -134,6 +135,10 @@ ipcMain.on("get-active-project", (e, a) => {
 //deactive project
 ipcMain.on("deactive-project", (e, a) => {
   deactivateProjectDialog(mainWindow);
+});
+
+ipcMain.on("save-file", (e, a) => {
+  saveFileData(mainWindow, a);
 });
 
 
