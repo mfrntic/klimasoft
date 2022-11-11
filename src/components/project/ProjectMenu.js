@@ -19,8 +19,12 @@ function ProjectMenu() {
         window.api.openNewProject(false);
     }
 
+    function openFileDialogHandler() {
+        window.api.openFileDialog();
+    }
+
     function saveFileDataHandler() {
-        window.api.saveFileData(JSON.stringify(activeProjectData, null, 2));
+        window.api.saveFileData({ data: JSON.stringify(activeProjectData, null, 2), forceDialog: false });
     }
 
     return (
@@ -32,12 +36,12 @@ function ProjectMenu() {
                         <button type="button" title="Novi projekt" onClick={openNewProjectHandler}>
                             <IoAdd />
                         </button>
-                        <button type="button" title="Otvori projekt (*.cldata)" onClick={window.api.openFileDialog}>
+                        <button type="button" title="Otvori projekt (*.cldata)" onClick={openFileDialogHandler}>
                             <IoFolderOpen />
                         </button>
-                        <button type="button" title="Spremi" 
-                            disabled={!activeProject.header.isValid()} 
-                            className={style.primary} 
+                        <button type="button" title="Spremi"
+                            disabled={!activeProject.header.isValid()}
+                            className={style.primary}
                             onClick={saveFileDataHandler}>
                             <IoSave />
                         </button>

@@ -10,10 +10,12 @@ import StationsDialog from "./pages/StationsDialog";
 import NewProjectDialog from "./pages/NewProjectDialog";
 import { stationsActions } from "./store/stationsSlice";
 import { projectActions } from "./store/projectSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 function App() {
+
+  const activeProjectData = useSelector(a => a.project);
 
   //load data
   const dispatch = useDispatch();
@@ -50,6 +52,12 @@ function App() {
       dispatch(projectActions.reset());
     }
     dispatch(projectActions.setHeader(res.project));
+  });
+
+  //save file dialog
+  window.api.saveFileDialog((e, force) => {
+    console.log("saveFileDialog", force);
+    window.api.saveFileData({ data: JSON.stringify(activeProjectData, null, 2), forceDialog: force });
   });
 
   //project deactivated

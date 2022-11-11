@@ -7,7 +7,8 @@ const fs = require("fs");
 
 let stations, newproject;
 
-exports.openStations = function (mainWindow) {
+exports.openStations = async function (mainWindow) {
+   
     // console.log("STATIONS!");
     const url = isDev
         ? "http://localhost:3000#/stations"
@@ -49,7 +50,12 @@ exports.closeStations = function () {
     }
 }
 
-exports.openFileDialog = async (mainWindow) => {
+exports.openFileDialog = async (mainWindow) => { 
+    console.log("openFileDialog", global.activeProject);
+    if ( global.activeProject) { //ako je otvaranje potpuno novog projekta prvo deaktiviraj stari
+        if (!await exports.deactivateProjectDialog(mainWindow)) return;
+    }
+
     const res = await dialog.showOpenDialog(mainWindow, {
         title: "Otvori projekt",
         defaultPath: app.getPath("documents"),
@@ -61,7 +67,7 @@ exports.openFileDialog = async (mainWindow) => {
     if (!res.canceled) {
         const proj = JSON.parse(fs.readFileSync(res.filePaths[0]));
         global.setActiveProject(proj);
-
+        global.filePath = res.filePaths[0];
         mainWindow.webContents.send("open-dialog-handler", {
             filePath: res.filePaths[0],
             project: proj
@@ -122,7 +128,7 @@ exports.closeNewProject = function () {
 }
 
 exports.confirmNewProject = async (mainWindow, project, loadedActive) => {
-    mainWindow.webContents.send("new-project-handler",{ project, loadedActive});
+    mainWindow.webContents.send("new-project-handler", { project, loadedActive });
     exports.closeNewProject();
 }
 
@@ -136,25 +142,37 @@ exports.deactivateProjectDialog = async (mainWindow) => {
     if (res.response === 0) {
         //deaktivacija projekta
         global.setActiveProject(null);
+        global.filePath = null;
         mainWindow.webContents.send("deactivated-project");
         return true;
     }
     return false;
 }
+exports.saveFileDialog = (mainWindow, forceDialog) => {
+    // console.log("saveFileDialog", forceDialog);
+    mainWindow.webContents.send("save-file-dialog", forceDialog);
+}
 
-exports.saveFileData = async (mainWindow, fileContents) => {
+exports.saveFileData = async (mainWindow, fileContents, forceDialog = true) => {
+    // console.log(fileContents);
     const proj = JSON.parse(fileContents);
-
-    const res = await dialog.showSaveDialog(mainWindow, {
-        title: "Spremi projekt",
-        defaultPath: path.join(app.getPath("documents"), proj.header.projectName + ".cldata"),
-        filters: [
-            { name: 'Klimasoft projekt', extensions: ['cldata'] },
-            { name: 'Sve datoteke', extensions: ['*'] }
-        ]
-    });
+    let res = {
+        filePath: global.filePath,
+        canceled: false
+    }
+    if (!global.filePath || forceDialog) {
+        res = await dialog.showSaveDialog(mainWindow, {
+            title: "Spremi projekt",
+            defaultPath: path.join(app.getPath("documents"), proj.header.projectName + ".cldata"),
+            filters: [
+                { name: 'Klimasoft projekt', extensions: ['cldata'] },
+                { name: 'Sve datoteke', extensions: ['*'] }
+            ]
+        });
+    }
     if (!res.canceled) {
         const filePath = res.filePath;
+        global.filePath = filePath;
         fs.writeFile(filePath, fileContents, (err) => {
             if (err) throw err;
         });

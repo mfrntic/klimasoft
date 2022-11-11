@@ -1,4 +1,4 @@
-const { openStations, openFileDialog, openNewProject, deactivateProjectDialog } = require("../electron/actions");
+const { openStations, openFileDialog, openNewProject, deactivateProjectDialog,  saveFileDialog } = require("../electron/actions");
 
 const isMac = process.platform === 'darwin';
 const isDev = require("electron-is-dev");
@@ -26,7 +26,8 @@ const menuTemplate = (window) => {
             submenu: [
                 { id: "new", label: "Novi projekt", accelerator: "Ctrl+N", click: () => { openNewProject(window, false); } },
                 { id: "open", label: "Otvori projekt...", accelerator: "Ctrl+O", click: () => { openFileDialog(window); } },
-                { id: "save", label: "Spremi projekt...", accelerator: "Ctrl+S", enabled: false },
+                { id: "save", label: "Spremi projekt...", accelerator: "Ctrl+S", enabled: false, click: () => { saveFileDialog(window, false); } },
+                { id: "saveas", label: "Spremi projekt kao...", enabled: false, click: () => { saveFileDialog(window, true); } },
                 // { type: 'separator' },
                 // { id: "options", label: "Postavke projekta...", enabled: false },
                 { id: "close", label: "Zatvori projekt...", enabled: false, click: () => { deactivateProjectDialog(window); } },

@@ -67,6 +67,11 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.on("deactivated-project", callback);
     },
 
+    saveFileDialog: (callback) => {
+        ipcRenderer.removeAllListeners("save-file-dialog")
+        ipcRenderer.on("save-file-dialog", callback);
+    },
+
     saveFileData: (data) => {
         ipcRenderer.send("save-file", data);
     },

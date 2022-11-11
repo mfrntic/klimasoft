@@ -6,7 +6,7 @@ import jspreadsheet from "jspreadsheet-ce";
 import "jspreadsheet-ce/dist/jspreadsheet.css";
 // import "jspreadsheet-ce/dist/jspreadsheet.theme.css";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MeasuresDataList from "../components/measures-data-list/MeasuresDataList";
 import ProjectCard from "../components/project/ProjectCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ import { projectActions } from "../store/projectSlice";
 import Project from "../models/klimasoft-project";
 
 import { Measures } from "../data/Measures";
-import GridToolbar from "./GridToolbar";
+import GridToolbar from "../components/project/GridToolbar";
 
 
 function ProjectData() {
@@ -22,33 +22,29 @@ function ProjectData() {
     // const activeProject = window.api.getActiveProject();
     const activeProjectData = useSelector(a => a.project);
     const activeProject = Project.fromObject(activeProjectData);
-    console.log("activeProject", activeProject);
 
     const jRef = useRef(null);
     const [selectedMeasure, setSelectedMeasure] = useState(Measures[0]);
+    const [prevMeasure, setPrevMeasure] = useState(null);
 
     const dispatch = useDispatch();
 
-
-
+    useEffect(() => {
+        setPrevMeasure(null);
+    }, [activeProject.header.projectName]);
 
     useEffect(() => {
         if (activeProject && selectedMeasure) {
-
-            const data = activeProject.data[selectedMeasure.IDMeasure];
 
             const onGridChange = () => {
                 const d = {};
                 d[selectedMeasure.IDMeasure] = jRef.current.jspreadsheet.getData();
                 dispatch(projectActions.setData(d));
-                console.log("change", d);
+                // console.log("change", d);
             };
 
             if (!jRef.current) return;
-            // if (jRef.current.jspreadsheet) {
-            //     jRef.current.jspreadsheet.destroy();
-            // }
-            const d = data.map(a => [...a]); //for deep copy, req. by jspreadsheet
+
             if (!jRef.current.jspreadsheet) {
                 const options = {
                     // data: [...d],
@@ -78,20 +74,23 @@ function ProjectData() {
             }
             // console.log("jref", jRef.current.jspreadsheet);
             jRef.current.jspreadsheet.onafterchanges = onGridChange;
-            jRef.current.jspreadsheet.setData([...d]);
 
+            console.log("measures", prevMeasure, selectedMeasure);
+            if (prevMeasure?.IDMeasure !== selectedMeasure.IDMeasure) {
+                const data = activeProject.data[selectedMeasure.IDMeasure];
+                const d = data.map(a => [...a]); //for deep copy, req. by jspreadsheet
+                jRef.current.jspreadsheet.setData([...d]);
+                setPrevMeasure({ ...selectedMeasure });
+            }
 
         }
 
-    }, [activeProject, dispatch, selectedMeasure]);
+
+    }, [activeProject, dispatch, selectedMeasure, prevMeasure]);
 
     function onSelectedMeasureHandler(measure) {
-        console.log("selectedMeasure", measure);
         setSelectedMeasure(measure);
-
     }
-
-
 
     return (
         <Layout>

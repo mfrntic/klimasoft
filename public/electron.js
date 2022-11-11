@@ -107,13 +107,12 @@ ipcMain.on("close-stations", (e, a) => {
 
 //file open dialog
 ipcMain.on("open-dialog", async (e, a) => {
-  openFileDialog(mainWindow);
+  await openFileDialog(mainWindow);
   // e.reply("open-dialog", res)
 });
 
 //new project dialog
 ipcMain.on("open-new-project", (e, a) => {
-
   openNewProject(mainWindow, a);
 });
 
@@ -137,8 +136,9 @@ ipcMain.on("deactive-project", (e, a) => {
   deactivateProjectDialog(mainWindow);
 });
 
-ipcMain.on("save-file", (e, a) => {
-  saveFileData(mainWindow, a);
+ipcMain.on("save-file", (e, res) => {
+  // console.log("save-file", res);
+  saveFileData(mainWindow, res.data, res.forceDialog);
 });
 
 

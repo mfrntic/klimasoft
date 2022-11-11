@@ -3,7 +3,7 @@ import style from "./GridToolbar.module.css";
 import { IconContext } from "react-icons";
 import { FaUndo, FaRedo, FaEraser, FaFileImport } from 'react-icons/fa';
 import { MdTabUnselected, MdContentCopy, MdContentPaste } from "react-icons/md";
-import { projectActions } from "../store/projectSlice";
+import { projectActions } from "../../store/projectSlice";
 import { useDispatch } from "react-redux";
 
 function GridToolbar({ jRef, measure }) {
@@ -42,14 +42,23 @@ function GridToolbar({ jRef, measure }) {
                 jRef.current.jspreadsheet.paste(selCell[0], selCell[1], text);
             }
         });
+    }
 
+    function onUndoHandler(){
+        console.log("undo");
+        jRef.current.jspreadsheet.undo() ;
+    }
+
+    function onRedoHandler(){
+        console.log("redo");
+        jRef.current.jspreadsheet.redo();
     }
 
     return (
         <div className={style.toolbar}>
             <IconContext.Provider value={{ className: style.icons, size: "0.95em" }}>
-                <button type="button" title="Poništi" onClick={() => { jRef.current.jspreadsheet.undo() }}><FaUndo /></button>
-                <button type="button" title="Ponovi poništeno" onClick={() => { jRef.current.jspreadsheet.redo() }}><FaRedo /></button>
+                <button type="button" title="Poništi" onClick={onUndoHandler}><FaUndo /></button>
+                <button type="button" title="Ponovi poništeno" onClick={onRedoHandler}><FaRedo /></button>
                 <button type="button" title="Odaberi sve" onClick={onSelectAllHandler}><MdTabUnselected /></button>
                 <button type="button" title="Kopiraj" onClick={onCopyHandler} ><MdContentCopy /></button>
                 <button type="button" title="Zalijepi" onClick={onPasteHandler}><MdContentPaste /></button>
