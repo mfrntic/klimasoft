@@ -89,6 +89,14 @@ contextBridge.exposeInMainWorld("api", {
     importDialogHandler: (callback) => {
         ipcRenderer.removeAllListeners("import-file")
         ipcRenderer.on("import-file", callback);
-    }
+    },
+    confirmImport: (data) => {
+        ipcRenderer.send("confirm-import-data", data);
+    },
+    confirmImportHandler: (callback) => {
+        ipcRenderer.removeAllListeners("import-data-handler")
+        ipcRenderer.on("import-data-handler", callback);
+    },
+
 });
 

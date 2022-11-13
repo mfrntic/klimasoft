@@ -68,8 +68,6 @@ function App() {
     dispatch(projectActions.reset());
   });
 
-  //handsontable
-  // registerAllModules();
 
   return (
     <Routes>

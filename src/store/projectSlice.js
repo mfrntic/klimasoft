@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const initialState = {
     header: {
@@ -43,9 +43,12 @@ export const projectSlice = createSlice({
         setData: function (state, action) {
             // const { measureID, data } = action.payload;
             //state.data = { ...state.data, ...action.payload };
-            const data = { ...state.data, ...action.payload };
+            //    const data = { ...state.data, ...action.payload };
+            const data = action.payload;
+
             for (const prop in data) {
-                data[prop] = data[prop].map(row => {
+                console.log("data[prop]", prop, data[prop]);
+                state.data[prop] = data[prop].map(row => {
                     // console.log("row", row);
                     row = row.map((val, i) => {
                         if (i > 0) {
@@ -59,11 +62,11 @@ export const projectSlice = createSlice({
                         }
                         return val;
                     });
-                    return row.filter(a => a !== "");
+                    return row; //.filter(a => a !== "" && !isNaN(a));
                 });
             }
             // console.log("data,", data);
-            state.data = data;
+            // state.data = data;
 
         }
     }

@@ -15,13 +15,14 @@ import Project from "../models/klimasoft-project";
 
 import { Measures } from "../data/Measures";
 import GridToolbar from "../components/project/GridToolbar";
+import GridTotal from "../components/project/GridTotal";
 
 
 function ProjectData() {
 
     // const activeProject = window.api.getActiveProject();
     const activeProjectData = useSelector(a => a.project);
-    
+
     console.log("activeProjectData", activeProjectData);
     const activeProject = Project.fromObject(activeProjectData);
 
@@ -82,19 +83,26 @@ function ProjectData() {
             console.log("measures", prevMeasure, selectedMeasure);
             if (prevMeasure?.IDMeasure !== selectedMeasure.IDMeasure) {
                 const data = activeProject.data[selectedMeasure.IDMeasure];
-                const d = data.map(a => [...a]); //for deep copy, req. by jspreadsheet
+                const d = data.map((a, i) => [...a]); //for deep copy, req. by jspreadsheet
                 jRef.current.jspreadsheet.setData([...d]);
                 setPrevMeasure({ ...selectedMeasure });
             }
 
         }
-
-
     }, [activeProject, dispatch, selectedMeasure, prevMeasure]);
+
 
     function onSelectedMeasureHandler(measure) {
         setSelectedMeasure(measure);
     }
+
+
+    window.api.confirmImportHandler((e, res) => {
+        console.log("confirmImport", res);
+        setPrevMeasure(null);
+        dispatch(projectActions.setData(res));
+    });
+
 
     return (
         <Layout>
@@ -107,11 +115,21 @@ function ProjectData() {
                         </div>
                     </div>
                     <div className={style.measuresData}>
-                        {selectedMeasure && <h4>UNOS PODATAKA*: <span className={style.titleMeasure}>{selectedMeasure.TypeName}</span></h4>}
+                        {selectedMeasure && <h4>
+                            UNOS PODATAKA*: <span className={style.titleMeasure}>{selectedMeasure.TypeName}</span>
+                        </h4>}
                         <div ref={jRef} className={style.grid}>
                             <GridToolbar jRef={jRef} measure={selectedMeasure} />
                         </div>
                         {selectedMeasure && <small>* Podatke unosite kao niz godišnjih prosjeka (svaka godina je jedan red, prva kolona sadrži godinu) ili samo kao izračunati višegodišnji prosjek (jedan red ukupno, prva kolona sadrži bilo što, npr tekst "Ukupno")</small>}
+
+                        {(selectedMeasure && activeProject.data.hasData(selectedMeasure.IDMeasure)) && <div className={style.deskriptiva}>
+                            <h4>
+                                DESKRIPTIVA: <span className={style.titleMeasure}>{selectedMeasure.TypeName}</span>
+                            </h4>
+                            <GridTotal measure={selectedMeasure} projectdata={activeProject.data} />
+                        </div>
+                        }
                     </div>
                 </div>}
                 {!activeProject?.header.isValid() && <ProjectNotSelected />}

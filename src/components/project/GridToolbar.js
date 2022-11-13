@@ -1,7 +1,7 @@
 import style from "./GridToolbar.module.css";
 
 import { IconContext } from "react-icons";
-import { FaUndo, FaRedo, FaEraser, FaFileImport } from 'react-icons/fa';
+import { FaUndo, FaRedo, FaEraser, FaFileImport, FaAngleRight } from 'react-icons/fa';
 import { MdTabUnselected, MdContentCopy, MdContentPaste } from "react-icons/md";
 import { projectActions } from "../../store/projectSlice";
 import { useDispatch } from "react-redux";
@@ -61,15 +61,16 @@ function GridToolbar({ jRef, measure }) {
     return (
         <div className={style.toolbar}>
             <IconContext.Provider value={{ className: style.icons, size: "0.95em" }}>
-                <button type="button" title="Poništi" onClick={onUndoHandler}><FaUndo /></button>
-                <button type="button" title="Ponovi poništeno" onClick={onRedoHandler}><FaRedo /></button>
+                {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Poništi" onClick={onUndoHandler}><FaUndo /></button>}
+                {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Ponovi poništeno" onClick={onRedoHandler}><FaRedo /></button>}
                 <button type="button" title="Odaberi sve" onClick={onSelectAllHandler}><MdTabUnselected /></button>
                 <button type="button" title="Kopiraj" onClick={onCopyHandler} ><MdContentCopy /></button>
                 <button type="button" title="Zalijepi" onClick={onPasteHandler}><MdContentPaste /></button>
 
-                <button type="button" title="Uvoz podataka" className={style.importData} onClick={onImportDataHandler}><FaFileImport /></button>
-                <button type="button" title="Očisti sadržaj tablice" className={style.clearTable} onClick={onClearDataHandler}><FaEraser /></button>
+                {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Uvoz podataka" className={style.importData} onClick={onImportDataHandler}><FaFileImport /></button>}
+                {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Očisti sadržaj tablice" className={style.clearTable} onClick={onClearDataHandler}><FaEraser /></button>}
 
+                {/* <button type="button" style={{marginLeft: "20px"}}><strong>DESKRIPTIVA</strong> <FaAngleRight /></button> */}
             </IconContext.Provider>
         </div>
     )

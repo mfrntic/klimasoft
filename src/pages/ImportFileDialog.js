@@ -18,7 +18,7 @@ function ImportFileDialog() {
 
     const [txt, setTxt] = useState();
     const [data4Import, setData4Import] = useState();
-
+ 
     window.api.importDialogHandler((e, txt) => {
         setTxt(txt);
     });
@@ -28,6 +28,11 @@ function ImportFileDialog() {
         setData4Import({ ...data });
     }, [])
 
+    function onImportHandler() {
+        //import data
+        console.log("data4import", data4Import);
+        window.api.confirmImport(data4Import);
+    }
 
 
 
@@ -38,7 +43,7 @@ function ImportFileDialog() {
             </div>
             <footer>
                 <IconContext.Provider value={{ size: "1.1em", className: style.icons }}>
-                    <button type="button" className={style.primaryButton} disabled={isEmpty(data4Import)}><FaFileImport /> Uvezi podatke</button>
+                    <button type="button" className={style.primaryButton} disabled={isEmpty(data4Import)} onClick={onImportHandler}><FaFileImport /> Uvezi podatke</button>
                     <button type="button" onClick={() => { window.api.importFileDialogClose() }}>Zatvori</button>
                 </IconContext.Provider>
             </footer>

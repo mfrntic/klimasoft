@@ -84,12 +84,13 @@ export class ProjectData {
             case "percipitation":
                 return this.percipitation && this.percipitation.length > 0;
             default:
-                return this.meanTemp && this.meanTemp.length > 0 &&
-                    this.avgMaxTemp && this.avgMaxTemp.length > 0 &&
-                    this.avgMinTemp && this.avgMinTemp.length > 0 &&
-                    this.absMaxTemp && this.absMaxTemp.length > 0 &&
-                    this.absMinTemp && this.absMinTemp.length > 0 &&
-                    this.percipitation && this.percipitation.length > 0;
+                console.log("hasdata");
+                return (this.meanTemp && this.meanTemp.length > 0) ||
+                    (this.avgMaxTemp && this.avgMaxTemp.length > 0) ||
+                    (this.avgMinTemp && this.avgMinTemp.length > 0) ||
+                    (this.absMaxTemp && this.absMaxTemp.length > 0) ||
+                    (this.absMinTemp && this.absMinTemp.length > 0) ||
+                    (this.percipitation && this.percipitation.length > 0);
         }
 
     }

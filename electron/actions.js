@@ -243,3 +243,10 @@ exports.importFileDialog = async (mainWindow) => {
 
     }
 }
+
+
+exports.confirmImport = async (mainWindow, data) => {
+    mainWindow.webContents.send("import-data-handler", data);
+    // console.log("import-data-handler", data);
+    exports.importFileDialogClose();
+}

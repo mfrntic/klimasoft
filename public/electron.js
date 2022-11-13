@@ -1,12 +1,12 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject, 
-  deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose } = require("../electron/actions");
+const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject,
+  deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose, confirmImport } = require("../electron/actions");
 const global = require("./global");
-const menuTemplate = require("../electron/menuTemplate"); 
+const menuTemplate = require("../electron/menuTemplate");
 const { getStations, initStations } = require("../src/data/StationsHR");
- 
+
 
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS;
@@ -44,7 +44,7 @@ function createWindow() {
   const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, global.activeProject));
   Menu.setApplicationMenu(menu);
 
- 
+
 
   // Load from localhost if in development
   // Otherwise load index.html file
@@ -151,6 +151,11 @@ ipcMain.on("import-file", (e, res) => {
 ipcMain.on("import-file-close", (e, res) => {
   // console.log("save-file", res);
   importFileDialogClose();
+});
+
+ipcMain.on("confirm-import-data", (e, a) => {
+  // console.log("confirm-new-project", a);
+  confirmImport(mainWindow, a);
 });
 
 if (getStations().length === 0) {

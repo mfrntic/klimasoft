@@ -1,11 +1,12 @@
 .measureItem {
-  padding: 8px 16px;
+  padding: 6px 12px;
   margin-bottom: 5px;
   border: 1px solid #d2d3d6;
   border-radius: 4px;
   background-color: #edeef0;
   width: auto;
   cursor: pointer;
+  font-size: 0.9em;
 }
 
 .measureItem:hover {
@@ -13,7 +14,7 @@
 }
 
 .icons {
-  vertical-align: bottom;
+  vertical-align: middle;
 }
 
 .measureItem .title {
@@ -29,6 +30,7 @@
   display: inline-block;
   width: 30px;
   color: green;
+  
 }
 
 .measureItem .arrowRight {

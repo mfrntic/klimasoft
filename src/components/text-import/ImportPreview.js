@@ -36,7 +36,11 @@ function ImportPreview({ contents, onDataChange }) {
             if (mNum !== null) {
                 var lineData = [];
                 for (var i = 1; i <= 13; i++) {
-                    lineData.push(Number(mNum[i].replace(",", ".")));
+                    let n = Number(mNum[i].replace(",", "."));
+                    if (isNaN(n)){
+                        n = "";
+                    }
+                    lineData.push(n);
                 }
                 rawData.push({ linedata: lineData, linelength: regexLines.lastIndex - mLine.index, startindex: mLine.index });
             }
@@ -79,7 +83,7 @@ function ImportPreview({ contents, onDataChange }) {
         }
         tables.push({ data: data, startIndex: startIndex, endIndex: endIndex });
 
-       // console.log(tables);
+        // console.log(tables);
 
         return tables;
     }
@@ -113,13 +117,15 @@ function ImportPreview({ contents, onDataChange }) {
     }
 
     useEffect(() => {
-        const data = {...selectedData};
-        for(const prop in data){
-            if (!data[prop]){
-                delete data[prop];
+        if (selectedData) {
+            const data = { ...selectedData };
+            for (const prop in data) {
+                if (!data[prop]) {
+                    delete data[prop];
+                }
             }
+            onDataChange(data);
         }
-        onDataChange(data);
     }, [selectedData, onDataChange])
 
     function renderPreview() {
@@ -130,7 +136,7 @@ function ImportPreview({ contents, onDataChange }) {
                     if (domNode.attribs && domNode.attribs.class === "commands") {
                         const position = parseInt(domNode.parent.attribs["data-position"]);
                         // console.log("position", position);
-                        return <DataBlockToolbar data={data[position]} onChange={onDataSelectedChange} selectedData={selectedData} />
+                        return <DataBlockToolbar data={data[position].data} onChange={onDataSelectedChange} selectedData={selectedData} />
                     }
                 }
             });
