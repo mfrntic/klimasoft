@@ -22,11 +22,9 @@ function ProjectData() {
 
     // const activeProject = window.api.getActiveProject();
     const activeProjectData = useSelector(a => a.project);
-
-    console.log("activeProjectData", activeProjectData);
+    //    console.log("activeProjectData", activeProjectData);
     const activeProject = Project.fromObject(activeProjectData);
-
-    console.log("activeProject", activeProject);
+    //   console.log("activeProject", activeProject);
 
     const jRef = useRef(null);
     const [selectedMeasure, setSelectedMeasure] = useState(Measures[0]);
