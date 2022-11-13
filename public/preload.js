@@ -78,6 +78,17 @@ contextBridge.exposeInMainWorld("api", {
 
     getClipboardData: () => {
         return clipboard.readText();
+    },
+
+    importFileDialog: () => {
+        ipcRenderer.send("import-file");
+    },
+    importFileDialogClose: () => {
+        ipcRenderer.send("import-file-close");
+    },
+    importDialogHandler: (callback) => {
+        ipcRenderer.removeAllListeners("import-file")
+        ipcRenderer.on("import-file", callback);
     }
 });
 

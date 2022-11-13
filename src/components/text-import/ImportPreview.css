@@ -1,0 +1,14 @@
+.preview .highlight {
+  background-color: #DBE9FA;
+}
+
+.preview .datablock{
+  /* cursor: pointer; */
+  position: relative;
+}
+
+.preview .datablock:hover .highlight {
+  background-color: #D1DFF0;
+}
+
+ 

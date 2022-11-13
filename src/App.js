@@ -12,6 +12,7 @@ import { stationsActions } from "./store/stationsSlice";
 import { projectActions } from "./store/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import ImportFileDialog from "./pages/ImportFileDialog";
 
 function App() {
 
@@ -29,9 +30,10 @@ function App() {
 
     //load active project
     const active = window.api.getActiveProject();
-    console.log("active", active);
+    // console.log("active", active);
     if (active) {
-      dispatch(projectActions.setHeader(active));
+      dispatch(projectActions.setHeader(active.header));
+      dispatch(projectActions.setData(active.data));
     }
 
   }, [dispatch]);
@@ -62,7 +64,7 @@ function App() {
 
   //project deactivated
   window.api.deactivateProjectHandler((e, res) => {
-    console.log("deactivate project");
+    // console.log("deactivate project");
     dispatch(projectActions.reset());
   });
 
@@ -76,6 +78,7 @@ function App() {
       <Route path="/stations" element={<StationsDialog />} />
       {/* <Route path="/stations/:id" element={<StationForm />} /> */}
       <Route path="/newproject" element={<NewProjectDialog />} />
+      <Route path="/import" element={<ImportFileDialog />} />
       <Route path="*" element={<Navigate to="/data" replace />} />
     </Routes>
   );

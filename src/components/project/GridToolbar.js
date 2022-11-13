@@ -13,7 +13,7 @@ function GridToolbar({ jRef, measure }) {
     function onSelectAllHandler() {
         // jRef.current.jspreadsheet.updateSelectionFromCoords(0, 0, data[0].length, data.length)
         jRef.current.jspreadsheet.selectAll();
-     
+
     }
 
     function onClearDataHandler() {
@@ -44,14 +44,18 @@ function GridToolbar({ jRef, measure }) {
         });
     }
 
-    function onUndoHandler(){
+    function onUndoHandler() {
         console.log("undo");
-        jRef.current.jspreadsheet.undo() ;
+        jRef.current.jspreadsheet.undo();
     }
 
-    function onRedoHandler(){
+    function onRedoHandler() {
         console.log("redo");
         jRef.current.jspreadsheet.redo();
+    }
+
+    function onImportDataHandler() {
+        window.api.importFileDialog();
     }
 
     return (
@@ -63,8 +67,9 @@ function GridToolbar({ jRef, measure }) {
                 <button type="button" title="Kopiraj" onClick={onCopyHandler} ><MdContentCopy /></button>
                 <button type="button" title="Zalijepi" onClick={onPasteHandler}><MdContentPaste /></button>
 
-                <button type="button" title="Uvoz podataka" className={style.importData}><FaFileImport /></button>
+                <button type="button" title="Uvoz podataka" className={style.importData} onClick={onImportDataHandler}><FaFileImport /></button>
                 <button type="button" title="Očisti sadržaj tablice" className={style.clearTable} onClick={onClearDataHandler}><FaEraser /></button>
+
             </IconContext.Provider>
         </div>
     )

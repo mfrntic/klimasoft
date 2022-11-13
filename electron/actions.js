@@ -8,7 +8,7 @@ const fs = require("fs");
 let stations, newproject;
 
 exports.openStations = async function (mainWindow) {
-   
+
     // console.log("STATIONS!");
     const url = isDev
         ? "http://localhost:3000#/stations"
@@ -50,9 +50,9 @@ exports.closeStations = function () {
     }
 }
 
-exports.openFileDialog = async (mainWindow) => { 
+exports.openFileDialog = async (mainWindow) => {
     console.log("openFileDialog", global.activeProject);
-    if ( global.activeProject) { //ako je otvaranje potpuno novog projekta prvo deaktiviraj stari
+    if (global.activeProject) { //ako je otvaranje potpuno novog projekta prvo deaktiviraj stari
         if (!await exports.deactivateProjectDialog(mainWindow)) return;
     }
 
@@ -176,5 +176,70 @@ exports.saveFileData = async (mainWindow, fileContents, forceDialog = true) => {
         fs.writeFile(filePath, fileContents, (err) => {
             if (err) throw err;
         });
+    }
+}
+
+let importDialog;
+
+exports.importFileDialogClose = () => {
+    if (importDialog) {
+        importDialog.close();
+    }
+}
+
+exports.importFileDialog = async (mainWindow) => {
+    const res = await dialog.showOpenDialog(mainWindow, {
+        title: "Uvoz podataka",
+        defaultPath: app.getPath("documents"),
+        filters: [
+            { name: 'Očekivani formati za uvoz', extensions: ['txt', 'dat'] },
+            { name: 'Sve datoteke', extensions: ['*'] }
+        ]
+    });
+    if (!res.canceled) {
+        const txt = fs.readFileSync(res.filePaths[0], 'utf8');
+
+        //otvori browser window za import
+        // console.log("STATIONS!");
+        const url = isDev
+            ? "http://localhost:3000#/import"
+            : `file://${path.join(path.basename(__dirname), "../build/index.html#/import")}`;
+
+        const mainBounds = mainWindow.getBounds();
+
+
+        importDialog = new BrowserWindow({
+            title: "Uvoz podataka: " + res.filePaths[0],
+            width: 890,
+            height: 575,
+            minWidth: 400,
+            minHeight: 400,
+            // maxWidth: 1200,
+            // maxHeight: 1200,
+            // minimizable: false,
+            // maximizable: false,
+            parent: mainWindow,
+            x: mainBounds.x + (mainBounds.width / 2 - 890 / 2),
+            y: mainBounds.y + (mainBounds.height / 2 - 575 / 2),
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true,
+                enableRemoteModule: false,
+                preload: path.resolve(__dirname, "../public/preload.js"),
+            },
+        });
+
+        if (isDev) {
+            importDialog.webContents.toggleDevTools();
+        }
+
+        importDialog.setMenu(null);
+        importDialog.loadURL(url);
+
+        importDialog.webContents.on("did-finish-load", () => {
+            importDialog.webContents.send("import-file", txt);
+        });
+
+
     }
 }

@@ -1,0 +1,57 @@
+.import {
+  display: block;
+  padding: 0;
+  margin: 0;
+  /* width: 100vw; */
+  height: 100vh;
+}
+
+.import .body {
+  height: calc(100% - 80px);
+  padding: 10px;
+  font-size: 0.8em;
+  overflow: scroll;
+}
+
+.import .body > div {
+  white-space: pre;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.import footer {
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px #d2d3d6 solid;
+  text-align: right;
+  background-color: #edeef0;
+}
+
+.import footer button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 12px 10px 12px 5px;
+  background-color: #111;
+  color: white;
+  border: none;
+}
+
+
+.import footer button:disabled{
+  background-color: silver !important;
+  opacity: 0.7;
+}
+
+
+.primaryButton {
+  background-color: #4f8edc !important;
+}
+ 
+
+.icons {
+  vertical-align: bottom;
+  margin: 0;
+  padding-right: 5px;
+}

@@ -10,6 +10,7 @@
     "cross-env": "^7.0.3",
     "electron-is-dev": "^1.2.0",
     "electron-store": "^8.1.0",
+    "html-react-parser": "^3.0.4",
     "jspreadsheet-ce": "^4.10.2",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -22,7 +23,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "concurrently -k \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electronmon .\"",
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://127.0.0.1:3000 && electronmon .\"",
     "build": "react-scripts build",
     "test": "mocha",
     "eject": "react-scripts eject",

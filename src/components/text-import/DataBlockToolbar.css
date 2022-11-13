@@ -1,0 +1,27 @@
+
+.preview .toolbar{
+    display: none;
+    position: absolute;
+    left: 15px;
+    top: 30px;
+    padding:  15px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+  }
+  
+  .preview .toolbar.selected{
+    display: inline-block;
+    background-color: rgba(248, 171, 90, 0.55);
+  }
+  
+  .preview .toolbar select{
+    padding: 5px;
+    border-radius: 4px;
+  
+  }
+  
+  .preview .datablock:hover .toolbar{
+    display: inline-block;
+  
+  }
+   

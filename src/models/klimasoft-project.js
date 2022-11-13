@@ -2,16 +2,18 @@ export default class Project {
 
     constructor(project) {
         if (!project) return;
-        Object.assign(this, project);
+        // Object.assign(this, project);
         this.header = new ProjectHeader(this.header);
         this.data = new ProjectData(this.data);
     }
 
     static fromObject(project) {
         if (!project) return null;
-        const res = Object.assign(new Project(), project);
-        res.header = new ProjectHeader(res.header);
-        res.data = new ProjectData(res.data);
+        // const res = Object.assign(new Project(), project);
+        // console.log("fromObject", res);
+        let res = {};
+        res.header = new ProjectHeader(project.header);
+        res.data = new ProjectData(project.data);
         return res;
     }
 

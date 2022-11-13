@@ -32,7 +32,7 @@ export const projectSlice = createSlice({
     name: "project",
     initialState,
     reducers: {
-        reset: function(state){
+        reset: function (state) {
             state.header = initialState.header;
             state.data = initialState.data;
         },
@@ -42,7 +42,29 @@ export const projectSlice = createSlice({
         },
         setData: function (state, action) {
             // const { measureID, data } = action.payload;
-            state.data = { ...state.data, ...action.payload };
+            //state.data = { ...state.data, ...action.payload };
+            const data = { ...state.data, ...action.payload };
+            for (const prop in data) {
+                data[prop] = data[prop].map(row => {
+                    // console.log("row", row);
+                    row = row.map((val, i) => {
+                        if (i > 0) {
+                            try {
+                                const tmp = parseFloat(val.toString().replace(",", "."));
+                                if (!isNaN(tmp)) {
+                                    val = tmp;
+                                }
+                            }
+                            catch { }
+                        }
+                        return val;
+                    });
+                    return row.filter(a => a !== "");
+                });
+            }
+            // console.log("data,", data);
+            state.data = data;
+
         }
     }
 });
