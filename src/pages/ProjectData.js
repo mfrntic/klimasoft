@@ -78,7 +78,7 @@ function ProjectData() {
             // console.log("jref", jRef.current.jspreadsheet);
             jRef.current.jspreadsheet.onafterchanges = onGridChange;
 
-            console.log("measures", prevMeasure, selectedMeasure);
+            // console.log("measures", prevMeasure, selectedMeasure);
             if (prevMeasure?.IDMeasure !== selectedMeasure.IDMeasure) {
                 const data = activeProject.data[selectedMeasure.IDMeasure];
                 const d = data.map((a, i) => [...a]); //for deep copy, req. by jspreadsheet
@@ -96,7 +96,7 @@ function ProjectData() {
 
 
     window.api.confirmImportHandler((e, res) => {
-        console.log("confirmImport", res);
+        // console.log("confirmImport", res);
         setPrevMeasure(null);
         dispatch(projectActions.setData(res));
     });

@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from "react";
 import { IconContext } from "react-icons";
-import { IoCheckmark, IoTrash, IoLocation } from 'react-icons/io5';
+import { IoCheckmark, IoLocation } from 'react-icons/io5';
 import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import Select from 'react-select';
@@ -85,7 +85,7 @@ function ProjectForm() {
             // console.log("header", projheader);
 
             //close
-            window.api.confirmNewProject(projheader, loadactive);
+            window.api.confirmNewProject({header: projheader, data: []}, loadactive);
         }
 
     }

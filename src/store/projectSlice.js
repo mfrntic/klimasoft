@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     header: {
@@ -47,7 +47,7 @@ export const projectSlice = createSlice({
             const data = action.payload;
 
             for (const prop in data) {
-                console.log("data[prop]", prop, data[prop]);
+                // console.log("data[prop]", prop, data[prop]);
                 state.data[prop] = data[prop].map(row => {
                     // console.log("row", row);
                     row = row.map((val, i) => {

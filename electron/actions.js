@@ -115,9 +115,9 @@ exports.openNewProject = async function (mainWindow, loadactive = true) {
     newproject.setMenu(null);
     newproject.loadURL(url);
 
-    // if (isDev) {
-    //     newproject.webContents.toggleDevTools();
-    // }
+    if (isDev) {
+        newproject.webContents.toggleDevTools();
+    }
 
 }
 

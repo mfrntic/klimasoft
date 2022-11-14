@@ -41,7 +41,7 @@ function GridTotal({ projectdata, measure }) {
 
     useEffect(() => {
         if (projectdata && measure) {
-            console.log("GridTotal", projectdata, measure);
+            // console.log("GridTotal", projectdata, measure);
             jRef.current.jspreadsheet.setData(describe(projectdata[measure.IDMeasure]));
         }
     }, [projectdata, measure])

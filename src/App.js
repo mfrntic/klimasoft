@@ -17,6 +17,7 @@ import ImportFileDialog from "./pages/ImportFileDialog";
 function App() {
 
   const activeProjectData = useSelector(a => a.project);
+  // console.log("App()", activeProjectData);
 
   //load data
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ function App() {
     if (active) {
       dispatch(projectActions.setHeader(active.header));
       dispatch(projectActions.setData(active.data));
+      // console.log(active);
     }
 
   }, [dispatch]);
@@ -53,7 +55,7 @@ function App() {
     if (!res.loadedActive) {
       dispatch(projectActions.reset());
     }
-    dispatch(projectActions.setHeader(res.project));
+    dispatch(projectActions.setHeader(res.project.header));
   });
 
   //save file dialog

@@ -27,7 +27,7 @@ let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: "Klimasoft",
-    width: 1100,
+    width: 1140,
     height: 800,
     minWidth: 800,
     minHeight: 600,
