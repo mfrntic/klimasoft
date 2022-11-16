@@ -13,3 +13,25 @@
     color: #4f8edc
   }
   
+  
+.page .reports {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.page .data .reportsMenu {
+  padding: 10px;
+}
+
+.page .data .reportsData {
+  padding: 10px;
+}
+
+.page .data .sticky {
+  position: sticky;
+  top: 10px;
+}
+ 

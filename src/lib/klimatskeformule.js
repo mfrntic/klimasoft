@@ -1,3 +1,4 @@
+const { default: reactSelect } = require("react-select");
 const { round, average, sum, max, min } = require("./mathUtils");
 const MoonSunCalc = require("./moonsuncalc");
 
@@ -431,7 +432,7 @@ exports.thornthwaitePET = {
         }
     },
     title: "Thornthwaite potential evapotranspiration [PET]",
-    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occur if a sufficient water source were availablToplinski karakter klime po Gračaninu"
+    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available"
 }
 
 exports.thornthwaiteWaterBalance = {
@@ -558,22 +559,60 @@ exports.ombrothermicIndex = {
 }
 
 exports.ombrothermicIndexSummerQuarter = {
-    calculate: function () {
+    calculate: function (mean_temps, percs) {
+        const t = [], p = [];
+        for (let i = 0; i < mean_temps.length; i++) {
+            if (i >= 5 && i <= 7) { //lip, srp, kol
+                t.push(mean_temps[i]);
+                p.push(percs[i]);
+            }
+        }
 
+        const res = round((average(p) / sum(t)) * 10, 2);
+        let result = "";
+        if (res < 0.3) {
+            result = "hyperarid";
+        }
+        else if (res < 0.9) {
+            result = "arid";
+        }
+        else if (res < 2) {
+            result = "semiarid";
+        }
+        else if (res < 3) {
+            result = "dry";
+        }
+        else if (res < 5.5) {
+            result = "subhumid";
+        }
+        else {
+            result = "humid";
+        }
+
+        return {
+            value: res,
+            result: result
+        }
     },
     title: "Ombrothermic index of the summer quarter [Iosq]",
     description: "Rasztovits et al. 2012."
 }
 
-
 exports.thermicityIndex = {
-    calculate: function () {
+    calculate: function (mean_temp) {
+        const T = average(mean_temp);
+        const m = min(mean_temp);
+        const M = max(mean_temp);
+        const res = round((T + m + M) * 10);
 
+        return {
+            value: res,
+            result: res.toFixed()
+        }
     },
     title: "Thermicity Index [It]",
     description: "Rasztovits et al. 2012."
 }
-
 
 exports.ombroEvapotranspirationIndex = {
     calculate: function (mean_temps, percs, lat, lon, year_from = 0, year_to = 0) {
@@ -591,17 +630,81 @@ exports.ombroEvapotranspirationIndex = {
 }
 
 exports.drySeasonWaterDeficit = {
-    calculate: function () {
-
+    calculate: function (mean_temps, percs, lat, lon, year_from = 0, year_to = 0) {
+        const resArr = [];
+        for (let i = 0; i < percs.length; i++) {
+            if (mean_temps[i] > 0) {
+                const pet = exports.thornthwaitePET.calculate(mean_temps, lat, lon, year_from, year_to);
+                resArr.push(round(percs[i] - pet.result[i], 2));
+            }
+            else {
+                resArr.push(0);
+            }
+        }
+        return {
+            value: resArr,
+            result: JSON.stringify(resArr)
+        }
     },
     title: "Dry season water deficit [DSWD]",
     description: "Dufour-Dror and Ertas 2004."
 }
 
 exports.drySeasonDuration = {
-    calculate: function () {
-
+    calculate: function (mean_temps, percs) {
+        let res = 0;
+        const resArr = [];
+        for (let i = 0; i < 12; i++) {
+            const t = mean_temps[i];
+            const p = percs[i];
+            resArr.push(round(p - 2 * t, 2));
+            if (p <= 2 * t) {
+                res++;
+            }
+        }
+        return {
+            value: res,
+            result: resArr
+        }
     },
     title: "Duration of the dry season [LDS]",
     description: "Gausen 1954., UNESCO 1963"
+}
+
+exports.rainfallAnomalyIndex = {
+    calculate: function (percs) {
+        let low = [...percs];
+        low.sort((a, b) => a - b);
+        low = low.slice(0, 10);
+        let high = [...percs]
+        high.sort((a, b) => b - a);
+        high = high.slice(0, 10);
+ 
+        const p_avg = round(average(percs), 2);
+        const high_avg = round(average(high), 2);
+        const low_avg = round(average(low), 2);
+        console.log(p_avg, high_avg, low_avg);
+
+        const res = [];
+        for (const p of percs) {
+            const anom = p - p_avg;
+            let ind;
+            if (anom < 0) {
+                ind = -3 * (anom / (low_avg - p_avg));
+                //ind = -3 * anom / (high_avg - p_avg);
+            }
+            else {
+                ind = 3 * anom / (high_avg - p_avg);
+            }
+            res.push(round(ind, 2));
+        }
+
+        return {
+            value: round(average(res), 2),
+            result: res
+        }
+
+    },
+    title: "Rainfall Anomaly Index [RAI]",
+    description: "RAI (Rainfall Anomaly Index) is an incorporation of ranking procedure to assign magnitudes to positive and negative precipitation anomalies"
 }

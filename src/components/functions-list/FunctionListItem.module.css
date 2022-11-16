@@ -1,0 +1,65 @@
+.functionItem {
+  padding: 6px 12px;
+  margin-bottom: 5px;
+  border: 1px solid #d2d3d6;
+  border-radius: 4px;
+  background-color: #edeef0;
+  width: auto;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.functionItem:hover {
+  background-color: lightgray;
+}
+
+.icons {
+  vertical-align: middle;
+}
+
+.functionItem .title {
+  display: inline-block;
+  width: calc(100% - 75px);
+  margin-right: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.functionItem .description {
+  /* display: inline-block; */
+  /* width: calc(100% - 75px); */
+  margin-left: 10px;
+  font-size: 0.9em;
+}
+
+.functionItem .arrowRight {
+  float: right;
+  color: gray;
+}
+
+.functionItem:hover .arrowRight {
+  color: black;
+}
+
+.functionItem.selected {
+  color: whitesmoke;
+  background-color: #4f8edc;
+}
+
+.functionItem.selected .arrowRight {
+  color: whitesmoke;
+}
+
+.functionItem.selected .done {
+  color: whitesmoke;
+}
+
+.functionItem .checkbox{
+  /* margin: 5px; */
+  width: 30px;
+  height: 18px;
+  cursor: pointer;
+}

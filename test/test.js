@@ -7,7 +7,12 @@ const { aridityIndexDeMartonne, aridityIndexGracanin, ellenbergEQ,
     thornthwaitePercipitationEfficiency,
     continentalityIndex,
     ombroEvapotranspirationIndex,
-    ombrothermicIndex } = require("../src/lib/klimatskeformule");
+    ombrothermicIndex,
+    ombrothermicIndexSummerQuarter,
+    thermicityIndex,
+    drySeasonWaterDeficit,
+    drySeasonDuration,
+    rainfallAnomalyIndex } = require("../src/lib/klimatskeformule");
 const { sum, average, round } = require("../src/lib/mathUtils");
 
 //puntjarka
@@ -107,13 +112,39 @@ describe("Formulas", () => {
         assert.equal(ppet.value, 22.77);
     });
 
+    it("Ombrothermic index of the summer quarter [Iosq]", () => {
+        const res = ombrothermicIndexSummerQuarter.calculate(temps, percs);
+        assert.equal(res.value, 0.2);
+    });
+
+    it("Thermicity Index [It]", () => {
+        const res = thermicityIndex.calculate(temps);
+        assert.equal(res.value, 380.3);
+    });
+
+    // it("Dry season water deficit [DSWD]", () => {
+    //     const res = drySeasonWaterDeficit.calculate(temps, percs, 45.86, 13.85);
+    //     assert.deepEqual(res.value, [45.9, 39.4, 31.9, 7.8, -36.3, -61.1, -114.8, -82.6, -21, 43.9, 64.4, 54.2])
+    // });
+
+    // it("Duration of the dry season [LDS]", () => {
+    //     const res = drySeasonDuration.calculate(temps, percs);
+    //     assert.equal(res.value, 1);
+    //     assert.deepEqual(res.result, [48.1, 41.9, 40.7, 31.8, 20.5, 19.8, -10.5, 8.7, 29.3, 72.8, 76.6, 59.2]);
+    // });
+
+    it("Rainfall Anomaly Index [RAI]", () => {
+        const p = [1110.3, 1628.4, 1589.6, 1532.6, 1482, 1624.4, 972.1, 1713, 1351.1, 1437, 1438.4, 1488.2, 1488.9, 1196.8, 1003.7];
+        const res = rainfallAnomalyIndex.calculate(p);
+        console.log(res);
+    });
+
     // it("Vodna bilanca (vodni suficit/deficit)", () => {
     //     const pet = thornthwaitePET.calculate(temps, 45.9036, 15.9693);
     //     const vodna_bilanca = thornthwaiteWaterBalance.calculate(percs, pet.result);
     //     // console.log("vodna_bilanca", vodna_bilanca);
     //     assert.equal(vodna_bilanca.value, 713.94);
     // });
-
 
     // it("Indeks djelotvornosti oborina po Thorntwaitu", () => {
     //     const res = thornthwaitePercipitationEfficiency.calculate(percs, temps);
