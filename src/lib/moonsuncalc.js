@@ -443,7 +443,7 @@ const { average } = require("./mathUtils");
         var cl = cos(lat * 0.0174532925199433);
         var sinho = sin((8.0 / 60.0) * 0.0174532925199433);
         //moonrise - average diameter used
-        var xe = 0;
+        let xe = 0;
         var ye = 0;
         var z1 = 0;
         var z2 = 0;
@@ -465,7 +465,7 @@ const { average } = require("./mathUtils");
         //used later to classify non-risings
         do {
             //ym = sinalt(iobj%, date, hour - 1, glong, cl, sl) - sinho(iobj%)
-            var yp = 0;
+            // var yp = 0;
             var y0 = sinalt(1, dat, Hour, glong, cl, sl) - sinho;
             var yp = sinalt(1, dat, Hour + 1, glong, cl, sl) - sinho;
             xe = 0;
@@ -481,11 +481,11 @@ const { average } = require("./mathUtils");
             var a = 0.5 * (ym + yp) - y0,
                 b = 0.5 * (yp - ym),
                 c = y0,
-                xe = -b / (2.0 * a),
-                //x coord of symmetry line
-                ye = (a * xe + b) * xe + c,
                 //extreme value for y in interval
                 dis = b * b - 4.0 * a * c;
+            //x coord of symmetry line
+            xe = -b / (2.0 * a)
+            ye = (a * xe + b) * xe + c
 
             //discriminant
             //intersects x axis!
@@ -600,7 +600,7 @@ const { average } = require("./mathUtils");
         //used later to classify non-risings
         do {
             //ym = sinalt(iobj%, date, hour - 1, glong, cl, sl) - sinho(iobj%)
-            var yp = 0;
+            // var yp = 0;
             var y0 = sinalt(1, dat, Hour, glong, cl, sl) - sinho;
             var yp = sinalt(1, dat, Hour + 1, glong, cl, sl) - sinho;
             xe = 0;
@@ -616,12 +616,12 @@ const { average } = require("./mathUtils");
             var a = 0.5 * (ym + yp) - y0,
                 b = 0.5 * (yp - ym),
                 c = y0,
-                xe = -b / (2.0 * a),
-                //x coord of symmetry line
-                ye = (a * xe + b) * xe + c,
+
                 //extreme value for y in interval
                 dis = b * b - 4.0 * a * c;
-
+            xe = -b / (2.0 * a);
+            //x coord of symmetry line
+            ye = (a * xe + b) * xe + c;
             //discriminant
             //intersects x axis!
             if (dis > 0) {
@@ -1050,13 +1050,13 @@ const { average } = require("./mathUtils");
         ctx.fillStyle = "black";
         //ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
         // if (!is_image_background) {
-            ctx.beginPath();
-            ctx.fillStyle = "gold";
-            ctx.arc(x + width / 2, y + width / 2, width / 2, 0, 2 * Math.PI);
-            // ctx.clip();
-            ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = "gold";
+        ctx.arc(x + width / 2, y + width / 2, width / 2, 0, 2 * Math.PI);
+        // ctx.clip();
+        ctx.fill();
 
-            drawphase();
+        drawphase();
         // }
         // else {
         //     var img = new Image(width, width);
