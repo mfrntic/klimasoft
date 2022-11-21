@@ -12,7 +12,9 @@ const { aridityIndexDeMartonne, aridityIndexGracanin, ellenbergEQ,
     thermicityIndex,
     drySeasonWaterDeficit,
     drySeasonDuration,
-    rainfallAnomalyIndex } = require("../src/lib/klimatskeformule");
+    rainfallAnomalyIndex, 
+    percentOfNormalPercipitation,
+    hydrothermicIndexSeljaninov} = require("../src/lib/klimatskeformule");
 const { sum, average, round } = require("../src/lib/mathUtils");
 
 //puntjarka
@@ -136,9 +138,15 @@ describe("Formulas", () => {
     it("Rainfall Anomaly Index [RAI]", () => {
         const p = [863.7, 623.4, 619.9, 782.5, 733.1, 670.3, 793.3, 600.4, 707.8, 648.7, 952.6, 1151.9, 683.2, 519.8, 918.7, 897.8, 660.4, 851.9, 632.4, 668.1, 1165, 467.8, 569.1, 788.1, 920.5, 720.2, 785.5, 642.7];
         const res = rainfallAnomalyIndex.calculate(p);
-        console.log(res);
+        console.log("RAI", res);
     });
 
+    it("Percent of Normal Percipitation [PN]", () => {
+        const p = [1151.9, 683.2, 519.8, 918.7, 897.8, 660.4, 851.9, 632.4, 668.1, 1165, 467.8, 569.1, 788.1];
+        const res = percentOfNormalPercipitation.calculate(p);
+        console.log("PN", res);
+
+    });
     // it("Vodna bilanca (vodni suficit/deficit)", () => {
     //     const pet = thornthwaitePET.calculate(temps, 45.9036, 15.9693);
     //     const vodna_bilanca = thornthwaiteWaterBalance.calculate(percs, pet.result);
@@ -151,5 +159,11 @@ describe("Formulas", () => {
     //     assert.equal(res.value, 150.07);
     //     assert.equal(res.result, "perhumidno");
     // });
+
+    
+    it("Seljaninov's hydrothermic index [HTC]", () => {
+        const res = hydrothermicIndexSeljaninov.calculate(temps, percs);
+        console.log("Seljaninov", res);
+    });
 
 });

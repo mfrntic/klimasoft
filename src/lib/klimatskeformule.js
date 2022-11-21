@@ -1,4 +1,4 @@
-const { default: reactSelect } = require("react-select");
+
 const { round, average, sum, max, min } = require("./mathUtils");
 const MoonSunCalc = require("./moonsuncalc");
 
@@ -712,4 +712,60 @@ exports.rainfallAnomalyIndex = {
     },
     title: "Rainfall Anomaly Index [RAI]",
     description: "RAI (Rainfall Anomaly Index) is an incorporation of ranking procedure to assign magnitudes to positive and negative precipitation anomalies"
+}
+
+exports.percentOfNormalPercipitation = {
+    calculate: function (percs) {
+        const meanP = round(average(percs), 2);
+ 
+        const resArr = [];
+        for (const p of percs) {
+            resArr.push(round(p / meanP * 100, 2));
+        }
+
+        return {
+            value: round(average(resArr), 2),
+            result: resArr
+        }
+    },
+    title: "Percent of Normal Percipitation [PN]",
+    description: "Postotak od normalne oborine (engl. Percent of Normal, PN) ili anomalija oborina zasniva se na odnosu mjesečnih oborina i prosječne mjesečne oborine promatranog razdoblja."
+}
+
+
+exports.hydrothermicIndexSeljaninov  = {
+    calculate: function (mean_temps, percs, vegetation_temp_treshold = 6) {
+        const t = [], p = [];
+        for (let i = 0; i < mean_temps.length; i++) {
+            if (mean_temps[i] > vegetation_temp_treshold) {
+                t.push(mean_temps[i]);
+                p.push(percs[i]);
+            }
+        }
+
+        const res = round((sum(p) / sum(t)) * 10, 2);
+        let result = "";
+        if (res < 0.5) {
+            result = "zona navodnjavanja, pustinje i polupustinje";
+        }
+        else if (res < 0.7) {
+            result = "zona suhog ratarenja";
+        }
+        else if (res < 1) {
+            result = "sušna zona sa jako izraženim nedostatkom vlage;";
+        }
+        else if (res < 1.3) {
+            result = "zona dovoljne vlažnosti";
+        }
+        else {
+            result = "zona suvišne vlažnosti";
+        }
+
+        return {
+            value: res,
+            result: result
+        }
+    },
+    title: "Seljaninov's hydrothermic index [HTC]",
+    description: "Seljaninov's hydrothermal coefficient (HTC) indicates a lack of moisture in the vegetation period."
 }

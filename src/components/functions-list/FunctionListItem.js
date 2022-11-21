@@ -1,13 +1,33 @@
 import style from "./FunctionListItem.module.css";
 import { IconContext } from "react-icons";
-import { IoSettings } from 'react-icons/io5';
+import { IoEllipsisHorizontal } from 'react-icons/io5';
+import { useState } from "react";
 
+function getArguments(func) {
+    const ARROW = true;
+    const FUNC_ARGS = ARROW ? /^(function)?\s*[^\(]*\(\s*([^\)]*)\)/m : /^(function)\s*[^\(]*\(\s*([^\)]*)\)/m;
+    const FUNC_ARG_SPLIT = /,/;
+    const FUNC_ARG = /^\s*(_?)(.+?)\1\s*$/;
+    const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+
+    return ((func || '').toString().replace(STRIP_COMMENTS, '').match(FUNC_ARGS) || ['', '', ''])[2]
+        .split(FUNC_ARG_SPLIT)
+        .map(function (arg) {
+            return arg.replace(FUNC_ARG, function (all, underscore, name) {
+                return name.split('=')[0].trim();
+            });
+        })
+        .filter(String);
+}
 
 function FunctionListItem({ climateFunction }) {
 
-    // function onSelectHandler() {
-    //     onSelect(measure);
-    // }
+    const [showMore, setShowMore] = useState(false);
+    function showMoreHandler() {
+        setShowMore((state) => !state);
+    }
+
+    const args = getArguments(climateFunction.calculate);
 
     return (
         // <div className={`${style.measureItem} ${isSelected && style.selected}`} onClick={onSelectHandler}>
@@ -16,12 +36,23 @@ function FunctionListItem({ climateFunction }) {
                 <input id={climateFunction.title} type="checkbox" className={style.checkbox} />
                 <label htmlFor={climateFunction.title} className={style.title} title={climateFunction.title}>{climateFunction.title}</label>
                 <IconContext.Provider value={{ className: style.icons, size: "1.25em" }}>
-                    <span className={style.arrowRight}> <IoSettings /></span>
+                    <button type="button" title="Prikaži više mogućnosti" className={style.arrowRight} onClick={showMoreHandler}><IoEllipsisHorizontal /></button>
                 </IconContext.Provider>
             </div>
-            <div className={style.description}>
-                {climateFunction.description}
-            </div>
+            {showMore && <div>
+                <hr></hr>
+                <div className={style.description}>
+                    {climateFunction.description}
+                </div>
+                <ul>
+                    {
+                        args.map((a) => {
+                            console.log(a);
+                            return <li key={a}>{a}</li>;
+                        })
+                    }
+                </ul>
+            </div>}
 
         </div>
     );

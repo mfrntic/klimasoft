@@ -15,7 +15,7 @@ function FunctionList() {
 
     return (
         <div className={style.functions}>
-            {formule.map((formula, i) => <FunctionListItem climateFunction={formula} />)}
+            {formule.map((formula, i) => <FunctionListItem key={i} climateFunction={formula} />)}
         </div>
     )
 }
