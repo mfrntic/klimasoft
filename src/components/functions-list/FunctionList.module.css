@@ -1,5 +1,15 @@
-.functions{
-    padding: 20px 0;
-    user-select: none;
-width: 380px;
+.functions {
+  user-select: none;
+  width: 380px;
+}
+
+.search {
+  padding: 20px 0;
+}
+
+.search input {
+  padding: 8px;
+  border: silver 1px solid;
+  border-radius: 4px;
+  width: calc(100% - 18px);
 }

@@ -2,10 +2,11 @@ import style from "./FunctionListItem.module.css";
 import { IconContext } from "react-icons";
 import { IoEllipsisHorizontal } from 'react-icons/io5';
 import { useState } from "react";
+import ParameterItem from "./ParameterItem";
 
 function getArguments(func) {
     const ARROW = true;
-    const FUNC_ARGS = ARROW ? /^(function)?\s*[^\(]*\(\s*([^\)]*)\)/m : /^(function)\s*[^\(]*\(\s*([^\)]*)\)/m;
+    const FUNC_ARGS = ARROW ? /^(function)?\s*[^(]*\(\s*([^)]*)\)/m : /^(function)\s*[^(]*\(\s*([^)]*)\)/m;
     const FUNC_ARG_SPLIT = /,/;
     const FUNC_ARG = /^\s*(_?)(.+?)\1\s*$/;
     const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -44,14 +45,15 @@ function FunctionListItem({ climateFunction }) {
                 <div className={style.description}>
                     {climateFunction.description}
                 </div>
-                <ul>
+                <div className={style.parameters}>
+                    <h4>Parametri:</h4>
                     {
                         args.map((a) => {
                             console.log(a);
-                            return <li key={a}>{a}</li>;
+                            return <ParameterItem key={a} parameter={a} />
                         })
                     }
-                </ul>
+                </div>
             </div>}
 
         </div>
