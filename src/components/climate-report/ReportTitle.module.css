@@ -1,0 +1,12 @@
+.title{
+    margin-top: 0.5em;
+    padding-bottom: 5px;
+    border-bottom: 1px solid black;
+}
+
+.stationBadge{
+    float: right;
+    font-weight: 300;
+    font-size: 0.8em;
+    text-transform: uppercase;
+}

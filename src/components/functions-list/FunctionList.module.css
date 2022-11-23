@@ -1,6 +1,9 @@
 .functions {
   user-select: none;
   width: 380px;
+  height: calc(100vh - 130px);
+  overflow-y: auto;
+  /* margin-bottom: 40px; */
 }
 
 .search {

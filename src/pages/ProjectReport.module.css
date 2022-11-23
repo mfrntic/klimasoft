@@ -20,17 +20,22 @@
   display: flex;
   flex-direction: row;
   margin-bottom: 15px;
+ 
 }
 
-.page .data .reportsMenu {
+.page .reports .reportsMenu {
+  /* padding: 10px; */
+}
+
+.page .reports .reportsData {
   padding: 10px;
+  margin-left: 2em;
+  /* padding-left: 2em; */
+  /* background-color: red; */
+  width: 100%;
 }
 
-.page .data .reportsData {
-  padding: 10px;
-}
-
-.page .data .sticky {
+.page .reports .sticky {
   position: sticky;
   top: 10px;
 }
