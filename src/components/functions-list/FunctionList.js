@@ -21,9 +21,7 @@ function FunctionList() {
     }
   }
   grupe.sort();
-  console.log("grupe", grupe);
-
-  const grupe = [];
+  
   for (const f of formule) {
 
     const calc = klimasoft[f.name];
