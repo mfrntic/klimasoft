@@ -23,6 +23,20 @@ function FunctionList() {
   grupe.sort();
   console.log("grupe", grupe);
 
+  const grupe = [];
+  for (const f of formule) {
+
+    const calc = klimasoft[f.name];
+    // console.log(calc);
+    if (calc.group) {
+      if (!grupe.includes(calc.group)) {
+        grupe.push(calc.group);
+      }
+    }
+  }
+  grupe.sort();
+  console.log("grupe", grupe);
+
 
   function onSearchChangeHandler(e) {
     const val = e.target.value;
