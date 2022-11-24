@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import Report from "../components/climate-report/Report";
 import ReportTitle from "../components/climate-report/ReportTitle";
 import FunctionList from "../components/functions-list/FunctionList";
 import Layout from "../components/layout/Layout";
@@ -25,6 +26,7 @@ function ProjectReport() {
             </div>
             <div className={style.reportsData}>
               <ReportTitle />
+              <Report />
             </div>
           </div>
         )}
