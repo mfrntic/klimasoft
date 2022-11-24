@@ -16,7 +16,7 @@ function ProjectReport() {
 
   return (
     <Layout>
-      <div className={`${style.page} ${activeProject?.header.isValid() ? null : style.fullHeight}`}>s
+      <div className={`${style.page} ${activeProject?.header.isValid() ? null : style.fullHeight}`}>
         {activeProject?.header.isValid() && (
           <div className={style.reports}>
             <div className={style.reportsMenu}>

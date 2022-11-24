@@ -31,6 +31,7 @@ export function getCalculations() {
     return {
       selected: false,
       name: f.name,
+      type: f.type,
       parameters: params.map((p) => {
         return {
           parameter: p,

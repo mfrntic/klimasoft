@@ -47,6 +47,7 @@ exports.aridityIndexDeMartonne = {
     name: "aridityIndexDeMartonne",
     title: "Aridity index [DMI], De Martonne (1926.)",
     group: "Vodni režim",
+    type: "SingleValueDescription",
     description: "The De Martonne (1926.) aridity index: DMI = P / (T + 10), where P (cm) is the annual precipitation and T (°C) the annual mean temperature.",
 }
 
@@ -87,6 +88,7 @@ exports.aridityIndexGracanin = {
     name: "aridityIndexGracanin",
     title: "Aridity index [Ag], Gračanin",
     group: "Vodni režim",
+    type: "SingleValueDescription",
     description: "Indeks mjesečne aridnosti prema Gračaninu (Pm - srednja mjesečna količina oborina, Tm - srenja mjesečna temperatura)"
 
 }
@@ -112,6 +114,7 @@ exports.ellenbergEQ = {
     name: "ellenbergEQ",
     title: "Ellenberg's climate quotient [EQ]",
     group: "Klimatski indeksi",
+    type: "SingleValue",
     description: "Ellenberg's climate quotient (EQ = T_warmest_month / AnnualPercipitation * 1000)"
 }
 
@@ -136,6 +139,7 @@ exports.embergerPluviotermicQuotient = {
     name: "embergerPluviotermicQuotient",
     title: "Emberger's pluviometric quotient [Q₂]",
     group: "Klimatski indeksi",
+    type: "SingleValue",
     description: "Emberger's pluviometric quotient (Q₂ = 2000 P / [(M + m + 546.4) * (M - m)]. P = total annual precipitation, M = mean max temperature of the warmest month, m = mean min temperature of the coldest month)"
 }
 
@@ -164,6 +168,7 @@ exports.continentalityIndexConrad = {
     name: "continentalityIndexConrad",
     title: "Continentality index (Conrad)",
     group: "Klimatski indeksi",
+    type: "SingleValueDescription",
     description: "An index of continentality, or coefficient of continentality, k, has been formulated by V. Conrad as follows: k = 1.7 * Temp_Amplitude / sin(Latitude + 10) - 14"
 }
 
@@ -342,6 +347,7 @@ exports.koppenClimateFormula = {
     name: "koppenClimateFormula",
     description: "Köppen’s classification is based on a subdivision of terrestrial climates into five major types, which are represented by the capital letters A, B, C, D, and E. Each of these climate types except for B is defined by temperature criteria. Type B designates climates in which the controlling factor on vegetation is dryness (rather than coldness). Aridity is not a matter of precipitation alone but is defined by the relationship between the precipitation input to the soil in which the plants grow and the evaporative losses. Since evaporation is difficult to evaluate and is not a conventional measurement at meteorological stations, Köppen was forced to substitute a formula that identifies aridity in terms of a temperature-precipitation index (that is, evaporation is assumed to be controlled by temperature). Dry climates are divided into arid (BW) and semiarid (BS) subtypes, and each may be differentiated further by adding a third code, h for warm and k for cold.",
     group: "Klimatski indeksi",
+    type: "SingleValueDescription",
     title: "Köppen’s climate classification formula"
 }
 
@@ -379,6 +385,7 @@ exports.langsRainfallFactor = {
     name: "langsRainfallFactor",
     title: "Lang’s rainfall factor [LRF]",
     group: "Vodni režim",
+    type: "SingleValueDescription",
     description: "Lang’s rainfall factor expresses natural irrigation conditions of landscape by the relationship between rainfalls and air temperature (Equation 2) (Sobisek 1993): f = R / t  -> where  f = Lang’s rainfall factor, R = average annual rainfall sum in mm, and t = average annual air temperature in °C"
 }
 
@@ -419,7 +426,7 @@ exports.thermicCharacterGracanin = {
             }
         }
 
-        for(let i = 0; i < temperatura.length ; i++){
+        for (let i = 0; i < temperatura.length; i++) {
             arr.push(getVal(temperatura[i]));
         }
 
@@ -433,6 +440,7 @@ exports.thermicCharacterGracanin = {
     name: "thermicCharacterGracanin",
     title: "Toplinski karakter klime po Gračaninu",
     group: "Klimatski indeksi",
+    type: "MultiValueDescription",
     description: "Toplinski karakter klime po Gračaninu"
 }
 
@@ -467,11 +475,13 @@ exports.thornthwaitePET = {
     name: "thornthwaitePET",
     title: "Thornthwaite potential evapotranspiration [PET]",
     group: "Vodni režim",
+    type: "MultiValueTotal",
     description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available"
 }
 
 exports.thornthwaiteWaterBalance = {
-    calculate: function (oborine, thornthwaite_pet_monthly) {
+    calculate: function (oborine, temperatura, lat, lon, year_from = 0, year_to = 0) {
+        const thornthwaite_pet_monthly = exports.thornthwaitePET.calculate(temperatura, lat, lon, year_from, year_to);
         const vodna_bilanca = [];
         for (let m = 0; m < oborine.length; m++) {
             vodna_bilanca.push(round(oborine[m] - thornthwaite_pet_monthly[m], 2));
@@ -484,6 +494,7 @@ exports.thornthwaiteWaterBalance = {
     name: "thornthwaiteWaterBalance",
     title: "Thornthwaite water balance",
     group: "Vodni režim",
+    type: "MultiValueTotal",
     formulaDescription: "Vodna bilanca (vodni suficit/deficit) s obzirom na potencijalnu evapotranspiraciju"
 }
 
@@ -514,6 +525,7 @@ exports.thornthwaitePercipitationEfficiency = {
     name: "thornthwaitePercipitationEfficiency",
     title: "Thornthwaite percipitation efficiency",
     group: "Vodni režim",
+    type: "SingleValueDescription",
     description: "Indeks djelotvornosti oborina po Thorntwaitu"
 }
 
@@ -547,6 +559,7 @@ exports.continentalityIndex = {
     name: "continentalityIndex",
     title: "Continentality index [CONTINENTY]",
     group: "Klimatski indeksi",
+    type: "SingleValueDescription",
     description: "Continentality index [CONTINENTY]: Tmax - Tmin (Tmax - mean air temperature of the hottest month [°C], Tmin - mean air temperature of the coldest month [°C])"
 }
 
@@ -598,6 +611,7 @@ exports.ombrothermicIndex = {
     name: "ombrothermicIndex",
     title: "Ombrothermic Index [Io]",
     group: "Vodni režim",
+    type: "SingleValueDescription",
     description: "Rivas-Martinez et al. 2011."
 }
 
@@ -640,6 +654,7 @@ exports.ombrothermicIndexSummerQuarter = {
     name: "ombrothermicIndexSummerQuarter",
     title: "Ombrothermic index of the summer quarter [Iosq]",
     group: "Vodni režim",
+    type: "SingleValueDescription",
     description: "Rasztovits et al. 2012."
 }
 
@@ -658,6 +673,7 @@ exports.thermicityIndex = {
     name: "thermicityIndex",
     title: "Thermicity Index [It]",
     group: "Klimatski indeksi",
+    type: "SingleValue",
     description: "Rasztovits et al. 2012."
 }
 
@@ -675,6 +691,7 @@ exports.ombroEvapotranspirationIndex = {
     name: "ombroEvapotranspirationIndex",
     title: "Ombro-evapotranspiration index [Ioe]",
     group: "Vodni režim",
+    type: "SingleValue",
     description: "Rivas-Martinez et al. 2011."
 }
 
@@ -698,6 +715,7 @@ exports.drySeasonWaterDeficit = {
     name: "drySeasonWaterDeficit",
     title: "Dry season water deficit [DSWD]",
     group: "Vodni režim",
+    type: "MultiValue",
     description: "Dufour-Dror and Ertas 2004."
 }
 
@@ -721,6 +739,7 @@ exports.drySeasonDuration = {
     name: "drySeasonDuration",
     title: "Duration of the dry season [LDS]",
     group: "Vodni režim",
+    type: "MultiValue",
     description: "Gausen 1954., UNESCO 1963"
 }
 
@@ -766,13 +785,14 @@ exports.rainfallAnomalyIndex = {
     name: "rainfallAnomalyIndex",
     title: "Rainfall Anomaly Index [RAI]",
     group: "Vodni režim",
+    type: "MultiValueAverage",
     description: "RAI (Rainfall Anomaly Index) is an incorporation of ranking procedure to assign magnitudes to positive and negative precipitation anomalies"
 }
 
 exports.percentOfNormalPercipitation = {
     calculate: function (oborine) {
         const meanP = round(average(oborine), 2);
- 
+
         const resArr = [];
         for (const p of oborine) {
             resArr.push(round(p / meanP * 100, 2));
@@ -786,10 +806,11 @@ exports.percentOfNormalPercipitation = {
     name: "percentOfNormalPercipitation",
     title: "Percent of Normal Percipitation [PN]",
     group: "Vodni režim",
+    type: "MultiValueAverage",
     description: "Postotak od normalne oborine (engl. Percent of Normal, PN) ili anomalija oborina zasniva se na odnosu mjesečnih oborina i prosječne mjesečne oborine promatranog razdoblja."
 }
 
-exports.hydrothermicIndexSeljaninov  = {
+exports.hydrothermicIndexSeljaninov = {
     calculate: function (temperatura, oborine, vegetation_temp_treshold = 6) {
         const t = [], p = [];
         for (let i = 0; i < temperatura.length; i++) {
@@ -825,37 +846,51 @@ exports.hydrothermicIndexSeljaninov  = {
     name: "hydrothermicIndexSeljaninov",
     title: "Seljaninov's hydrothermic index [HTC]",
     group: "Vodni režim",
+    type: "SingleValueDescription",
     description: "Seljaninov's hydrothermal coefficient (HTC) indicates a lack of moisture in the vegetation period."
 }
 
 exports.walterClimateDiagram = {
-    calculate: function () {},
+    calculate: function () { },
     name: "walterClimateDiagram",
     title: "Walter Climate Diagram [WCD]",
     group: "Dijagrami",
+    type: "Klimadijagram",
     description: "Graphic representation of climatic conditions at a particular place, which shows seasonal variations and extremes as well as mean values and therefore provides a succinct and easily accessible summary of a local climate."
 }
 
 exports.walterKlimatogram = {
-    calculate: function () {},
+    calculate: function () { },
     name: "walterKlimatogram",
     title: "Walter Climatogram [WCG]",
     group: "Dijagrami",
+    type: "Klimatogram",
     description: "Walter climate diagram, but for each year of input data."
 }
 
+exports.stationInfo = {
+    calculate: function () { },
+    name: "stationInfo",
+    title: "Location / Station Info",
+    group: "Deskriptiva",
+    type: "StationInfo",
+    description: "Information about the selected location / meteorological station"
+}
+
 exports.descriptiveTemperature = {
-    calculate: function () {},
+    calculate: function () { },
     name: "descriptiveTemperature",
     title: "Descriptive Temperature",
     group: "Deskriptiva",
+    type: "DescriptiveTemperature",
     description: "Statistically processed temperature data"
 }
 
 exports.descriptivePercipitation = {
-    calculate: function () {},
+    calculate: function () { },
     name: "descriptivePercipitation",
     title: "Descriptive Percipitation",
     group: "Deskriptiva",
+    type: "DescriptivePercipitation",
     description: "Statistically processed percipitation data"
 }

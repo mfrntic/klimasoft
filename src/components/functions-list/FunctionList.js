@@ -49,7 +49,7 @@ function FunctionList() {
       <div className={style.functions}>
         {
           grupe.map(g => {
-            return <div>
+            return <div key={g}>
               {formule.filter((a) => klimasoft[a.name].group === g && (searchValue.length === 0 || klimasoft[a.name].title?.toLowerCase().includes(searchValue.toLowerCase()))).length > 0 && <h3>{g}</h3>}
               <div>
                 {formule.filter((a) => klimasoft[a.name].group === g && (searchValue.length === 0 || klimasoft[a.name].title?.toLowerCase().includes(searchValue.toLowerCase()))) //izbaci višak

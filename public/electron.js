@@ -27,9 +27,9 @@ let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: "Klimasoft",
-    width: 1140,
+    width: 1200,
     height: 800,
-    minWidth: 800,
+    minWidth: 1180,
     minHeight: 600,
     icon: path.join(__dirname, "favicon.ico"),
     webPreferences: {

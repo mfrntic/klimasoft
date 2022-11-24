@@ -1,14 +1,12 @@
 import style from "./Report.module.css";
 import { useSelector } from "react-redux";
+import FormulaRenderer from "./FormulaRenderer";
 
 function Report() {
     const calculations = useSelector(a => a.project.calculations);
+
     return <section className={style.report}>
-        {calculations.map(c => {
-            return <div className={style.item}>
-                {JSON.stringify(c)} 
-            </div>
-        })}
+        {calculations.filter(a => a.selected).map(c => <FormulaRenderer formula={c} />)}
     </section>
 }
 

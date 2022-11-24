@@ -1,7 +1,8 @@
 .functions {
   user-select: none;
   width: 380px;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 138px);
+  
   overflow-y: auto;
   /* margin-bottom: 40px; */
 }
