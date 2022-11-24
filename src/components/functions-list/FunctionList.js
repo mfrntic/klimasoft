@@ -9,6 +9,20 @@ import * as klimasoft from "../../lib/klimatskeformule";
 function FunctionList() {
   const [searchValue, setSearchValue] = useState("");
   const formule = useSelector((a) => a.project.calculations);
+  const grupe = [];
+  for (const f of formule) {
+
+    const calc = klimasoft[f.name];
+    // console.log(calc);
+    if (calc.group) {
+      if (!grupe.includes(calc.group)) {
+        grupe.push(calc.group);
+      }
+    }
+  }
+  grupe.sort();
+  console.log("grupe", grupe);
+
 
   function onSearchChangeHandler(e) {
     const val = e.target.value;
@@ -21,11 +35,20 @@ function FunctionList() {
         <input placeholder="Pretraživanje funkcija..." value={searchValue} onChange={onSearchChangeHandler} />
       </div>
       <div className={style.functions}>
-        {formule
-          .filter((a) => searchValue.length === 0 || klimasoft[a.name].title?.toLowerCase().includes(searchValue.toLowerCase()))
-          .map((formula, i) => (
-            <FunctionListItem key={i} climateFunction={formula} />
-          ))}
+        {
+          grupe.map(g => {
+            return <div>
+              <h3>{g}</h3>
+              <div>
+                {formule.filter((a) => klimasoft[a.name].group === g && (searchValue.length === 0 || klimasoft[a.name].title?.toLowerCase().includes(searchValue.toLowerCase()))) //izbaci višak
+                  .map((formula, i) => (
+                    <FunctionListItem key={i} climateFunction={formula} />
+                  ))}
+              </div>
+            </div>
+          })
+
+        }
       </div>
     </div>
   );

@@ -1,0 +1,11 @@
+.report{
+    background-color: white;
+    padding: 10px;
+    border: lightgray 1px solid;
+    border-radius: 5px;
+}
+
+.report .item{
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px 0;
+}

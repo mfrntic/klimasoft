@@ -6,6 +6,18 @@
   /* margin-bottom: 40px; */
 }
 
+.functions h3 {
+  text-transform: uppercase;
+  color: #4f8edc;
+  font-size: 10pt;
+  text-align: center;
+}
+
+.functions h3::before,
+.functions h3::after{
+  content: " — ";
+}
+
 .search {
   padding: 20px 0;
 }
