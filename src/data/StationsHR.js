@@ -2575,7 +2575,7 @@ exports.StationsHR = [
   },
   {
     "IDStation": 236,
-    "StationName": "Tmava (Đakovo)",
+    "StationName": "Đakovo",
     "Altitude": 250,
     "Latitude": 45.26666667,
     "Longitude": 18.26666667,
@@ -2586,7 +2586,7 @@ exports.StationsHR = [
   },
   {
     "IDStation": 237,
-    "StationName": "Tmava (Garešnica)",
+    "StationName": "Trnava (Garešnica)",
     "Altitude": 145,
     "Latitude": 45.66666667,
     "Longitude": 17.03333333,
@@ -4556,7 +4556,7 @@ exports.saveStation = function (station) {
   }
   
   store.set("items", stations);
-  console.log("STATION SAVED", station);
+  // console.log("STATION SAVED", station);
 }
 
 exports.deleteStation = function (station) {
