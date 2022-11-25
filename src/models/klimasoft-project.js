@@ -3,8 +3,8 @@ export default class Project {
     constructor(project) {
         if (!project) return;
         // Object.assign(this, project);
-        this.header = new ProjectHeader(this.header);
-        this.data = new ProjectData(this.data);
+        this.header = new ProjectHeader(project.header);
+        this.data = new ProjectData(project.data);
     }
 
     static fromObject(project) {
@@ -49,6 +49,10 @@ export class Period {
     }
     from;
     to;
+
+    toString = function(){
+        return `${this.from}. - ${this.to}.`;
+    }
 
     getYears = function () {
         return this.to - this.from + 1;

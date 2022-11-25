@@ -868,19 +868,19 @@ exports.walterKlimatogram = {
     description: "Walter climate diagram, but for each year of input data."
 }
 
-exports.stationInfo = {
+exports.projectInfo = {
     calculate: function () { },
-    name: "stationInfo",
-    title: "Location / Station Info",
+    name: "projectInfo",
+    title: "Osnovne informacije",
     group: "Deskriptiva",
-    type: "StationInfo",
-    description: "Information about the selected location / meteorological station"
+    type: "ProjectInfo",
+    description: "Information about the selected project, period and location / meteorological station"
 }
 
 exports.descriptiveTemperature = {
     calculate: function () { },
     name: "descriptiveTemperature",
-    title: "Descriptive Temperature",
+    title: "Deskriptiva temperature",
     group: "Deskriptiva",
     type: "DescriptiveTemperature",
     description: "Statistically processed temperature data"
@@ -889,7 +889,7 @@ exports.descriptiveTemperature = {
 exports.descriptivePercipitation = {
     calculate: function () { },
     name: "descriptivePercipitation",
-    title: "Descriptive Percipitation",
+    title: "Deskriptiva oborine",
     group: "Deskriptiva",
     type: "DescriptivePercipitation",
     description: "Statistically processed percipitation data"
