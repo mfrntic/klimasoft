@@ -1113,8 +1113,7 @@ const KD = {
             let ml = _margin_left, mt = _margin_top;
 
             //number of y ticks (y scale)
- 
-            let maxperc = 0;
+             let maxperc = 0;
             //$.each(perc, function (i, o) {
             for (const o of perc) {
                 maxperc = Math.max(maxperc, ...o.filter(a => !isNaN(a)));
@@ -1202,7 +1201,6 @@ const KD = {
                 }
 
                 //razdoblje suhoće
-
                 ctx.save();
                 let show_aridness = (this.options.show_aridness !== undefined ? this.options.show_aridness : false);
                 if (show_aridness) {
@@ -1229,10 +1227,18 @@ const KD = {
                     ctx.restore();
                 }
 
-                //temperatura i oborine - glavno
 
+                  //dodatni clip da neide ispod nule
+                  ctx.save();
+                  ctx.beginPath();
+                  ctx.rect(this.dr.x, this.dr.y, this.dr.width, this.dr.height);
+                  ctx.clip();
+
+                  
+                //temperatura i oborine - glavno
                 ctx.beginPath();
                 ctx.moveTo(this.dr.x, x_base - temp[j][0] * y_tick);
+
                 for (let i = 0; i < x_axis.length; i++) {
                     ctx.lineTo(x_axis[i], x_base - temp[j][i] * y_tick);
                 }
@@ -1250,11 +1256,7 @@ const KD = {
                 ctx.save();
                 ctx.clip();
 
-                //dodatni clip da neide ispod nule
-                ctx.beginPath();
-                ctx.rect(this.dr.x, this.dr.y, this.dr.width, this.dr.height);
-                ctx.clip();
-
+              
                 //oborine - humidno razdoblje
                 ctx.fillStyle = "black";
                 ctx.fillRect(this.dr.x, this.dr.y, this.dr.width, this.dr.height - 50 * y_tick - xBaseFactor);
@@ -1352,17 +1354,17 @@ const KD = {
                             if (cardTemp !== null && cardTemp !== undefined) {
                                 ctx.textAlign = "start";
                                 if (cardTemp.abs_max !== null) {
-                                    ctx.fillText(cardTemp.abs_max.toFixed(1), this.dr.x + mj_width * 12 * r + mrgHd, this.dr.bottom() + mrgHd * 2.4);
+                                    ctx.fillText(cardTemp.abs_max?.toFixed(1), this.dr.x + mj_width * 12 * r + mrgHd, this.dr.bottom() + mrgHd * 2.4);
                                 }
                                 if (cardTemp.avg_max !== null) {
-                                    ctx.fillText(cardTemp.avg_max.toFixed(1), this.dr.x + mj_width * 12 * r + mrgHd, this.dr.bottom() + mrgHd * 4.2);
+                                    ctx.fillText(cardTemp.avg_max?.toFixed(1), this.dr.x + mj_width * 12 * r + mrgHd, this.dr.bottom() + mrgHd * 4.2);
                                 }
                                 ctx.textAlign = "end";
                                 if (cardTemp.avg_min !== null) {
-                                    ctx.fillText(cardTemp.avg_min.toFixed(1), this.dr.x + kg_width + mj_width * 12 * r - mrgHd, this.dr.bottom() + mrgHd * 2.4);
+                                    ctx.fillText(cardTemp.avg_min?.toFixed(1), this.dr.x + kg_width + mj_width * 12 * r - mrgHd, this.dr.bottom() + mrgHd * 2.4);
                                 }
                                 if (cardTemp.abs_min !== null) {
-                                    ctx.fillText(cardTemp.abs_min.toFixed(1), this.dr.x + kg_width + mj_width * 12 * r - mrgHd, this.dr.bottom() + mrgHd * 4.2);
+                                    ctx.fillText(cardTemp.abs_min?.toFixed(1), this.dr.x + kg_width + mj_width * 12 * r - mrgHd, this.dr.bottom() + mrgHd * 4.2);
                                 }
                             }
                             ctx.textAlign = "center";
@@ -1407,8 +1409,6 @@ const KD = {
                             ctx.textAlign = "start";
                         }
                     }
-
-
                 }
                 if (this.options.show_axis_scales) {
                     let fntscale = 9 * (kg_width / 140.0);
@@ -1438,10 +1438,8 @@ const KD = {
                             ctx.fillText(ob, this.dr.right() + 38, x_base - this._y_height * i);
                             ctx.textAlign = "start";
                         }
-
                     }
                 }
-
                 isDrawn = true;
             }
         }

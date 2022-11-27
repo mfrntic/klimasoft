@@ -97,7 +97,7 @@ function Klimatogram({ calculation }) {
         let diag = new KD.Klimatogram(document.getElementById("klimatogram"), options);
 
 
-    }, [calculation]);
+    }, [calculation, projData]);
 
 
     return (

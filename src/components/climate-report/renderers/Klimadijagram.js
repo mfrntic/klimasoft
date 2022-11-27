@@ -6,6 +6,8 @@ import Project, { Period, ProjectData, ProjectHeader } from "../../../models/kli
 
 function Klimadijagram({ calculation }) {
 
+    console.log("Klimadijagram", calculation);
+
     const projData = useSelector(a => a.project);
 
     useEffect(() => {
@@ -20,7 +22,7 @@ function Klimadijagram({ calculation }) {
         const percs = describe(data.percipitation).filter(a => a[0] === "avg")[0].slice(1, 13);
         const ztm = [];
         const absMins = describe(data.absMinTemp).filter(a => a[0] === "min")[0].slice(1, 13);
-        const avgMins = describe(data.avgMinTemp).filter(a => a[0] === "min")[0].slice(1, 13);
+        const avgMins = describe(data.avgMinTemp).filter(a => a[0] === "avg")[0].slice(1, 13);
         for (let i = 0; i < 12; i++) {
             if (avgMins.length >= i && avgMins[i] <= 0) {
                 ztm.push("s");
@@ -33,18 +35,28 @@ function Klimadijagram({ calculation }) {
             }
         }
 
+        let show_months = calculation.parameters.find(a => a.parameter === "show_months").value;
+        show_months = !show_months ? true : (show_months === "da" ? true : false);
+
+        let show_vegetation_period = calculation.parameters.find(a => a.parameter === "show_vegetation_period").value;
+        show_vegetation_period = !show_vegetation_period ? true : (show_vegetation_period === "da" ? true : false);
+
+        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness").value;
+        show_aridness = !show_aridness ? true : (show_aridness === "da" ? true : false);
+
+
         var options = {
             temp: meanTemp,
             perc: percs,
-            show_aridness: true, 
+            show_aridness: show_aridness,
             header_data: {
                 station_name: header.station.StationName,
                 station_altitude: header.station.Altitude,
                 yow_period: period.getYears()
             },
-            show_months: true,
+            show_months: show_months,
             zero_temp_months: ztm,
-            show_vegetation_period: false, 
+            show_vegetation_period: show_vegetation_period,
             show_axis: true,
             interactive: false,
             show_cardinal_temp: true,
@@ -55,6 +67,7 @@ function Klimadijagram({ calculation }) {
                 avg_min: calculate(data.avgMinTemp, 0, "min", 2),
                 avg_max: calculate(data.avgMaxTemp, 0, "max", 2)
             },
+            credits: "sumfak.unizg.hr",
             onready: () => {
                 diag.draw();
             }
@@ -64,7 +77,7 @@ function Klimadijagram({ calculation }) {
         let diag = new KD.Diagram(document.getElementById("kd"), options);
 
 
-    }, [calculation]);
+    }, [calculation, projData]);
 
 
     return (
