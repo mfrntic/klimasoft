@@ -851,7 +851,7 @@ exports.hydrothermicIndexSeljaninov = {
 }
 
 exports.walterClimateDiagram = {
-    calculate: function () { },
+    calculate: function (show_aridness, show_months, show_vegetation_period) { },
     name: "walterClimateDiagram",
     title: "Walter Climate Diagram [WCD]",
     group: "Dijagrami",
@@ -860,7 +860,7 @@ exports.walterClimateDiagram = {
 }
 
 exports.walterKlimatogram = {
-    calculate: function () { },
+    calculate: function (show_aridness, show_months, years_in_row) { },
     name: "walterKlimatogram",
     title: "Walter Climatogram [WCG]",
     group: "Dijagrami",

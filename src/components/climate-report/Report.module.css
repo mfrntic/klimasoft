@@ -3,12 +3,14 @@
     padding: 10px;
     border: lightgray 1px solid;
     border-radius: 5px;
- 
+    width: auto;
+
 }
 
 .report .item {
     font-family: 'Courier New', Courier, monospace;
     padding: 10px 0;
+
 }
 
 /* .report table {
@@ -46,11 +48,12 @@
 }
 
 .report h3::before,
-.report h3::after{
-  content: " — ";
+.report h3::after {
+    content: " — ";
 }
 
-.report > section > div{
+.report>section>div {
     margin-bottom: 1.5em;
     text-align: center;
+    overflow-x: auto;
 }

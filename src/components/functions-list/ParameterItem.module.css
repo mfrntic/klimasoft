@@ -1,6 +1,10 @@
 .parameter label {
   display: inline-block;
   width: 100px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow:hidden ;
+  vertical-align: middle;
 }
 
 .parameter select {

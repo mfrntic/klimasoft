@@ -220,8 +220,10 @@ const KD = {
 
 
         //odredi veg. period
+
         if (!(this.options.vegetation_period.start < this.options.vegetation_period.end)) {
             for (let i = 0; i < options.temp.length; i++) {
+
                 if (this.options.temp[i] > 6) {
                     if (this.options.vegetation_period.start === 0) {
                         this.options.vegetation_period.start = i + 1;
@@ -478,15 +480,18 @@ const KD = {
                 ctx.strokeRect(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
             }
 
+
             //inner border
             let mj_width = this.dr.width / 12;
             this._mjesecWidthX = mj_width;
+
             let x_axis = [];
             x_axis.push(this.dr.x);
             for (let i = 1; i < 11; i++) {
                 x_axis.push(this.dr.x + (mj_width / 2) + mj_width * i);
             }
             x_axis.push(this.dr.right());
+
 
             let num_of_y_ticks = (7 + Math.ceil((this.options.max_perc() - 100) / 100));
             if (num_of_y_ticks === 7) {
@@ -536,7 +541,9 @@ const KD = {
             //temperatura i oborine - glavno
             ctx.beginPath();
             ctx.moveTo(this.dr.x, x_base - temp[0] * y_tick);
+
             for (let i = 0; i < x_axis.length; i++) {
+
                 ctx.lineTo(x_axis[i], x_base - temp[i] * y_tick);
             }
             for (let i = x_axis.length; i >= 0; i--) {
@@ -887,7 +894,7 @@ const KD = {
     //---------------------------------------------------------------------------------------------- 
     //KLIMATOGRAM
     //--------------------------------------------------------------------------------------------- 
-    Klimatogram: function (canvas_id, options) {
+    Klimatogram: function (canvas, options) {
         let default_options = {
             //header_data: {
             //    station_name: "N/A",
@@ -967,7 +974,7 @@ const KD = {
 
         //opći parametri - margine
         let isDrawn = false;
-        this._canvas = document.getElementById(canvas_id);
+        this._canvas = canvas;
         if (this._canvas === null) {
             return;
         }
@@ -1002,33 +1009,38 @@ const KD = {
         let isReady1 = false, isReady2 = false;
         let kd = this;
         //pattern vertical lines
+
         let _i_patt_kd = new Image();
         _i_patt_kd.onload = function () {
+
             _patt_kd = _ctx.createPattern(_i_patt_kd, "repeat");
             isReady1 = true;
             kd.isReady = isReady1 && isReady2;
             if (kd.isReady) {
+                //console.log("image loading", _i_patt_kd);
                 kd.options.onready();
             }
-        }
-        _i_patt_kd.src = "/Content/pkd.png";
+        };
+        _i_patt_kd.src = require("../lib/img/pkd.png");
         _i_patt_kd.width = 8;
         _i_patt_kd.height = 8;
+
 
         //pattern dotted
         let _i_patt_kd_1 = new Image();
         _i_patt_kd_1.onload = function () {
+
             _patt_kd_1 = _ctx.createPattern(_i_patt_kd_1, "repeat");
             isReady2 = true;
             kd.isReady = isReady1 && isReady2;
             if (kd.isReady) {
+                //console.log("image loading", _i_patt_kd_1);
                 kd.options.onready();
             }
         }
-        _i_patt_kd_1.src = "/Content/pkd_2.png";
+        _i_patt_kd_1.src = require("../lib/img/pkd_2.png");
         _i_patt_kd_1.width = 8;
         _i_patt_kd_1.height = 8;
-
 
         //Određuje da li postoji razdoblje suhoće na dijagramu
         this.hasAridnessPeriod = function () {
@@ -1093,7 +1105,7 @@ const KD = {
                         }
                     }
                     // $.merge(perc[h], perc_calc);
-                    perc[h] = perc.concat(perc_calc);
+                    perc[h] = perc[h].concat(perc_calc);
                 }
             }
 
@@ -1101,11 +1113,13 @@ const KD = {
             let ml = _margin_left, mt = _margin_top;
 
             //number of y ticks (y scale)
+ 
             let maxperc = 0;
             //$.each(perc, function (i, o) {
             for (const o of perc) {
-                maxperc = Math.max(maxperc, Math.max.apply(null, o));
+                maxperc = Math.max(maxperc, ...o.filter(a => !isNaN(a)));
             }
+ 
 
             let num_of_y_ticks = (8 + Math.ceil((maxperc - 100) / 100));
             if (num_of_y_ticks === 8) {
@@ -1126,20 +1140,9 @@ const KD = {
             }
 
             for (let j = 0; j < temp.length; j++) {
-                //limitation
-                if (this.options.limited && j > 0) {
-                    ctx.font = "20px Arial"
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
-                    ctx.fillStyle = "red";
-                    ctx.fillText("Free account limitation - only 1 row available!", this._canvas.width / 2, this.this.dr.bottom() + footerHeight + 30);
-                    ctx.textAlign = "start";
-                    ctx.textBaseline = "alphabetic";
 
-                    break;
-                }
                 //calc drawing area
-                this.this.dr = {
+                this.dr = {
                     x: ml,
                     y: mt + j * (kg_height + footerHeight) + 20,
                     width: kg_width * (temp[j].length / 12),
@@ -1153,7 +1156,7 @@ const KD = {
                 };
 
                 if (temp.length - 1 === j && temp[j].length / 12 < this.options.years_in_row) {
-                    this.this.dr.width = kg_width * (temp[j].length / 12);
+                    this.dr.width = kg_width * (temp[j].length / 12);
                 }
                 //this._drawingArea = this.dr;
 
@@ -1163,27 +1166,28 @@ const KD = {
                 //}
 
                 //dužina jednog mjeseca na skali
-                let mj_width = this.this.dr.width / temp[j].length;
+                let mj_width = this.dr.width / temp[j].length;
                 this._mjesecWidthX = mj_width;
 
                 let x_axis = [];
-                x_axis.push(this.this.dr.x);
+                x_axis.push(this.dr.x);
                 for (let i = 1; i < temp[j].length - 1; i++) {
                     if (i % 12 === 0) {
-                        x_axis.push(this.r.x + mj_width * i);
+                        x_axis.push(this.dr.x + mj_width * i);
                     }
                     else {
-                        x_axis.push(this.this.dr.x + (mj_width / 2) + mj_width * i);
+                        x_axis.push(this.dr.x + (mj_width / 2) + mj_width * i);
                     }
                 }
-                x_axis.push(this.this.dr.right());
+                x_axis.push(this.dr.right());
 
 
-                this._y_height = this.this.dr.height / num_of_y_ticks; //veličina osi je 10 tickova
+                this._y_height = this.dr.height / num_of_y_ticks; //veličina osi je 10 tickova
                 let y_tick = this._y_height / 10;
 
+
                 //baza x osi (default je 0 (bottom), međutim ide u minus ovisno o temperaturi)
-                let x_base = this.this.dr.bottom();
+                let x_base = this.dr.bottom();
                 let xBaseFactor = 0;
                 switch (xBaseType) {
                     case "T1":
@@ -1203,20 +1207,20 @@ const KD = {
                 let show_aridness = (this.options.show_aridness !== undefined ? this.options.show_aridness : false);
                 if (show_aridness) {
                     ctx.beginPath();
-                    ctx.moveTo(this.this.dr.x, this.this.dr.bottom() - 50 * y_tick);
+                    ctx.moveTo(this.dr.x, this.dr.bottom() - 50 * y_tick);
                     for (let i = 0; i < x_axis.length; i++) {
                         ctx.lineTo(x_axis[i], x_base - (perc_orig[j][i] / 3) * y_tick);
                     }
-                    ctx.lineTo(x_axis[x_axis.length - 1], this.this.dr.bottom() - 50 * y_tick);
+                    ctx.lineTo(x_axis[x_axis.length - 1], this.dr.bottom() - 50 * y_tick);
                     ctx.closePath();
                     ctx.clip();
 
                     ctx.beginPath();
-                    ctx.moveTo(this.this.dr.x, this.this.dr.bottom());
+                    ctx.moveTo(this.dr.x, this.dr.bottom());
                     for (let i = 0; i < x_axis.length - 1; i++) {
                         ctx.lineTo(x_axis[i], x_base - temp[j][i] * y_tick);
                     }
-                    ctx.lineTo(x_axis[x_axis.length - 1], this.this.dr.bottom());
+                    ctx.lineTo(x_axis[x_axis.length - 1], this.dr.bottom());
                     ctx.closePath();
                     ctx.clip();
                     ctx.fillStyle = _patt_kd_1;
@@ -1226,6 +1230,7 @@ const KD = {
                 }
 
                 //temperatura i oborine - glavno
+
                 ctx.beginPath();
                 ctx.moveTo(this.dr.x, x_base - temp[j][0] * y_tick);
                 for (let i = 0; i < x_axis.length; i++) {
@@ -1444,7 +1449,7 @@ const KD = {
             this.ctx.fillStyle = "black";
             //Naslov
             this.ctx.font = "bold 12pt Arial";
-            this.ctx.fillText(this.options.header_data.station_name.toUpperCase() + " (" + this.options.header_data.station_altitude + ")", this.this.dr.x, 30)
+            this.ctx.fillText(this.options.header_data.station_name.toUpperCase() + " (" + this.options.header_data.station_altitude + ")", this.dr.x, 30)
         }
     }
 };

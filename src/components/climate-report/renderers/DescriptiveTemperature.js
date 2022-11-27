@@ -16,7 +16,7 @@ function DescriptiveTemperature({ calculation }) {
         <div>
             <h3>{calculation.title}</h3>
             {measures.map(m => {
-                return <Fragment>
+                return <Fragment key={m.IDMeasure}>
                     <h4>{m.TypeName} ({project.header.period.toString()})</h4>
                     <GridTotal measure={m} projectdata={project.data} />
                 </Fragment>

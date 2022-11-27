@@ -27,7 +27,7 @@ export class ProjectHeader {
         if (!header) return;
         Object.assign(this, header);
         if (header.period) {
-            this.period = new Period(header.period.from, header.period.to);
+            this.period = new Period(header.period);
         }
     }
 
@@ -43,19 +43,18 @@ export class ProjectHeader {
 }
 
 export class Period {
-    constructor(from, to) {
-        this.from = from;
-        this.to = to;
+    constructor(period) {
+        Object.assign(this, period);
     }
     from;
     to;
 
-    toString = function(){
+    toString = function () {
         return `${this.from}. - ${this.to}.`;
     }
 
     getYears = function () {
-        return this.to - this.from + 1;
+        return Number(this.to) - Number(this.from) + 1;
     }
 }
 
@@ -72,6 +71,23 @@ export class ProjectData {
     absMaxTemp = []
     absMinTemp = []
     percipitation = []
+
+    getYears = function () {
+        const years = [];
+        const props = ["meanTemp", "avgMaxTemp", "avgMinTemp", "absMaxTemp", "absMinTemp", "percipitation"];
+        for (let prop of props) {
+            for (let row of this[prop]) {
+                
+                const year = Number(row[0]);
+                if (!isNaN(year) && (!years.includes(year))) {
+ 
+                    years.push(year);
+                }
+            }
+        }
+        years.sort();
+        return years;
+    }
 
     hasData = function (measure) {
         switch (measure?.toLowerCase()) {

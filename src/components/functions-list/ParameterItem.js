@@ -34,10 +34,16 @@ function ParameterItem(props) {
     } else if (parameter === "lon") {
         measures = [station.Longitude];
     }
+    else if (parameter.startsWith("show")) {
+        measures = ["da", "ne"];
+    }
+    else if (parameter === "years_in_row") {
+        measures = [3, 4, 5, 6, 7, 8, 9, 10];
+    }
 
     return (
         <div className={style.parameter}>
-            <label>{parameter}</label>
+            <label title={parameter}>{parameter}</label>
             <select onChange={onParameterValueChangedHandler} value={value}>
                 {/* <option></option> */}
                 {measures.map((a) => {

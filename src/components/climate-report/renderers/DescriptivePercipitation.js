@@ -12,7 +12,7 @@ function DescriptivePercipitation({calculation}) {
         <div>
             <h3>{calculation.title}</h3>
             {measures.map(m => {
-                 return <Fragment>
+                 return <Fragment key={m.IDMeasure}>
                     <h4>{m.TypeName}</h4>
                  <GridTotal measure={m} projectdata={data} />
                  </Fragment>

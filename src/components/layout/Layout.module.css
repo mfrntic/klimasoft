@@ -11,5 +11,5 @@
   margin-top: 55px;
   padding: 5px 10px;
   overflow: auto;
-  height: calc(100vh - 55px);
+  height: calc(100vh - 60px);
 }

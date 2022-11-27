@@ -25,14 +25,17 @@ exports.average = function (nums) {
 exports.max = function (nums) {
     if (Array.isArray(nums)) {
 
-        return nums.reduce((a, b) => Math.max(a, b), -Infinity);
+        return nums.filter(a=>!isNaN(a)).reduce((a, b) => Math.max(a, b), -Infinity);
     }
     return nums;
 }
 
 exports.min = function (nums) {
     if (Array.isArray(nums)) {
-        return nums.reduce((a, b) => Math.min(a, b), Infinity);
+
+        return nums.filter(a=>!isNaN(a)).reduce((a, b) => {
+            return Math.min(a, b)
+        }, Infinity);
     }
     return nums;
 }
