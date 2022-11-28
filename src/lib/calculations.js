@@ -10,9 +10,25 @@ function getArguments(func) {
   return ((func || "").toString().replace(STRIP_COMMENTS, "").match(FUNC_ARGS) || ["", "", ""])[2]
     .split(FUNC_ARG_SPLIT)
     .map(function (arg) {
-      return arg.replace(FUNC_ARG, function (all, underscore, name) {
-        return name.split("=")[0].trim();
+      const name = arg.replace(FUNC_ARG, function (all, underscore, name) {
+        console.log("arg", name);
+        const parts = name.split("=");
+        return parts[0].trim();
       });
+      const def = arg.replace(FUNC_ARG, function (all, underscore, name) {
+        const parts = name.split("=");
+        if (parts.length > 1) {
+          return parts[1].trim();
+        }
+        else {
+          return null;
+        }
+      });
+
+      return {
+        name: name,
+        default: def
+      }
     })
     .filter(String);
 }
@@ -35,8 +51,8 @@ export function getCalculations() {
       title: f.title,
       parameters: params.map((p) => {
         return {
-          parameter: p,
-          value: p === "oborine" ? "percipitation" : p === "temperatura" ? "meanTemp" : "",
+          parameter: p.name,
+          value: p === "oborine" ? "percipitation" : p === "temperatura" ? "meanTemp" : p.default
         };
       }),
     };

@@ -663,8 +663,8 @@ const KD = {
             }
             ctx.textAlign = "start";
             //zero temperature months
-            ctx.globalAlpha = 0.65;
             if (this.options.zero_temp_months !== null) {
+                ctx.globalAlpha = 0.65;
                 for (let i = 0; i < this.options.zero_temp_months.length; i++) {
                     switch (this.options.zero_temp_months[i]) {
                         case "a":
@@ -678,29 +678,34 @@ const KD = {
                         default:
                     }
                 }
+                ctx.globalAlpha = 1;
 
             }
-            ctx.globalAlpha = 1;
-            let mrgMths = 9 * (this._canvas.clientWidth / 350.0);
-            ctx.font = mrgMths + "px Arial";
-            ctx.textBaseline = "middle";
-            ctx.textAlign = "center";
-            for (let i = 0; i < 12; i++) {
-                ctx.fillStyle = "black";
-                if (this._canvas.clientWidth > 150 && this.options.show_months && this.options.zero_temp_months !== null) {
+            if (this._canvas.clientWidth > 150 && this.options.show_months && this.options.zero_temp_months !== null) {
+
+                let mrgMths = 9 * (this._canvas.clientWidth / 350.0);
+                let oldFont = ctx.font;
+                ctx.font = mrgMths + "px Arial";
+                ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
+                for (let i = 0; i < 12; i++) {
+                    ctx.fillStyle = "black";
                     switch (this.options.zero_temp_months[i]) {
                         case "s":
                             ctx.fillStyle = "white";
                             break;
                         default:
-                    };
-                }
-                ctx.fillText(i + 1, this.dr.x + mj_width * i + mj_width / 2, this.dr.bottom() + mj_width / 2);
-            }
-            ctx.textBaseline = "alphabetic";
-            ctx.textAlign = "start";
-            //ctx.fillText(i, this.dr.x + mj_width * i, this.dr.bottom());         
+                            ctx.fillStyle = "black";
+                            break;
 
+                    }
+                    ctx.fillText(i + 1, this.dr.x + mj_width * i + mj_width / 2, this.dr.bottom() + mj_width / 2);
+                }
+                ctx.textBaseline = "alphabetic";
+                ctx.textAlign = "start";
+                ctx.font = oldFont;
+                //ctx.fillText(i, this.dr.x + mj_width * i, this.dr.bottom());         
+            };
             //inner border - axis
             if (this.options.show_axis) {
                 //okvir (osi)
@@ -1113,12 +1118,12 @@ const KD = {
             let ml = _margin_left, mt = _margin_top;
 
             //number of y ticks (y scale)
-             let maxperc = 0;
+            let maxperc = 0;
             //$.each(perc, function (i, o) {
             for (const o of perc) {
                 maxperc = Math.max(maxperc, ...o.filter(a => !isNaN(a)));
             }
- 
+
 
             let num_of_y_ticks = (8 + Math.ceil((maxperc - 100) / 100));
             if (num_of_y_ticks === 8) {
@@ -1228,13 +1233,13 @@ const KD = {
                 }
 
 
-                  //dodatni clip da neide ispod nule
-                  ctx.save();
-                  ctx.beginPath();
-                  ctx.rect(this.dr.x, this.dr.y, this.dr.width, this.dr.height);
-                  ctx.clip();
+                //dodatni clip da neide ispod nule
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(this.dr.x, this.dr.y, this.dr.width, this.dr.height);
+                ctx.clip();
 
-                  
+
                 //temperatura i oborine - glavno
                 ctx.beginPath();
                 ctx.moveTo(this.dr.x, x_base - temp[j][0] * y_tick);
@@ -1256,7 +1261,7 @@ const KD = {
                 ctx.save();
                 ctx.clip();
 
-              
+
                 //oborine - humidno razdoblje
                 ctx.fillStyle = "black";
                 ctx.fillRect(this.dr.x, this.dr.y, this.dr.width, this.dr.height - 50 * y_tick - xBaseFactor);

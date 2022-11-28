@@ -860,7 +860,7 @@ exports.walterClimateDiagram = {
 }
 
 exports.walterKlimatogram = {
-    calculate: function (show_aridness, show_months, years_in_row) { },
+    calculate: function (show_aridness, show_months, years_in_row = 7) { },
     name: "walterKlimatogram",
     title: "Walter Climatogram [WCG]",
     group: "Dijagrami",

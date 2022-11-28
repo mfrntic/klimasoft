@@ -10,7 +10,7 @@ import { projectActions } from "../../store/projectSlice";
 function FunctionListItem({ climateFunction }) {
   const [showMore, setShowMore] = useState(false);
   const funkcija = klimasoft[climateFunction.name];
-  //   console.log("climateFunction", climateFunction);
+    console.log("climateFunction", climateFunction);
 
   const dispatch = useDispatch();
 
