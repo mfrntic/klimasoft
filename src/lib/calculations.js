@@ -1,36 +1,45 @@
+ 
 import * as klimasoft from "./klimatskeformule";
+ 
+ 
 
-function getArguments(func) {
-  const ARROW = true;
-  const FUNC_ARGS = ARROW ? /^(function)?\s*[^(]*\(\s*([^)]*)\)/m : /^(function)\s*[^(]*\(\s*([^)]*)\)/m;
-  const FUNC_ARG_SPLIT = /,/;
-  const FUNC_ARG = /^\s*(_?)(.+?)\1\s*$/;
-  const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+function getParams(formula) {
 
-  return ((func || "").toString().replace(STRIP_COMMENTS, "").match(FUNC_ARGS) || ["", "", ""])[2]
-    .split(FUNC_ARG_SPLIT)
-    .map(function (arg) {
-      const name = arg.replace(FUNC_ARG, function (all, underscore, name) {
-        console.log("arg", name);
-        const parts = name.split("=");
-        return parts[0].trim();
-      });
-      const def = arg.replace(FUNC_ARG, function (all, underscore, name) {
-        const parts = name.split("=");
-        if (parts.length > 1) {
-          return parts[1].trim();
-        }
-        else {
-          return null;
-        }
-      });
+  // String representation of the function code
+  var str = formula.calculate.toString();
+  // console.log("str", str);
+  // Remove comments of the form /* ... */
+  // Removing comments of the form //
+  // Remove body of the function { ... }
+  // removing '=>' if func is arrow function
+  str = str
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\/\/(.)*/g, '')
+    .replace(/{[\s\S]*}/, '')
+    .replace(/=>/g, '')
+    .trim();
 
-      return {
-        name: name,
-        default: def
-      }
-    })
-    .filter(String);
+
+  // Start parameter names after first '('
+  var start = str.indexOf("(") + 1;
+
+  // End parameter names is just before last ')'
+  var end = str.length - 1;
+
+  var result = str.substring(start, end).split(", ");
+
+  var params = [];
+
+  result.forEach(element => {
+    // Removing any default value
+     element = element.replace(/=[\s\S]*/g, '').trim();
+
+   
+    if (element.length > 0)
+      params.push(element);
+  });
+
+  return params;
 }
 
 export function getCalculations() {
@@ -42,8 +51,8 @@ export function getCalculations() {
     }
   }
   return formule.map((f) => {
-    const params = getArguments(f.calculate);
-
+    const params = getParams(f);
+   
     return {
       selected: false,
       name: f.name,
@@ -51,8 +60,8 @@ export function getCalculations() {
       title: f.title,
       parameters: params.map((p) => {
         return {
-          parameter: p.name,
-          value: p === "oborine" ? "percipitation" : p === "temperatura" ? "meanTemp" : p.default
+          parameter: p,
+          value: p === "oborine" ? "percipitation" : p === "temperatura" ? "meanTemp" : (f.defaultParamValues ? f.defaultParamValues[p] : "") 
         };
       }),
     };

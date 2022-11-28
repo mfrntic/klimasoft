@@ -35,10 +35,13 @@ function ParameterItem(props) {
         measures = [station.Longitude];
     }
     else if (parameter.startsWith("show")) {
-        measures = ["da", "ne"];
+        measures = ["true", "false"];
     }
     else if (parameter === "years_in_row") {
         measures = [3, 4, 5, 6, 7, 8, 9, 10];
+    }
+    else if (parameter === "vegetation_temp_treshold"){
+        measures = [6, 6.5, 7];
     }
 
     return (

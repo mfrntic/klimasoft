@@ -10,3 +10,31 @@
     font-family: 'Courier New', Courier, monospace;
     padding: 10px 0;
 }
+
+
+.report h3 {
+    text-transform: uppercase;
+    color: #4f8edc;
+    font-size: 10pt;
+    text-align: center;
+}
+
+.report h4 {
+    text-transform: uppercase;
+    color: dimgray;
+    font-size: 10pt;
+    font-weight: normal;
+    margin-bottom: 6px;
+    /* text-align: center; */
+}
+
+.report h3::before,
+.report h3::after {
+    content: " — ";
+}
+
+.report>section>div {
+    margin-bottom: 1.5em;
+    text-align: center;
+    overflow-x: auto;
+}

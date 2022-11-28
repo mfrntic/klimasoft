@@ -112,6 +112,5 @@ export class ProjectData {
                     (this.absMinTemp && this.absMinTemp.length > 0) ||
                     (this.percipitation && this.percipitation.length > 0);
         }
-
     }
 }

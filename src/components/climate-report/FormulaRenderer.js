@@ -4,7 +4,7 @@ import DescriptiveTemperature from "./renderers/DescriptiveTemperature";
 import Klimadijagram from "./renderers/Klimadijagram";
 import Klimatogram from "./renderers/Klimatogram";
 import ProjectInfo from "./renderers/ProjectInfo";
-
+import SingleValueCard from "./renderers/SingleValueCard"; 
 
 function FormulaRenderer({ formula }) {
 
@@ -15,10 +15,11 @@ function FormulaRenderer({ formula }) {
             {formula.type === "DescriptivePercipitation" && <DescriptivePercipitation calculation={formula} />}
             {formula.type === "Klimadijagram" && <Klimadijagram calculation={formula} />}
             {formula.type === "Klimatogram" && <Klimatogram calculation={formula} />}
-            {/* <pre key={formula.name}>
+            {formula.type === "SingleValue" && <SingleValueCard calculation={formula} showDescription={false}/>}
+            {formula.type === "SingleValueDescription" && <SingleValueCard calculation={formula} showDescription={true}/>}
+            {/* <pre key={formula.name} style={{ textAlign: "left" }}>
                 {JSON.stringify(formula, null, 3)}
-            </pre>
-            <hr /> */}
+            </pre> */}
         </Fragment>
     )
 }

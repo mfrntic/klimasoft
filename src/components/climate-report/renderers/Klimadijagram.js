@@ -14,9 +14,9 @@ function Klimadijagram({ calculation }) {
         const project = new Project(projData);
         const data = new ProjectData(project.data);
         const header = new ProjectHeader(project.header);
-        console.log("header", header);
+        // console.log("header", header);
         const period = new Period(header.period);
-        console.log("data", data);
+        // console.log("data", data);
 
         const meanTemp = describe(data.meanTemp).filter(a => a[0] === "avg")[0].slice(1, 13);
         const percs = describe(data.percipitation).filter(a => a[0] === "avg")[0].slice(1, 13);
@@ -36,25 +36,26 @@ function Klimadijagram({ calculation }) {
         }
 
         let show_months = calculation.parameters.find(a => a.parameter === "show_months").value;
-        show_months = !show_months ? true : (show_months === "da" ? true : false);
+        show_months = (show_months.toString() === "true" ? true : false);
+        // console.log("show_months 2", show_months);
+        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness").value;
+        show_aridness = (show_aridness.toString() === "true" ? true : false);
+        //  console.log("show_aridness", calculation.parameters, show_aridness);
 
         let show_vegetation_period = calculation.parameters.find(a => a.parameter === "show_vegetation_period").value;
-        show_vegetation_period = !show_vegetation_period ? true : (show_vegetation_period === "da" ? true : false);
-
-        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness").value;
-        show_aridness = !show_aridness ? true : (show_aridness === "da" ? true : false);
-
-
+        show_vegetation_period =  (show_vegetation_period.toString() === "true" ? true : false);
+  
         var options = {
             temp: meanTemp,
             perc: percs,
             show_aridness: show_aridness,
+            show_months: show_months,
             header_data: {
                 station_name: header.station.StationName,
                 station_altitude: header.station.Altitude,
                 yow_period: period.getYears()
             },
-            show_months: show_months,
+
             zero_temp_months: ztm,
             show_vegetation_period: show_vegetation_period,
             show_axis: true,

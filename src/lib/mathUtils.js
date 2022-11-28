@@ -25,7 +25,7 @@ exports.average = function (nums) {
 exports.max = function (nums) {
     if (Array.isArray(nums)) {
 
-        return nums.filter(a=>!isNaN(a)).reduce((a, b) => Math.max(a, b), -Infinity);
+        return nums.filter(a => !isNaN(a)).reduce((a, b) => Math.max(a, b), -Infinity);
     }
     return nums;
 }
@@ -33,7 +33,7 @@ exports.max = function (nums) {
 exports.min = function (nums) {
     if (Array.isArray(nums)) {
 
-        return nums.filter(a=>!isNaN(a)).reduce((a, b) => {
+        return nums.filter(a => !isNaN(a)).reduce((a, b) => {
             return Math.min(a, b)
         }, Infinity);
     }
@@ -72,6 +72,9 @@ exports.variance = function (nums) {
 }
 
 exports.calculate = function (month_matrix, calc_month = 0, calc_type = "sum", round_digits = 2) {
+
+    if (!Array.isArray(month_matrix)) return null;
+
     calc_type = calc_type.toLowerCase().trim();
     //transform month_matrix to something more suitable for calculatinos on columns or rows
     const data = [];
@@ -124,16 +127,25 @@ exports.calculate = function (month_matrix, calc_month = 0, calc_type = "sum", r
     }
 }
 
-exports.describe = function (month_matrix) {
-    const calcTypes = ["count", "sum", "avg", "min", "max", "variance", "stdev"];
+exports.describe = function (month_matrix, calc_type = "all", full_row = true) {
+    let calcTypes = ["count", "sum", "avg", "min", "max", "variance", "stdev"];
+    const calcTypesFiltered = calcTypes.filter(a => a === calc_type);
+    if (calcTypesFiltered.length > 0) {
+        calcTypes = calcTypesFiltered;
+    }
     const res = [];
 
     for (const ctype of calcTypes) {
-        const row = [ctype];
+        const row = [];
+        if (full_row){
+            row.push(ctype);
+        }
         for (let m = 1; m <= 12; m++) {
             row.push(exports.calculate(month_matrix, m, ctype));
         }
-        row.push(exports.calculate(month_matrix, 0, ctype)); //cijela godina na kraju
+        if (full_row) {
+            row.push(exports.calculate(month_matrix, 0, ctype)); //cijela godina na kraju
+        }
         res.push(row);
     }
 

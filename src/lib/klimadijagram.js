@@ -663,6 +663,7 @@ const KD = {
             }
             ctx.textAlign = "start";
             //zero temperature months
+           
             if (this.options.zero_temp_months !== null) {
                 ctx.globalAlpha = 0.65;
                 for (let i = 0; i < this.options.zero_temp_months.length; i++) {
@@ -706,6 +707,7 @@ const KD = {
                 ctx.font = oldFont;
                 //ctx.fillText(i, this.dr.x + mj_width * i, this.dr.bottom());         
             };
+
             //inner border - axis
             if (this.options.show_axis) {
                 //okvir (osi)
@@ -1231,7 +1233,6 @@ const KD = {
 
                     ctx.restore();
                 }
-
 
                 //dodatni clip da neide ispod nule
                 ctx.save();

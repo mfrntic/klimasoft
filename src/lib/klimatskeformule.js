@@ -445,7 +445,8 @@ exports.thermicCharacterGracanin = {
 }
 
 exports.thornthwaitePET = {
-    calculate: function (temperatura, lat, lon, year_from = 0, year_to = 0) {
+    calculate: function (temperatura, lat, lon) {
+        let year_from = 0, year_to = 0;
         if (year_from === 0) year_from = new Date().getFullYear();
         if (year_to === 0) year_to = new Date().getFullYear();
         let I = 0;
@@ -476,12 +477,14 @@ exports.thornthwaitePET = {
     title: "Thornthwaite potential evapotranspiration [PET]",
     group: "Vodni režim",
     type: "MultiValueTotal",
-    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available"
+    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available",
+
 }
 
 exports.thornthwaiteWaterBalance = {
-    calculate: function (oborine, temperatura, lat, lon, year_from = 0, year_to = 0) {
-        const thornthwaite_pet_monthly = exports.thornthwaitePET.calculate(temperatura, lat, lon, year_from, year_to);
+    calculate: function (oborine, temperatura, lat, lon) {
+
+        const thornthwaite_pet_monthly = exports.thornthwaitePET.calculate(temperatura, lat, lon);
         const vodna_bilanca = [];
         for (let m = 0; m < oborine.length; m++) {
             vodna_bilanca.push(round(oborine[m] - thornthwaite_pet_monthly[m], 2));
@@ -678,8 +681,8 @@ exports.thermicityIndex = {
 }
 
 exports.ombroEvapotranspirationIndex = {
-    calculate: function (temperatura, oborine, lat, lon, year_from = 0, year_to = 0) {
-        const pet = exports.thornthwaitePET.calculate(temperatura, lat, lon, year_from, year_to).value;
+    calculate: function (temperatura, oborine, lat, lon) {
+        const pet = exports.thornthwaitePET.calculate(temperatura, lat, lon).value;
         const annualPerc = sum(oborine);
         const res = round(annualPerc / pet, 2);
 
@@ -696,11 +699,11 @@ exports.ombroEvapotranspirationIndex = {
 }
 
 exports.drySeasonWaterDeficit = {
-    calculate: function (temperatura, oborine, lat, lon, year_from = 0, year_to = 0) {
+    calculate: function (temperatura, oborine, lat, lon) {
         const resArr = [];
         for (let i = 0; i < oborine.length; i++) {
             if (temperatura[i] > 0) {
-                const pet = exports.thornthwaitePET.calculate(temperatura, lat, lon, year_from, year_to);
+                const pet = exports.thornthwaitePET.calculate(temperatura, lat, lon);
                 resArr.push(round(oborine[i] - pet.result[i], 2));
             }
             else {
@@ -811,7 +814,7 @@ exports.percentOfNormalPercipitation = {
 }
 
 exports.hydrothermicIndexSeljaninov = {
-    calculate: function (temperatura, oborine, vegetation_temp_treshold = 6) {
+    calculate: function (temperatura, oborine, vegetation_temp_treshold) {
         const t = [], p = [];
         for (let i = 0; i < temperatura.length; i++) {
             if (temperatura[i] > vegetation_temp_treshold) {
@@ -847,7 +850,10 @@ exports.hydrothermicIndexSeljaninov = {
     title: "Seljaninov's hydrothermic index [HTC]",
     group: "Vodni režim",
     type: "SingleValueDescription",
-    description: "Seljaninov's hydrothermal coefficient (HTC) indicates a lack of moisture in the vegetation period."
+    description: "Seljaninov's hydrothermal coefficient (HTC) indicates a lack of moisture in the vegetation period.",
+    defaultParamValues: {
+        vegetation_temp_treshold: 6
+    },
 }
 
 exports.walterClimateDiagram = {
@@ -856,16 +862,26 @@ exports.walterClimateDiagram = {
     title: "Walter Climate Diagram [WCD]",
     group: "Dijagrami",
     type: "Klimadijagram",
-    description: "Graphic representation of climatic conditions at a particular place, which shows seasonal variations and extremes as well as mean values and therefore provides a succinct and easily accessible summary of a local climate."
+    description: "Graphic representation of climatic conditions at a particular place, which shows seasonal variations and extremes as well as mean values and therefore provides a succinct and easily accessible summary of a local climate.",
+    defaultParamValues: {
+        show_aridness: true,
+        show_months: true,
+        show_vegetation_period: false
+    },
 }
 
 exports.walterKlimatogram = {
-    calculate: function (show_aridness, show_months, years_in_row = 7) { },
+    calculate: (show_aridness, show_months, years_in_row) => { },
     name: "walterKlimatogram",
     title: "Walter Climatogram [WCG]",
     group: "Dijagrami",
     type: "Klimatogram",
-    description: "Walter climate diagram, but for each year of input data."
+    description: "Walter climate diagram, but for each year of input data.",
+    defaultParamValues: {
+        show_aridness: true,
+        show_months: false,
+        years_in_row: 7
+    },
 }
 
 exports.projectInfo = {

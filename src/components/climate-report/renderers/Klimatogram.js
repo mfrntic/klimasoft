@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import KD from "../../../lib/klimadijagram";
-import { calculate, describe, max, min } from "../../../lib/mathUtils";
-import Project, { Period, ProjectData, ProjectHeader } from "../../../models/klimasoft-project";
+import { max, min } from "../../../lib/mathUtils";
+import Project, { ProjectData, ProjectHeader } from "../../../models/klimasoft-project";
 
 function Klimatogram({ calculation }) {
 
@@ -12,7 +12,7 @@ function Klimatogram({ calculation }) {
         const project = new Project(projData);
         const data = new ProjectData(project.data);
         const header = new ProjectHeader(project.header);
-        const period = new Period(header.period);
+        // const period = new Period(header.period);
         // console.log("data", data);
 
         const kgdata = [];
@@ -31,18 +31,19 @@ function Klimatogram({ calculation }) {
                 const avg_max = data.avgMaxTemp.filter(a => a[0] == year)[0]?.slice(1, 13);
 
                 const ztm = [];
-               
+
                 for (let i = 0; i < 12; i++) {
-                    if (avg_min.length >= i && avg_min[i] <= 0) {
+                    if (avg_min.length >= i && avg_min[i] < 0) {
                         ztm.push("s");
                     }
-                    else if (abs_min.length >= i && abs_min[i] <= 0) {
+                    else if (abs_min.length >= i && abs_min[i] < 0) {
                         ztm.push("a");
                     }
                     else {
                         ztm.push("");
                     }
                 }
+
 
                 const d = {
                     year: year,
@@ -54,7 +55,8 @@ function Klimatogram({ calculation }) {
                         avg_max: max(avg_max),
                         avg_min: min(avg_min)
                     },
-                    zero_temp_months: ztm
+                    zero_temp_months: ztm,
+
                 }
 
                 kgdata.push(d);
@@ -78,15 +80,23 @@ function Klimatogram({ calculation }) {
         //     }
         // }
 
+        let show_months = calculation.parameters.find(a => a.parameter === "show_months").value;
+        show_months = (show_months.toString() === "true" ? true : false);
+        // console.log("show_months 2", show_months);
+        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness").value;
+        show_aridness = (show_aridness.toString() === "true" ? true : false);
+        //  console.log("show_aridness", calculation.parameters, show_aridness);
+        let years_in_row = calculation.parameters.find(a => a.parameter === "years_in_row").value;
+ 
         var options = {
             header_data: {
                 station_name: header.station.StationName,
                 station_altitude: header.station.Altitude,
             },
             data: kgdata,
-            years_in_row: 7,
-            show_aridness: true,
-            show_months: false,
+            years_in_row: years_in_row,
+            show_aridness: show_aridness,
+            show_months: show_months,
             show_cardinal_temp: true,
             show_axis_scales: true,
             onready: function () {
