@@ -1,7 +1,7 @@
 import style from "./GridToolbar.module.css";
 
 import { IconContext } from "react-icons";
-import { FaUndo, FaRedo, FaEraser, FaFileImport, FaAngleRight } from 'react-icons/fa';
+import { FaUndo, FaRedo, FaEraser, FaFileImport } from 'react-icons/fa';
 import { MdTabUnselected, MdContentCopy, MdContentPaste } from "react-icons/md";
 import { projectActions } from "../../store/projectSlice";
 import { useDispatch } from "react-redux";
@@ -17,6 +17,7 @@ function GridToolbar({ jRef, measure }) {
     }
 
     function onClearDataHandler() {
+        if (!measure) return;
         if (window.confirm("Da li ste sigurni da želite obrisati sve podatke iz tablice?")) {
             jRef.current.jspreadsheet.setData([[]]);
             const d = {};

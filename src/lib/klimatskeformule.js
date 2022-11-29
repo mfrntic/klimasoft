@@ -393,9 +393,10 @@ exports.langsRainfallFactor = {
 exports.thermicCharacterGracanin = {
     calculate: function (temperatura) {
 
-        const arr = [];
+        const arr = [], arr1 = [];
 
         const getVal = (t) => {
+            t = Number(t);
             const res = {
                 value: null,
                 result: ""
@@ -425,17 +426,18 @@ exports.thermicCharacterGracanin = {
                 res.value = "v";
                 res.result = "vruće";
             }
+            return res;
         }
 
         for (let i = 0; i < temperatura.length; i++) {
-            arr.push(getVal(temperatura[i]));
+            arr.push(getVal(temperatura[i]).value);
+            arr1.push(getVal(temperatura[i]).result);
         }
 
-        const tot = getVal(average(temperatura));
-
+      
         return {
-            value: tot,
-            result: arr
+            value: arr,
+            result: arr1
         };
     },
     name: "thermicCharacterGracanin",
@@ -485,7 +487,7 @@ exports.thornthwaitePET = {
 exports.thornthwaiteWaterBalance = {
     calculate: function (oborine, temperatura, lat, lon) {
 
-        const thornthwaite_pet_monthly = exports.thornthwaitePET.calculate(temperatura, lat, lon);
+        const thornthwaite_pet_monthly = exports.thornthwaitePET.calculate(temperatura, lat, lon).result;
         const vodna_bilanca = [];
         for (let m = 0; m < oborine.length; m++) {
             vodna_bilanca.push(round(oborine[m] - thornthwaite_pet_monthly[m], 2));
@@ -712,8 +714,8 @@ exports.drySeasonWaterDeficit = {
             }
         }
         return {
-            value: resArr,
-            result: JSON.stringify(resArr)
+            value: sum(resArr),
+            result: resArr
         }
     },
     name: "drySeasonWaterDeficit",

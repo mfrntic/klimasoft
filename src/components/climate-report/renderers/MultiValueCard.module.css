@@ -1,0 +1,21 @@
+.table table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table table td,
+.table table th{
+    border: 1px solid gray;
+    width: 80px;
+    padding: 5px;
+}
+
+.table table th{
+    font-weight: 600;
+    background-color: lightgray;
+}
+
+.gridtotal{
+    display: block;
+    font-size: 0.85em;
+}
