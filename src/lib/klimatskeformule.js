@@ -178,6 +178,7 @@ exports.koppenClimateFormula = {
             value: null,
             result: ""
         }
+        lat = Number(lat);
 
         const coolest = min(temperatura);
         const warmest = max(temperatura);
@@ -662,10 +663,10 @@ exports.ombrothermicIndexSummerQuarter = {
 }
 
 exports.thermicityIndex = {
-    calculate: function (mean_temp) {
-        const T = average(mean_temp);
-        const m = min(mean_temp);
-        const M = max(mean_temp);
+    calculate: function (temperatura) {
+        const T = average(temperatura);
+        const m = min(temperatura);
+        const M = max(temperatura);
         const res = round((T + m + M) * 10);
 
         return {

@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Measures } from "../../../data/Measures";
 import * as klimasoft from "../../../lib/klimatskeformule";
 import { describe } from "../../../lib/mathUtils";
 
@@ -7,11 +8,12 @@ function SingleValueCard({ calculation, showDescription }) {
     const func = klimasoft[calculation.name].calculate;
     const data = useSelector(a => a.project.data);
     const parameters = calculation.parameters.map(p => {
-        if (p.parameter === "temperatura" ||
-            p.parameter === "oborine") {
-            console.log(describe(data[p.value], "avg", false))
-            return describe(data[p.value], "avg", false)[0];
+        const measure = Measures.find(a=>a.IDMeasure === p.value);
+        if (measure){
+            return describe(data[p.value], measure.Aggregation, false)[0];
         }
+
+       
         else {
             return p.value;
         }
