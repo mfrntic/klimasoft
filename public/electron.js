@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject,
-  deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose, confirmImport } = require("../electron/actions");
+  deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose, confirmImport, climateReference } = require("../electron/actions");
 const global = require("./global");
 const menuTemplate = require("../electron/menuTemplate");
 const { getStations, initStations } = require("../src/data/StationsHR");
@@ -156,6 +156,12 @@ ipcMain.on("import-file-close", (e, res) => {
 ipcMain.on("confirm-import-data", (e, a) => {
   // console.log("confirm-new-project", a);
   confirmImport(mainWindow, a);
+});
+
+ipcMain.on("climate-reference", (e, a) => {
+  const appmenu = Menu.getApplicationMenu();
+  const menu = appmenu.getMenuItemById("cr");
+  menu.click();
 });
 
 if (getStations().length === 0) {

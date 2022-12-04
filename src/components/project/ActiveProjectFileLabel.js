@@ -14,7 +14,7 @@ function ActiveProjectFileLabel({ activeProject }) {
 
     return (
         <div title="" onClick={onActiveLabelClickHandler} className={style.activeProjectLabel}>
-            {activeProject.header.isValid() ? activeProject.header.projectName + ".cldata *" : "[ NOVI PROJEKT (*.cldata) ]"}
+            {activeProject.header.isValid() ? activeProject.header.projectName + ".cldata *" : "[ KLIMASOFT PROJEKT (*.cldata) ]"}
         </div>
     );
 }

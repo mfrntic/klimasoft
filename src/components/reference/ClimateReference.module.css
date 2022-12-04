@@ -1,0 +1,46 @@
+.climateReference{
+    padding: 10px;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+
+
+
+}
+
+.climateReference > div{
+    margin-top: 10px;
+    max-width: 900px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    padding: 20px;
+}
+
+.climateReference h2{
+    text-align: center;
+    color: #4f8edc;
+}
+
+.climateReference ul{
+    position: relative;
+    border: none;
+}
+
+.climateReference table{
+    border-collapse: collapse;
+    width: 900px;
+
+}
+
+.climateReference table td,
+.climateReference table th{
+    border: 1px solid gray;
+    padding: 5px;
+    text-align: center;
+}
+
+.climateReference table th{
+    background-color: lightgray;
+}

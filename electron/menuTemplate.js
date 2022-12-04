@@ -1,7 +1,8 @@
-const { openStations, openFileDialog, openNewProject, deactivateProjectDialog,  saveFileDialog } = require("../electron/actions");
+const { openStations, openFileDialog, openNewProject, deactivateProjectDialog, saveFileDialog, climateReference } = require("../electron/actions");
 
 const isMac = process.platform === 'darwin';
 const isDev = require("electron-is-dev");
+const { Menu } = require("electron");
 
 const menuTemplate = (window) => {
     return [
@@ -108,14 +109,22 @@ const menuTemplate = (window) => {
             role: 'help',
             label: "Pomoć",
             submenu: [
+                // {
+                //     label: 'Upute za rad s programom',
+                //     click: async () => {
+                //         // const { shell } = require('electron')
+                //         // await shell.openExternal('https://electronjs.org')
+                //     }
+                // },
                 {
-                    label: 'Upute za rad s programom',
-                    click: async () => {
-                        // const { shell } = require('electron')
-                        // await shell.openExternal('https://electronjs.org')
+                    id: "cr",
+                    label: "Klimatska referenca", 
+                    type: "checkbox", 
+                    click: () => {
+                       
+                        climateReference(window);
                     }
                 },
-                { label: "Klimatska referenca" },
                 { type: "separator" },
                 { label: "O programu \"KlimaSoft\"..." }
             ]

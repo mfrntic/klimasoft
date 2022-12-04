@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import ProjectReport from "./pages/ProjectReport";
 import StationsDialog from "./pages/StationsDialog";
@@ -11,14 +12,16 @@ import NewProjectDialog from "./pages/NewProjectDialog";
 import { stationsActions } from "./store/stationsSlice";
 import { projectActions } from "./store/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Fragment, useEffect } from "react";
+import { useEffect } from "react";
 import ImportFileDialog from "./pages/ImportFileDialog";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import Reference from "./pages/Reference";
 
 function App() {
 
   const activeProjectData = useSelector(a => a.project);
+  const navigate = useNavigate();
   // console.log("App()", activeProjectData);
 
   //load data
@@ -74,19 +77,30 @@ function App() {
     dispatch(projectActions.reset());
   });
 
+  window.api.climateReferenceHandler((e, res) => {
+    console.log("crh", res);
+    if (res) {
+      navigate("/reference");
+    }
+    else {
+      // navigate("/");
+      navigate(-1);
+    }
+  });
 
   return (
- 
-      <Routes>
-        <Route path="/data" element={<ProjectData />} />
-        <Route path="/report" element={<ProjectReport />} />
-        <Route path="/stations" element={<StationsDialog />} />
-        {/* <Route path="/stations/:id" element={<StationForm />} /> */}
-        <Route path="/newproject" element={<NewProjectDialog />} />
-        <Route path="/import" element={<ImportFileDialog />} />
-        <Route path="*" element={<Navigate to="/data" replace />} />
-      </Routes>
- 
+
+    <Routes>
+      <Route path="/data" element={<ProjectData />} />
+      <Route path="/report" element={<ProjectReport />} />
+      <Route path="/stations" element={<StationsDialog />} />
+      {/* <Route path="/stations/:id" element={<StationForm />} /> */}
+      <Route path="/newproject" element={<NewProjectDialog />} />
+      <Route path="/import" element={<ImportFileDialog />} />
+      <Route path="/reference" element={<Reference />} />
+      <Route path="*" element={<Navigate to="/data" replace />} />
+    </Routes>
+
   );
 
 }

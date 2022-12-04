@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, nativeImage, clipboard } = require("electron");
+const { contextBridge, ipcRenderer, nativeImage, clipboard, Menu } = require("electron");
 const { getStations, saveStation, initStations, deleteStation } = require("../src/data/StationsHR");
 
 
@@ -63,12 +63,12 @@ contextBridge.exposeInMainWorld("api", {
     },
 
     deactivateProjectHandler: (callback) => {
-        ipcRenderer.removeAllListeners("deactivated-project")
+        ipcRenderer.removeAllListeners("deactivated-project");
         ipcRenderer.on("deactivated-project", callback);
     },
 
     saveFileDialog: (callback) => {
-        ipcRenderer.removeAllListeners("save-file-dialog")
+        ipcRenderer.removeAllListeners("save-file-dialog");
         ipcRenderer.on("save-file-dialog", callback);
     },
 
@@ -87,20 +87,29 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.send("import-file-close");
     },
     importDialogHandler: (callback) => {
-        ipcRenderer.removeAllListeners("import-file")
+        ipcRenderer.removeAllListeners("import-file");
         ipcRenderer.on("import-file", callback);
     },
     confirmImport: (data) => {
         ipcRenderer.send("confirm-import-data", data);
     },
     confirmImportHandler: (callback) => {
-        ipcRenderer.removeAllListeners("import-data-handler")
+        ipcRenderer.removeAllListeners("import-data-handler");
         ipcRenderer.on("import-data-handler", callback);
     },
 
     copyImage: (dataURL) => {
         const img = nativeImage.createFromDataURL(dataURL);
         clipboard.writeImage(img);
-    }
+    },
+    climateReference: () => {
+        ipcRenderer.send("climate-reference");
+    },
+    climateReferenceHandler: (callback) => {
+        ipcRenderer.removeAllListeners("climate-reference");
+        ipcRenderer.on("climate-reference", callback);
+    },
+
+
 });
 

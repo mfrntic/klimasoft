@@ -1,9 +1,9 @@
 // const isMac = process.platform === 'darwin';
-const { BrowserWindow, dialog, app } = require("electron");
+const { BrowserWindow, dialog, app, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 const global = require("../public/global");
-const fs = require("fs");
+const fs = require("fs"); 
 
 let stations, newproject;
 
@@ -50,8 +50,9 @@ exports.closeStations = function () {
     }
 }
 
+
 exports.openFileDialog = async (mainWindow) => {
-    console.log("openFileDialog", global.activeProject);
+    // console.log("openFileDialog", global.activeProject);
     if (global.activeProject) { //ako je otvaranje potpuno novog projekta prvo deaktiviraj stari
         if (!await exports.deactivateProjectDialog(mainWindow)) return;
     }
@@ -249,4 +250,12 @@ exports.confirmImport = async (mainWindow, data) => {
     mainWindow.webContents.send("import-data-handler", data);
     // console.log("import-data-handler", data);
     exports.importFileDialogClose();
+}
+
+
+exports.climateReference = function(mainWindow){
+    const appmenu = Menu.getApplicationMenu();
+    const m = appmenu.getMenuItemById("cr");
+
+    mainWindow.webContents.send("climate-reference", m.checked);
 }
