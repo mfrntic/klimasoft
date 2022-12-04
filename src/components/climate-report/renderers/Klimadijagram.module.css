@@ -1,0 +1,12 @@
+.toolbar{
+    display: block;  
+  }
+  
+  .toolbar button {
+    outline: none;
+    background-color: transparent;
+    color: #343434;
+  }
+  
+ 
+   

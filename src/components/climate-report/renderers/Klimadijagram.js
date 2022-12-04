@@ -1,14 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import KD from "../../../lib/klimadijagram";
-import { calculate, describe, max, min } from "../../../lib/mathUtils";
+import { calculate, describe } from "../../../lib/mathUtils";
 import Project, { Period, ProjectData, ProjectHeader } from "../../../models/klimasoft-project";
+import { IconContext } from "react-icons";
+import { FaDownload, FaCopy } from 'react-icons/fa';
+import style from "./Klimadijagram.module.css"; 
 
 function Klimadijagram({ calculation }) {
 
-    console.log("Klimadijagram", calculation);
+    // console.log("Klimadijagram", calculation);
 
     const projData = useSelector(a => a.project);
+
+    const diag = useRef();
 
     useEffect(() => {
         const project = new Project(projData);
@@ -43,8 +48,8 @@ function Klimadijagram({ calculation }) {
         //  console.log("show_aridness", calculation.parameters, show_aridness);
 
         let show_vegetation_period = calculation.parameters.find(a => a.parameter === "show_vegetation_period").value;
-        show_vegetation_period =  (show_vegetation_period.toString() === "true" ? true : false);
-  
+        show_vegetation_period = (show_vegetation_period.toString() === "true" ? true : false);
+
         var options = {
             temp: meanTemp,
             perc: percs,
@@ -70,21 +75,38 @@ function Klimadijagram({ calculation }) {
             },
             credits: "sumfak.unizg.hr",
             onready: () => {
-                diag.draw();
+                diag.current.draw();
             }
             //margin_left: 0
         };
 
-        let diag = new KD.Diagram(document.getElementById("kd"), options);
-
+        diag.current = new KD.Diagram(document.getElementById("kd"), options);
 
     }, [calculation, projData]);
 
+    function onSaveImageHandler() {
+        diag.current.toImage("download");
+    }
+
+    function onCopyImageHandler() {
+        const dataURL = diag.current.toImage("dataurl");
+        console.log("dataURL", dataURL);
+        window.api.copyImage(dataURL);
+    }
 
     return (
         <div>
             <h3>{calculation.title}</h3>
-            <canvas id="kd" width="400" height="550"></canvas>
+            <div className={style.toolbar}>
+                <IconContext.Provider value={{ className: style.icons, size: "0.95em" }}>
+                    <button type="button" title="Spremi sliku" onClick={onSaveImageHandler} ><FaDownload /></button>
+                    <button type="button" title="Kopiraj sliku" onClick={onCopyImageHandler}><FaCopy /></button>
+                </IconContext.Provider>
+            </div>
+
+
+
+            <canvas id="kd" width="400" height="550" ></canvas>
         </div>
     )
 }

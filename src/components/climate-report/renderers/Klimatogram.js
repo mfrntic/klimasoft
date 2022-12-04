@@ -1,12 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import KD from "../../../lib/klimadijagram";
 import { max, min } from "../../../lib/mathUtils";
 import Project, { ProjectData, ProjectHeader } from "../../../models/klimasoft-project";
+import style from "./Klimatogram.module.css";
+import { IconContext } from "react-icons";
+import { FaDownload, FaCopy } from 'react-icons/fa';
 
 function Klimatogram({ calculation }) {
 
     const projData = useSelector(a => a.project);
+
+    const diag = useRef();
 
     useEffect(() => {
         const project = new Project(projData);
@@ -44,7 +49,6 @@ function Klimatogram({ calculation }) {
                     }
                 }
 
-
                 const d = {
                     year: year,
                     temp: temp[0].slice(1, 13).map(a => !a ? 0 : a),
@@ -62,23 +66,7 @@ function Klimatogram({ calculation }) {
                 kgdata.push(d);
             }
         }
-        console.log(kgdata);
 
-        // const ztm = [];
-        // const absMins = describe(data.absMinTemp).filter(a => a[0] === "min")[0].slice(1, 13);
-        // const avgMins = describe(data.avgMinTemp).filter(a => a[0] === "min")[0].slice(1, 13);
-
-        // for (let i = 0; i < 12; i++) {
-        //     if (avgMins.length >= i && avgMins[i] <= 0) {
-        //         ztm.push("s");
-        //     }
-        //     else if (absMins.length >= i && absMins[i] <= 0) {
-        //         ztm.push("a");
-        //     }
-        //     else {
-        //         ztm.push("");
-        //     }
-        // }
 
         let show_months = calculation.parameters.find(a => a.parameter === "show_months").value;
         show_months = (show_months.toString() === "true" ? true : false);
@@ -87,7 +75,7 @@ function Klimatogram({ calculation }) {
         show_aridness = (show_aridness.toString() === "true" ? true : false);
         //  console.log("show_aridness", calculation.parameters, show_aridness);
         let years_in_row = calculation.parameters.find(a => a.parameter === "years_in_row").value;
- 
+
         var options = {
             header_data: {
                 station_name: header.station.StationName,
@@ -100,19 +88,33 @@ function Klimatogram({ calculation }) {
             show_cardinal_temp: true,
             show_axis_scales: true,
             onready: function () {
-                diag.draw();
+                diag.current.draw();
             }
         };
 
-        let diag = new KD.Klimatogram(document.getElementById("klimatogram"), options);
-
+        diag.current = new KD.Klimatogram(document.getElementById("klimatogram"), options);
 
     }, [calculation, projData]);
 
+    function onSaveImageHandler() {
+        diag.current.toImage("download");
+    }
+
+    function onCopyImageHandler() {
+        const dataURL = diag.current.toImage("dataurl");
+        console.log("dataURL", dataURL);
+        window.api.copyImage(dataURL);
+    }
 
     return (
         <div>
             <h3>{calculation.title}</h3>
+            <div className={style.toolbar}>
+                <IconContext.Provider value={{ className: style.icons, size: "0.95em" }}>
+                    <button type="button" title="Spremi sliku" onClick={onSaveImageHandler} ><FaDownload /></button>
+                    <button type="button" title="Kopiraj sliku" onClick={onCopyImageHandler} ><FaCopy /></button>
+                </IconContext.Provider>
+            </div>
             <canvas id="klimatogram" width="980" height="100"></canvas>
         </div>
     )

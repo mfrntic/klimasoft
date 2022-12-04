@@ -3,6 +3,8 @@ import { Measures } from "../../../data/Measures";
 import * as klimasoft from "../../../lib/klimatskeformule";
 import { describe } from "../../../lib/mathUtils";
 import style from "./SingleValueCard.module.css";
+import { IconContext } from "react-icons";
+import { FaCopy } from 'react-icons/fa';
 
 function SingleValueCard({ calculation, showDescription }) {
 
@@ -21,15 +23,25 @@ function SingleValueCard({ calculation, showDescription }) {
     });
 
 
+
     const res = func.calculate(...parameters);
-    console.log("p", res);
+    //    console.log("p", res);
+
+    function onCopyHandler() {
+        navigator.clipboard.writeText(res.result);
+    }
 
     return (
         <div>
             <h3>{calculation.title}</h3>
             <div className={style.card} >
-                <h4>{res.value}</h4>    
-                {showDescription && <h5>{res.result}</h5>}        
+                <h4>
+                    {res.value}
+                    <IconContext.Provider value={{ className: style.icons }}>
+                        <button type="button" title="Kopiraj" onClick={onCopyHandler}><FaCopy /></button>
+                    </IconContext.Provider>
+                </h4>
+                {showDescription && <h5>{res.result}</h5>}
             </div>
 
             <p className={style.description}>{func.description}</p>

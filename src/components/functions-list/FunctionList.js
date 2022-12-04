@@ -9,7 +9,9 @@ import * as klimasoft from "../../lib/klimatskeformule";
 function FunctionList() {
   const [searchValue, setSearchValue] = useState("");
   let formule = useSelector((a) => a.project.calculations);
+  console.log("formule", formule);
   formule = formule.filter(a => klimasoft[a.name]?.title.length > 0);
+  console.log("formule 2", formule);
   // formule.sort((a, b) => { return a.type.localeCompare(b.type)});
 
   const grupe = [];
@@ -23,9 +25,9 @@ function FunctionList() {
     }
   }
   grupe.sort();
-  
 
-  // console.log("grupe", grupe);
+
+
 
   function onSearchChangeHandler(e) {
     const val = e.target.value;

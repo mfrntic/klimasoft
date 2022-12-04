@@ -11,8 +11,10 @@ import NewProjectDialog from "./pages/NewProjectDialog";
 import { stationsActions } from "./store/stationsSlice";
 import { projectActions } from "./store/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import ImportFileDialog from "./pages/ImportFileDialog";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function App() {
 
@@ -35,7 +37,8 @@ function App() {
     if (active) {
       dispatch(projectActions.setHeader(active.header));
       dispatch(projectActions.setData(active.data));
-      // console.log(active);
+      dispatch(projectActions.setCalculations(active.calculations));
+      console.log("active", active.calculations);
     }
 
   }, [dispatch]);
@@ -45,13 +48,14 @@ function App() {
   window.api.openFileDialogHandler((e, res) => {
     dispatch(projectActions.setHeader(res.project.header));
     dispatch(projectActions.setData(res.project.data));
-    // console.log("open-dialog", res);
+    dispatch(projectActions.setCalculations(res.project.calculations));
+    // console.log("open-dialog", res.project.calculations);
 
   });
 
   //file open dialog handler (učitavnje projekta iz datoteke)
   window.api.confirmNewProjectHandler((e, res) => {
-    console.log("confirmNewProject", res);
+    // console.log("confirmNewProject", res);
     if (!res.loadedActive) {
       dispatch(projectActions.reset());
     }
@@ -60,8 +64,8 @@ function App() {
 
   //save file dialog
   window.api.saveFileDialog((e, force) => {
-    console.log("saveFileDialog", force);
     window.api.saveFileData({ data: JSON.stringify(activeProjectData, null, 2), forceDialog: force });
+    toast("Spremljeno");
   });
 
   //project deactivated
@@ -72,15 +76,17 @@ function App() {
 
 
   return (
-    <Routes>
-      <Route path="/data" element={<ProjectData />} />
-      <Route path="/report" element={<ProjectReport />} />
-      <Route path="/stations" element={<StationsDialog />} />
-      {/* <Route path="/stations/:id" element={<StationForm />} /> */}
-      <Route path="/newproject" element={<NewProjectDialog />} />
-      <Route path="/import" element={<ImportFileDialog />} />
-      <Route path="*" element={<Navigate to="/data" replace />} />
-    </Routes>
+ 
+      <Routes>
+        <Route path="/data" element={<ProjectData />} />
+        <Route path="/report" element={<ProjectReport />} />
+        <Route path="/stations" element={<StationsDialog />} />
+        {/* <Route path="/stations/:id" element={<StationForm />} /> */}
+        <Route path="/newproject" element={<NewProjectDialog />} />
+        <Route path="/import" element={<ImportFileDialog />} />
+        <Route path="*" element={<Navigate to="/data" replace />} />
+      </Routes>
+ 
   );
 
 }

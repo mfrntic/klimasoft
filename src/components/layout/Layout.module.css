@@ -13,3 +13,13 @@
   overflow: auto;
   height: calc(100vh - 60px);
 }
+
+
+.toast {
+  font-size: 10pt !important;
+  min-height: 36px !important;
+  /* opacity: 0.85; */
+  /* background-color: gray !important; */
+   /* width: 150px !important;  */
+}
+

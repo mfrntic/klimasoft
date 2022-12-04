@@ -24,11 +24,12 @@ function ProjectCard({ project, width }) {
                 </h2>
                 <div className={classes.row}>
                     <label title="Naziv odabrane lokacije / postaje"><FaBookmark /></label>
-                    <span><strong>{station.StationName}</strong></span>
+ 
+                    <span className={classes.maplink} title="Postavke projekta" onClick={openProjectDialogHandler}><strong>{station.StationName}</strong></span>
                 </div>
                 <div className={classes.row}>
                     <label title="Koordinate (Lat, Lon)"><FaMapMarkerAlt /></label>
-                    <span>{station.Latitude}, {station.Longitude}</span>
+                    <span className={classes.maplink} title="Prikaži na karti" onClick={() => {window.open(`https://www.google.com/maps/place/${station.Latitude},${station.Longitude}/@${station.Latitude},${station.Longitude},14z`)}}>{station.Latitude}, {station.Longitude}</span>
                 </div>
                 <div className={classes.row}>
                     <label title="Nadmorska visina"><FaMountain /></label>

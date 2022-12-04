@@ -51,3 +51,13 @@
 .icons {
   vertical-align: bottom;
 }
+
+.maplink{
+  cursor: pointer;
+  color: dimgray;
+  font-weight: 600;
+}
+
+.maplink:hover{
+  color: black;
+}

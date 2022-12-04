@@ -3,6 +3,7 @@ import { IconContext } from "react-icons";
 import { IoBarChart, IoApps, IoFolderOpen, IoAdd, IoSave } from 'react-icons/io5';
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import Project from "../../models/klimasoft-project";
 import ActiveProjectFileLabel from "./ActiveProjectFileLabel";
 import style from "./ProjectMenu.module.css";
@@ -25,6 +26,7 @@ function ProjectMenu() {
 
     function saveFileDataHandler() {
         window.api.saveFileData({ data: JSON.stringify(activeProjectData, null, 2), forceDialog: false });
+        toast("Spremljeno");
     }
 
     return (

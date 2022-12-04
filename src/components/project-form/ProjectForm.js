@@ -85,18 +85,30 @@ function ProjectForm() {
             // console.log("header", projheader);
 
             //close
-            window.api.confirmNewProject({header: projheader, data: []}, loadactive);
+            window.api.confirmNewProject({ header: projheader, data: [] }, loadactive);
         }
-
     }
 
 
     function onValidateHandler(e) {
-
+        let stat;
         if (e && !e.target) {
             //station select
-            setSelectedLokacija(stations.find(a => a.IDStation === e.value));
+            stat = stations.find(a => a.IDStation === e.value);
+            setSelectedLokacija(stat);
             setHasError(false);
+        }
+        else {
+            stat = selectedLokacija;
+        }
+
+        const naziv = refNaziv.current.value;
+        const pod = refPeriodOd.current.value;
+        const pdo = refPeriodDo.current.value;
+        const suggestedNaziv = `${stat.StationName} (${pod}. - ${pdo}.)`;
+        // console.log(suggestedNaziv);
+        if (naziv !== suggestedNaziv) {
+            refNaziv.current.value = suggestedNaziv;
         }
 
         if (e.target && e.target.value) {

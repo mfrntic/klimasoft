@@ -884,6 +884,7 @@ const KD = {
                     if (ua.indexOf("Chrome") > 0) {
                         let link = document.createElement('a');
                         link.setAttribute("download", this.options.header_data.station_name + ".png");
+                        link.innerText = "Spremanje";
                         link.href = this._canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
                         link.click();
                     }
@@ -1449,6 +1450,40 @@ const KD = {
                 isDrawn = true;
             }
         }
+
+        this.toImage = function (returnType) {
+            let dataURL = this._canvas.toDataURL("image/png");
+            let ua = window.navigator.userAgent;
+            switch (returnType) {
+                case "dataurl":
+                    return dataURL;
+                case "imagedata":
+                    return _ctx.getImageData(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
+                case 'obj':
+                    let imgObj = new Image();
+                    imgObj.src = dataURL;
+                    document.getElementById('graphics').appendChild(imgObj);
+                    break;
+                case 'window':
+                    window.open(dataURL, "Canvas Image");
+                    break;
+                case 'download':
+                    if (ua.indexOf("Chrome") > 0) {
+                        let link = document.createElement('a');
+                        link.setAttribute("download", this.options.header_data.station_name + ".png");
+                        link.innerText = "Spremanje";
+                        link.href = this._canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                        link.click();
+                    }
+                    else {
+                        console.warn("Download from client side is avialable only in Chrome. Please use Chrome!");
+                    }
+                    break;
+                default:
+                    return dataURL;
+            }
+        }
+
         if (isDrawn && this.options.header_data !== null) {
             this.ctx.fillStyle = "black";
             //Naslov

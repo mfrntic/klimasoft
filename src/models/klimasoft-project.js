@@ -77,11 +77,12 @@ export class ProjectData {
         const props = ["meanTemp", "avgMaxTemp", "avgMinTemp", "absMaxTemp", "absMinTemp", "percipitation"];
         for (let prop of props) {
             for (let row of this[prop]) {
-                
+
                 const year = Number(row[0]);
                 if (!isNaN(year) && (!years.includes(year))) {
- 
-                    years.push(year);
+                    if (year > 0) {
+                        years.push(year);
+                    }
                 }
             }
         }
