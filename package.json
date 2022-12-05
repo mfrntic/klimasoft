@@ -83,7 +83,7 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "./public/logo512.png" 
+      "icon": "./public/logo256.png" 
     },
     "linux": {
       "target": "deb",

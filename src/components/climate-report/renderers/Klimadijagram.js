@@ -6,8 +6,8 @@ import Project, { Period, ProjectData, ProjectHeader } from "../../../models/kli
 import { IconContext } from "react-icons";
 import { FaDownload, FaCopy } from 'react-icons/fa';
 import style from "./Klimadijagram.module.css"; 
-//import { calculate, describe } from "../../../lib/mathUtils";
-const { calculate, describe } = require("../../../lib/mathUtils");
+import { calculate, describe } from "../../../lib/mathUtils";
+// const { calculate, describe } = require("../../../lib/mathUtils");
 
 function Klimadijagram({ calculation }) {
 

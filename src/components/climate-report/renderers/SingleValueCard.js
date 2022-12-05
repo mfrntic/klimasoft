@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
 import { Measures } from "../../../data/Measures";
 import * as klimasoft from "../../../lib/klimatskeformule";
-// import { describe } from "../../../lib/mathUtils";
+import { describe } from "../../../lib/mathUtils";
 import style from "./SingleValueCard.module.css";
 import { IconContext } from "react-icons";
 import { FaCopy } from 'react-icons/fa';
-const { describe } = require("../../../lib/mathUtils");
+// const { describe } = require("../../../lib/mathUtils");
 
 function SingleValueCard({ calculation, showDescription }) {
 

@@ -1,10 +1,10 @@
-// import { describe } from "../../lib/mathUtils";
+import { describe } from "../../lib/mathUtils";
 import style from "./GridTotal.module.css";
 import jspreadsheet from "jspreadsheet-ce";
 import "jspreadsheet-ce/dist/jspreadsheet.css";
 import { useEffect, useRef } from "react";
 import GridToolbar from "./GridToolbar";
-const { describe } = require("../../lib/mathUtils");
+// const { describe } = require("../../lib/mathUtils");
 
 function GridTotal({ projectdata, measure }) {
     const jRef = useRef(null);

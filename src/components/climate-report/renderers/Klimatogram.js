@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import KD from "../../../lib/klimadijagram";
-// import { max, min } from "../../../lib/mathUtils";
+import { max, min } from "../../../lib/mathUtils";
 import Project, { ProjectData, ProjectHeader } from "../../../models/klimasoft-project";
 import style from "./Klimatogram.module.css";
 import { IconContext } from "react-icons";
 import { FaDownload, FaCopy } from 'react-icons/fa';
-const {max, min} = require("../../../lib/mathUtils");
+// const {max, min} = require("../../../lib/mathUtils");
 
 function Klimatogram({ calculation }) {
 

@@ -1,14 +1,12 @@
-
 // const log = require('electron-log');
 // log.transports.file.level = 'info';
 // log.transports.file.resolvePath = () => path.join( __dirname, "klimasoft-custom.log");
-
 
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 
 const path = require("path");
-const url = require('url');
+// const url = require("url");
 
 const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject,
   deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose, confirmImport } = require("./actions");
@@ -53,11 +51,9 @@ function createWindow() {
     },
   });
 
-
   const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, global.activeProject));
   Menu.setApplicationMenu(menu);
 
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${__dirname}/../build/index.html`);
 
   // Load from localhost if in development
   // Otherwise load index.html file 
@@ -65,12 +61,14 @@ function createWindow() {
   //   mainWindow.loadURL("http://localhost:3000");
   // }
   // else {
+  //   console.log("PATH", path.join(__dirname, '../build/index.html'));
   //   mainWindow.loadURL(url.format({
   //     pathname: path.join(__dirname, '../build/index.html'),
   //     protocol: 'file:',
   //     slashes: true
   //   }));
   // }
+  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${__dirname}/../build/index.html`);
 
   // mainWindow.loadURL(
   //   isDev
@@ -101,6 +99,8 @@ app.whenReady().then(() => {
   }
 
   createWindow();
+
+
 });
 
 // Add a new listener that tries to quit the application when

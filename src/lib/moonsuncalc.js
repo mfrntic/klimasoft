@@ -449,7 +449,7 @@ const { average } = require("./mathUtils");
         var z2 = 0;
         ///''''''''''''''''''''''''''''''
         var utrise = 0;
-        var utset = 0;
+        // var utset = 0;
         var rise = 0;
         var sett = 0;
         var Hour = 1;
@@ -514,7 +514,7 @@ const { average } = require("./mathUtils");
                         // must be setting
                     }
                     else {
-                        utset = Hour + z1;
+                        // utset = Hour + z1;
                         sett = 1;
                     }
                     break;
@@ -523,12 +523,12 @@ const { average } = require("./mathUtils");
                     // minimum - so set then rise
                     if ((ye < 0)) {
                         utrise = Hour + z2;
-                        utset = Hour + z1;
+                        // utset = Hour + z1;
                         // maximum - so rise then set
                     }
                     else {
                         utrise = Hour + z1;
-                        utset = Hour + z2;
+                        // utset = Hour + z2;
                     }
                     rise = 1;
                     sett = 1;
@@ -583,7 +583,7 @@ const { average } = require("./mathUtils");
         var z1 = 0;
         var z2 = 0;
         ///''''''''''''''''''''''''''''''
-        var utrise = 0;
+        // var utrise = 0;
         var utset = 0;
         var rise = 0;
         var sett = 0;
@@ -644,7 +644,7 @@ const { average } = require("./mathUtils");
                     // simple rise / set event
                     // must be a rising event
                     if ((ym < 0)) {
-                        utrise = Hour + z1;
+                        // utrise = Hour + z1;
                         rise = 1;
                         // must be setting
                     }
@@ -657,12 +657,12 @@ const { average } = require("./mathUtils");
                     // rises and sets within interval
                     // minimum - so set then rise
                     if ((ye < 0)) {
-                        utrise = Hour + z2;
+                        // utrise = Hour + z2;
                         utset = Hour + z1;
                         // maximum - so rise then set
                     }
                     else {
-                        utrise = Hour + z1;
+                        // utrise = Hour + z1;
                         utset = Hour + z2;
                     }
                     rise = 1;

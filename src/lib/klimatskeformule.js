@@ -1,7 +1,10 @@
-const { round, average, sum, max, min } = require("./mathUtils");
-const MoonSunCalc = require("./moonsuncalc");
+// const { round, average, sum, max, min } = require("./mathUtils");
+// const MoonSunCalc = require("./moonsuncalc");
 
-exports.aridityIndexDeMartonne = {
+import { round, average, sum, max, min  } from "./mathUtils";
+import MoonSunCalc from "./moonsuncalc";
+
+export const aridityIndexDeMartonne = {
     calculate: function (oborine, temperatura) {
 
         //izračunaj prosjek
@@ -51,7 +54,7 @@ exports.aridityIndexDeMartonne = {
     description: "The De Martonne (1926.) aridity index: DMI = P / (T + 10), where P (cm) is the annual precipitation and T (°C) the annual mean temperature.",
 }
 
-exports.aridityIndexGracanin = {
+export const aridityIndexGracanin = {
     calculate: function (oborine, temperatura) {
 
         //izračunaj prosjek
@@ -93,7 +96,7 @@ exports.aridityIndexGracanin = {
 
 }
 
-exports.ellenbergEQ = {
+export const ellenbergEQ = {
     calculate: function (oborine, temperatura) {
 
         //izračunaj prosjek
@@ -118,7 +121,7 @@ exports.ellenbergEQ = {
     description: "Ellenberg's climate quotient (EQ = T_warmest_month / AnnualPercipitation * 1000)"
 }
 
-exports.embergerPluviotermicQuotient = {
+export const embergerPluviotermicQuotient = {
     calculate: function (oborine, temperatura) {
         //izračunaj prosjek
         const annualPerc = sum(oborine);
@@ -143,7 +146,7 @@ exports.embergerPluviotermicQuotient = {
     description: "Emberger's pluviometric quotient (Q₂ = 2000 P / [(M + m + 546.4) * (M - m)]. P = total annual precipitation, M = mean max temperature of the warmest month, m = mean min temperature of the coldest month)"
 }
 
-exports.continentalityIndexConrad = {
+export const continentalityIndexConrad = {
     calculate: function (temperatura, lat) {
         const res = {
             value: null,
@@ -172,7 +175,7 @@ exports.continentalityIndexConrad = {
     description: "An index of continentality, or coefficient of continentality, k, has been formulated by V. Conrad as follows: k = 1.7 * Temp_Amplitude / sin(Latitude + 10) - 14"
 }
 
-exports.koppenClimateFormula = {
+export const koppenClimateFormula = {
     calculate: function (oborine, temperatura, lat) {
         const res = {
             value: null,
@@ -352,7 +355,7 @@ exports.koppenClimateFormula = {
     title: "Köppen’s climate classification formula"
 }
 
-exports.langsRainfallFactor = {
+export const langsRainfallFactor = {
     calculate: function (oborine, temperatura) {
         //izračunaj prosjek
         const annualPerc = sum(oborine);
@@ -390,7 +393,7 @@ exports.langsRainfallFactor = {
     description: "Lang’s rainfall factor expresses natural irrigation conditions of landscape by the relationship between rainfalls and air temperature (Equation 2) (Sobisek 1993): f = R / t  -> where  f = Lang’s rainfall factor, R = average annual rainfall sum in mm, and t = average annual air temperature in °C"
 }
 
-exports.thermicCharacterGracanin = {
+export const thermicCharacterGracanin = {
     calculate: function (temperatura) {
 
         const arr = [], arr1 = [];
@@ -447,7 +450,7 @@ exports.thermicCharacterGracanin = {
     description: "Toplinski karakter klime po Gračaninu"
 }
 
-exports.thornthwaitePET = {
+export const thornthwaitePET = {
     calculate: function (temperatura, lat, lon) {
         let year_from = 0, year_to = 0;
         if (year_from === 0) year_from = new Date().getFullYear();
@@ -484,10 +487,10 @@ exports.thornthwaitePET = {
 
 }
 
-exports.thornthwaiteWaterBalance = {
+export const thornthwaiteWaterBalance = {
     calculate: function (oborine, temperatura, lat, lon) {
 
-        const thornthwaite_pet_monthly = exports.thornthwaitePET.calculate(temperatura, lat, lon).result;
+        const thornthwaite_pet_monthly = thornthwaitePET.calculate(temperatura, lat, lon).result;
         const vodna_bilanca = [];
         for (let m = 0; m < oborine.length; m++) {
             vodna_bilanca.push(round(oborine[m] - thornthwaite_pet_monthly[m], 2));
@@ -504,7 +507,7 @@ exports.thornthwaiteWaterBalance = {
     formulaDescription: "Vodna bilanca (vodni suficit/deficit) s obzirom na potencijalnu evapotranspiraciju"
 }
 
-exports.thornthwaitePercipitationEfficiency = {
+export const thornthwaitePercipitationEfficiency = {
     calculate: function (oborine, temperatura) {
         let d = 0;
         for (let m = 1; m <= 12; m++) {
@@ -535,7 +538,7 @@ exports.thornthwaitePercipitationEfficiency = {
     description: "Indeks djelotvornosti oborina po Thorntwaitu"
 }
 
-exports.continentalityIndex = {
+export const continentalityIndex = {
     calculate: function (temperatura) {
         const tmin = min(temperatura);
         const tmax = max(temperatura);
@@ -578,7 +581,7 @@ exports.continentalityIndex = {
 //     description: ""
 // }
 
-exports.ombrothermicIndex = {
+export const ombrothermicIndex = {
     calculate: function (temperatura, oborine) {
         const t = [], p = [];
         for (let i = 0; i < temperatura.length; i++) {
@@ -621,7 +624,7 @@ exports.ombrothermicIndex = {
     description: "Rivas-Martinez et al. 2011."
 }
 
-exports.ombrothermicIndexSummerQuarter = {
+export const ombrothermicIndexSummerQuarter = {
     calculate: function (temperatura, oborine) {
         const t = [], p = [];
         for (let i = 0; i < temperatura.length; i++) {
@@ -664,7 +667,7 @@ exports.ombrothermicIndexSummerQuarter = {
     description: "Rasztovits et al. 2012."
 }
 
-exports.thermicityIndex = {
+export const thermicityIndex = {
     calculate: function (temperatura) {
         const T = average(temperatura);
         const m = min(temperatura);
@@ -683,9 +686,9 @@ exports.thermicityIndex = {
     description: "Rasztovits et al. 2012."
 }
 
-exports.ombroEvapotranspirationIndex = {
+export const ombroEvapotranspirationIndex = {
     calculate: function (temperatura, oborine, lat, lon) {
-        const pet = exports.thornthwaitePET.calculate(temperatura, lat, lon).value;
+        const pet = thornthwaitePET.calculate(temperatura, lat, lon).value;
         const annualPerc = sum(oborine);
         const res = round(annualPerc / pet, 2);
 
@@ -701,12 +704,12 @@ exports.ombroEvapotranspirationIndex = {
     description: "Rivas-Martinez et al. 2011."
 }
 
-exports.drySeasonWaterDeficit = {
+export const drySeasonWaterDeficit = {
     calculate: function (temperatura, oborine, lat, lon) {
         const resArr = [];
         for (let i = 0; i < oborine.length; i++) {
             if (temperatura[i] > 0) {
-                const pet = exports.thornthwaitePET.calculate(temperatura, lat, lon);
+                const pet = thornthwaitePET.calculate(temperatura, lat, lon);
                 resArr.push(round(oborine[i] - pet.result[i], 2));
             }
             else {
@@ -725,7 +728,7 @@ exports.drySeasonWaterDeficit = {
     description: "Dufour-Dror and Ertas 2004."
 }
 
-exports.drySeasonDuration = {
+export const drySeasonDuration = {
     calculate: function (temperatura, oborine) {
         let res = 0;
         const resArr = [];
@@ -749,7 +752,7 @@ exports.drySeasonDuration = {
     description: "Gausen 1954., UNESCO 1963"
 }
 
-exports.rainfallAnomalyIndex = {
+export const rainfallAnomalyIndex = {
     calculate: function (oborine) {
         let low = [...oborine];
         low.sort((a, b) => a - b);
@@ -795,7 +798,7 @@ exports.rainfallAnomalyIndex = {
     description: "RAI (Rainfall Anomaly Index) is an incorporation of ranking procedure to assign magnitudes to positive and negative precipitation anomalies"
 }
 
-exports.percentOfNormalPercipitation = {
+export const percentOfNormalPercipitation = {
     calculate: function (oborine) {
         const meanP = round(average(oborine), 2);
 
@@ -816,7 +819,7 @@ exports.percentOfNormalPercipitation = {
     description: "Postotak od normalne oborine (engl. Percent of Normal, PN) ili anomalija oborina zasniva se na odnosu mjesečnih oborina i prosječne mjesečne oborine promatranog razdoblja."
 }
 
-exports.hydrothermicIndexSeljaninov = {
+export const hydrothermicIndexSeljaninov = {
     calculate: function (temperatura, oborine, vegetation_temp_treshold) {
         const t = [], p = [];
         for (let i = 0; i < temperatura.length; i++) {
@@ -859,7 +862,7 @@ exports.hydrothermicIndexSeljaninov = {
     },
 }
 
-exports.walterClimateDiagram = {
+export const walterClimateDiagram = {
     calculate: function (show_aridness, show_months, show_vegetation_period) { },
     name: "walterClimateDiagram",
     title: "Walter Climate Diagram [WCD]",
@@ -873,7 +876,7 @@ exports.walterClimateDiagram = {
     },
 }
 
-exports.walterKlimatogram = {
+export const walterKlimatogram = {
     calculate: (show_aridness, show_months, years_in_row) => { },
     name: "walterKlimatogram",
     title: "Walter Climatogram [WCG]",
@@ -887,7 +890,7 @@ exports.walterKlimatogram = {
     },
 }
 
-exports.projectInfo = {
+export const projectInfo = {
     calculate: function () { },
     name: "projectInfo",
     title: "Osnovne informacije",
@@ -896,7 +899,7 @@ exports.projectInfo = {
     description: "Information about the selected project, period and location / meteorological station"
 }
 
-exports.descriptiveTemperature = {
+export const descriptiveTemperature = {
     calculate: function () { },
     name: "descriptiveTemperature",
     title: "Deskriptiva temperature",
@@ -905,7 +908,7 @@ exports.descriptiveTemperature = {
     description: "Statistically processed temperature data"
 }
 
-exports.descriptivePercipitation = {
+export const descriptivePercipitation = {
     calculate: function () { },
     name: "descriptivePercipitation",
     title: "Deskriptiva oborine",

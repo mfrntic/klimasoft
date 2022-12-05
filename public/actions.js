@@ -3,16 +3,17 @@ const { BrowserWindow, dialog, app, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
 const global = require("./global");
-const fs = require("fs"); 
+const fs = require("fs");
 
 let stations, newproject;
 
 exports.openStations = async function (mainWindow) {
 
     // console.log("STATIONS!");
-    const url = isDev
-        ? "http://localhost:3000#/stations"
-        : `file://${path.join(path.basename(__dirname), "../build/index.html#/stations")}`;
+    // const url = isDev
+    //     ? "http://localhost:3000#/stations"
+    //     : `file://${path.join(path.basename(__dirname), "../build/index.html#/stations")}`;
+    const url = isDev ? 'http://localhost:3000#/stations' : `file://${__dirname}/../build/index.html#/stations`;
 
     const mainBounds = mainWindow.getBounds();
 
@@ -33,7 +34,7 @@ exports.openStations = async function (mainWindow) {
             nodeIntegration: false,
             contextIsolation: true,
             enableRemoteModule: false,
-            preload: path.resolve(__dirname, "../public/preload.js"),
+            preload: path.resolve(__dirname, "./preload.js"),
         },
     });
     stations.setMenu(null);
@@ -84,9 +85,11 @@ exports.openNewProject = async function (mainWindow, loadactive = true) {
         if (!await exports.deactivateProjectDialog(mainWindow)) return;
     }
     //console.log("loadactive-", loadactive);
-    const url = isDev
-        ? "http://localhost:3000#/newproject?loadactive=" + loadactive
-        : `file://${path.join(path.basename(__dirname), "../build/index.html#/newproject?loadactive=" + loadactive)}`;
+    // const url = isDev
+    //     ? "http://localhost:3000#/newproject?loadactive=" + loadactive
+    //     : `file://${path.join(path.basename(__dirname), "../build/index.html#/newproject?loadactive=" + loadactive)}`;
+    const url = isDev ? "http://localhost:3000#/newproject?loadactive=" + loadactive : `file://${__dirname}/../build/index.html#/newproject?loadactive=${loadactive}`;
+
 
     // console.log("openStations", mainWindow);
     const mainBounds = mainWindow.getBounds();
@@ -110,7 +113,7 @@ exports.openNewProject = async function (mainWindow, loadactive = true) {
             nodeIntegration: false,
             contextIsolation: true,
             enableRemoteModule: false,
-            preload: path.resolve(__dirname, "../public/preload.js"),
+            preload: path.resolve(__dirname, "./preload.js"),
         },
     });
     newproject.setMenu(null);
@@ -204,7 +207,8 @@ exports.importFileDialog = async (mainWindow) => {
         // console.log("STATIONS!");
         const url = isDev
             ? "http://localhost:3000#/import"
-            : `file://${path.join(path.basename(__dirname), "../build/index.html#/import")}`;
+            : `file://${__dirname}/../build/index.html#/import`;
+        // const url = isDev ? "http://localhost:3000#/newproject?loadactive=" + loadactive : `file://${__dirname}/../build/index.html#//newproject?loadactive=${loadactive}`;
 
         const mainBounds = mainWindow.getBounds();
 
@@ -226,7 +230,7 @@ exports.importFileDialog = async (mainWindow) => {
                 nodeIntegration: false,
                 contextIsolation: true,
                 enableRemoteModule: false,
-                preload: path.resolve(__dirname, "../public/preload.js"),
+                preload: path.resolve(__dirname, "./preload.js"),
             },
         });
 
@@ -253,7 +257,7 @@ exports.confirmImport = async (mainWindow, data) => {
 }
 
 
-exports.climateReference = function(mainWindow){
+exports.climateReference = function (mainWindow) {
     const appmenu = Menu.getApplicationMenu();
     const m = appmenu.getMenuItemById("cr");
 

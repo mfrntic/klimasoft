@@ -1,4 +1,4 @@
-exports.round = function (num, places) {
+const round = function (num, places) {
     const multiplier = Number("1" + "0".repeat(places));
     if (places > 0) {
         return Math.round(num * multiplier + Number.EPSILON) / multiplier;
@@ -8,21 +8,21 @@ exports.round = function (num, places) {
     }
 }
 
-exports.sum = function (nums) {
+const sum = function (nums) {
     if (Array.isArray(nums)) {
         return nums.reduce((a, b) => a + b, 0);
     }
     return nums;
 }
 
-exports.average = function (nums) {
+const average = function (nums) {
     if (Array.isArray(nums)) {
-        return exports.sum(nums) / nums.length;
+        return sum(nums) / nums.length;
     }
     return nums;
 }
 
-exports.max = function (nums) {
+const max = function (nums) {
     if (Array.isArray(nums)) {
 
         return nums.filter(a => !isNaN(a)).reduce((a, b) => Math.max(a, b), -Infinity);
@@ -30,7 +30,7 @@ exports.max = function (nums) {
     return nums;
 }
 
-exports.min = function (nums) {
+const min = function (nums) {
     if (Array.isArray(nums)) {
 
         return nums.filter(a => !isNaN(a)).reduce((a, b) => {
@@ -40,8 +40,8 @@ exports.min = function (nums) {
     return nums;
 }
 
-exports.stdev = function (nums) {
-    let mean = exports.average(nums);
+const stdev = function (nums) {
+    let mean = average(nums);
 
     // Assigning (value - mean) ^ 2 to every array item
     nums = nums.map((k) => {
@@ -49,14 +49,14 @@ exports.stdev = function (nums) {
     })
 
     // Calculating the sum of updated array
-    let sum = exports.sum(nums);
+    let s = sum(nums);
 
     // Returning the Standered deviation
-    return Math.sqrt(sum / nums.length)
+    return Math.sqrt(s / nums.length)
 }
 
-exports.variance = function (nums) {
-    let mean = exports.average(nums);
+const variance = function (nums) {
+    let mean = average(nums);
 
     // Assigning (value - mean) ^ 2 to every array item
     nums = nums.map((k) => {
@@ -64,14 +64,14 @@ exports.variance = function (nums) {
     })
 
     // Calculating the sum of updated array
-    let sum = exports.sum(nums);
+    let s = sum(nums);
 
     // Calculating the variance
-    let variance = sum / nums.length
+    let variance = s / nums.length
     return variance;
 }
 
-exports.calculate = function (month_matrix, calc_month = 0, calc_type = "sum", round_digits = 2) {
+const calculate = function (month_matrix, calc_month = 0, calc_type = "sum", round_digits = 2) {
 
     if (!Array.isArray(month_matrix)) return null;
 
@@ -107,27 +107,27 @@ exports.calculate = function (month_matrix, calc_month = 0, calc_type = "sum", r
     switch (calc_type) {
         case "average":
         case "avg":
-            return exports.round(exports.average(resarr), round_digits);
+            return round(average(resarr), round_digits);
         case "minimum":
         case "min":
-            return exports.round(exports.min(resarr), round_digits);
+            return round(min(resarr), round_digits);
         case "maximum":
         case "max":
-            return exports.round(exports.max(resarr), round_digits);
+            return round(max(resarr), round_digits);
         case "count":
         case "cnt":
             return resarr.length;
         case "stdev":
-            return exports.round(exports.stdev(resarr), round_digits);
+            return round(stdev(resarr), round_digits);
         case "variance":
-            return exports.round(exports.variance(resarr), round_digits);
+            return round(variance(resarr), round_digits);
         default:
             //sum
-            return exports.round(exports.sum(resarr), round_digits);
+            return round(sum(resarr), round_digits);
     }
 }
 
-exports.describe = function (month_matrix, calc_type = "all", full_row = true) {
+const describe = function (month_matrix, calc_type = "all", full_row = true) {
     let calcTypes = ["count", "sum", "avg", "min", "max", "variance", "stdev"];
     const calcTypesFiltered = calcTypes.filter(a => a === calc_type);
     if (calcTypesFiltered.length > 0) {
@@ -137,17 +137,19 @@ exports.describe = function (month_matrix, calc_type = "all", full_row = true) {
 
     for (const ctype of calcTypes) {
         const row = [];
-        if (full_row){
+        if (full_row) {
             row.push(ctype);
         }
         for (let m = 1; m <= 12; m++) {
-            row.push(exports.calculate(month_matrix, m, ctype));
+            row.push(calculate(month_matrix, m, ctype));
         }
         if (full_row) {
-            row.push(exports.calculate(month_matrix, 0, ctype)); //cijela godina na kraju
+            row.push(calculate(month_matrix, 0, ctype)); //cijela godina na kraju
         }
         res.push(row);
     }
 
     return res;
 }
+
+export {round, sum, average, max, min, stdev, variance, calculate, describe};
