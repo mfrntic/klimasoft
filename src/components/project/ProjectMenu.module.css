@@ -74,6 +74,10 @@ ul.topnav li.right {
   margin-left: 1em;
 }
 
+.commands button{
+  color: white !important; 
+}
+
 button.primary {
   color: whitesmoke;
   background-color: #4f8edc;

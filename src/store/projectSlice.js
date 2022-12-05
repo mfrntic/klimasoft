@@ -41,9 +41,14 @@ export const projectSlice = createSlice({
       state.data = initialState.data;
       state.calculations = getCalculations()
     },
-    setCalculations: function(state, action){
-      console.log("setCalculations", action.payload);
-      state.calculations = action.payload;
+    setCalculations: function (state, action) {
+      // console.log("setCalculations", action.payload);
+      if (!!action && Array.isArray(action) && action.length > 0) {
+        state.calculations = action.payload;
+      }
+      else {
+        state.calculations =  getCalculations();
+      }
     },
     setHeader: function (state, action) {
       // console.log("setHeader", action);
@@ -66,7 +71,7 @@ export const projectSlice = createSlice({
                 if (!isNaN(tmp)) {
                   val = tmp;
                 }
-              } catch {}
+              } catch { }
             }
             return val;
           });

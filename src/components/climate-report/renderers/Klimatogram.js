@@ -69,13 +69,13 @@ function Klimatogram({ calculation }) {
         }
 
 
-        let show_months = calculation.parameters.find(a => a.parameter === "show_months").value;
-        show_months = (show_months.toString() === "true" ? true : false);
+        let show_months = calculation.parameters.find(a => a.parameter === "show_months")?.value;
+        show_months = (show_months?.toString() === "true" ? true : false);
         // console.log("show_months 2", show_months);
-        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness").value;
-        show_aridness = (show_aridness.toString() === "true" ? true : false);
+        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness")?.value;
+        show_aridness = (show_aridness?.toString() === "true" ? true : false);
         //  console.log("show_aridness", calculation.parameters, show_aridness);
-        let years_in_row = calculation.parameters.find(a => a.parameter === "years_in_row").value;
+        let years_in_row = calculation.parameters.find(a => a.parameter === "years_in_row")?.value;
 
         var options = {
             header_data: {

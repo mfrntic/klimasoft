@@ -29,13 +29,14 @@
 }
 
 .page .reports .reportsMenu {
- 
+ /* flex: 1; */
 }
 
 .page .reports .reportsData {
   padding: 10px;
   margin-left: 1em;
   width: 100%;
+  /* flex: 2 */
 }
 
 .page .reports .sticky {

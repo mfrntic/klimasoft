@@ -42,15 +42,15 @@ function Klimadijagram({ calculation }) {
             }
         }
 
-        let show_months = calculation.parameters.find(a => a.parameter === "show_months").value;
-        show_months = (show_months.toString() === "true" ? true : false);
+        let show_months = calculation.parameters.find(a => a.parameter === "show_months")?.value;
+        show_months = (show_months?.toString() === "true" ? true : false);
         // console.log("show_months 2", show_months);
-        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness").value;
-        show_aridness = (show_aridness.toString() === "true" ? true : false);
+        let show_aridness = calculation.parameters.find(a => a.parameter === "show_aridness")?.value;
+        show_aridness = (show_aridness?.toString() === "true" ? true : false);
         //  console.log("show_aridness", calculation.parameters, show_aridness);
 
-        let show_vegetation_period = calculation.parameters.find(a => a.parameter === "show_vegetation_period").value;
-        show_vegetation_period = (show_vegetation_period.toString() === "true" ? true : false);
+        let show_vegetation_period = calculation.parameters.find(a => a.parameter === "show_vegetation_period")?.value;
+        show_vegetation_period = (show_vegetation_period?.toString() === "true" ? true : false);
 
         var options = {
             temp: meanTemp,
