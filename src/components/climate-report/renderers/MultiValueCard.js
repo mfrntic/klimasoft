@@ -4,10 +4,10 @@ import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { Measures } from "../../../data/Measures";
 import * as klimasoft from "../../../lib/klimatskeformule";
-import { describe } from "../../../lib/mathUtils";
+// import { describe } from "../../../lib/mathUtils";
 import GridToolbar from "../../project/GridToolbar";
 import style from "./MultiValueCard.module.css";
-
+const {describe} = require("../../../lib/mathUtils");
 function MultiValueCard({ calculation }) {
 
 

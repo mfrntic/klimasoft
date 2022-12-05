@@ -1,11 +1,22 @@
+
+// const log = require('electron-log');
+// log.transports.file.level = 'info';
+// log.transports.file.resolvePath = () => path.join( __dirname, "klimasoft-custom.log");
+
+
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
+
 const path = require("path");
+const url = require('url');
+
 const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject,
-  deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose, confirmImport, climateReference } = require("../electron/actions");
+  deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose, confirmImport } = require("./actions");
 const global = require("./global");
-const menuTemplate = require("../electron/menuTemplate");
-const { getStations, initStations } = require("../src/data/StationsHR");
+const menuTemplate = require("./menuTemplate");
+const { getStations, initStations } = require("./StationsHR");
+
+// console.log("log", log.transports.file.resolvePath());
 
 
 // Conditionally include the dev tools installer to load React Dev Tools
@@ -13,6 +24,8 @@ let installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS;
 
 //lang
 app.commandLine.appendSwitch('lang', 'hr');
+// app.commandLine.appendSwitch("enable-logging=file");
+
 
 if (isDev) {
   const devTools = require("electron-devtools-installer");
@@ -44,20 +57,33 @@ function createWindow() {
   const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, global.activeProject));
   Menu.setApplicationMenu(menu);
 
-
+  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${__dirname}/../build/index.html`);
 
   // Load from localhost if in development
-  // Otherwise load index.html file
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
-  );
+  // Otherwise load index.html file 
+  // if (isDev) {
+  //   mainWindow.loadURL("http://localhost:3000");
+  // }
+  // else {
+  //   mainWindow.loadURL(url.format({
+  //     pathname: path.join(__dirname, '../build/index.html'),
+  //     protocol: 'file:',
+  //     slashes: true
+  //   }));
+  // }
+
+  // mainWindow.loadURL(
+  //   isDev
+  //     ? "http://localhost:3000"
+  //     : `file://${path.join(__dirname, "../build/index.html")}`
+  // );
 
   // Open DevTools if in dev mode
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
+
+  mainWindow.on("closed", () => (mainWindow = null));
 }
 
 // Create a new browser window by invoking the createWindow

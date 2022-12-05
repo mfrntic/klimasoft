@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer, nativeImage, clipboard, Menu } = require("electron");
-const { getStations, saveStation, initStations, deleteStation } = require("../src/data/StationsHR");
+const { getStations, saveStation, initStations, deleteStation } = require("./StationsHR");
 
 
 contextBridge.exposeInMainWorld("api", {

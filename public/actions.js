@@ -2,7 +2,7 @@
 const { BrowserWindow, dialog, app, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
-const global = require("../public/global");
+const global = require("./global");
 const fs = require("fs"); 
 
 let stations, newproject;

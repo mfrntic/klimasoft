@@ -1,4 +1,4 @@
-﻿const moment = require("moment");
+const moment = require("moment");
 const { average } = require("./mathUtils");
 /*
 (c) 2011-2014, Marko Frntić

@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import style from "./BackButton.module.css";
 import { IconContext } from "react-icons";
 import { FaArrowCircleLeft } from 'react-icons/fa';
 
 
 function BackButton() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     function backButtonHandler() {
         // navigate(-1);

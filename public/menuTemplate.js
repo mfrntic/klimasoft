@@ -1,4 +1,4 @@
-const { openStations, openFileDialog, openNewProject, deactivateProjectDialog, saveFileDialog, climateReference } = require("../electron/actions");
+const { openStations, openFileDialog, openNewProject, deactivateProjectDialog, saveFileDialog, climateReference } = require("./actions");
 
 const isMac = process.platform === 'darwin';
 const isDev = require("electron-is-dev");
