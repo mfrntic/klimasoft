@@ -13,6 +13,7 @@
     "electron-is-dev": "^1.2.0",
     "electron-log": "^4.4.8",
     "electron-store": "^8.1.0",
+    "electron-window-state": "^5.0.3",
     "html-react-parser": "^3.0.4",
     "jspreadsheet-ce": "^4.10.2",
     "moment": "^2.29.4",
@@ -34,6 +35,7 @@
     "dist:win": "npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "dist:mac": "npm run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "dist:linux": "npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js",
+    "release": "npm run build && electron-builder -w -p \"onTagOrDraft\" -c.extraMetadata.main=build/electron.js",
     "react-start": "react-scripts start"
   },
   "eslintConfig": {
@@ -69,6 +71,11 @@
   "build": {
     "appId": "hr.monachus.klimasoft",
     "productName": "Klimasoft",
+    "copyright": "Monachus informatika d.o.o.",
+    "publish": {
+      "provider": "github",
+      "token": "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"
+    },
     "files": [
       "build/**/*",
       "node_modules/**/*"
@@ -83,7 +90,12 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "./public/logo256.png" 
+      "icon": "./public/logo512.png",
+      "certificateFile": "private/Monachus.pfx",
+      "certificatePassword": "",
+      "verifyUpdateCodeSignature": false,
+      "publisherName": "Monachus",
+      "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp"
     },
     "linux": {
       "target": "deb",

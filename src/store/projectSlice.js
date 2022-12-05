@@ -30,7 +30,7 @@ const initialState = {
   calculations: getCalculations(),
 };
 
-console.log("initState", initialState);
+// console.log("initState", initialState);
 
 export const projectSlice = createSlice({
   name: "project",
@@ -43,12 +43,13 @@ export const projectSlice = createSlice({
     },
     setCalculations: function (state, action) {
       // console.log("setCalculations", action.payload);
-      if (!!action && Array.isArray(action) && action.length > 0) {
-        state.calculations = action.payload;
-      }
-      else {
-        state.calculations =  getCalculations();
-      }
+      state.calculations = action.payload;
+      // if (Array.isArray(action) && action.length > 0) {
+      //   state.calculations = action.payload;
+      // }
+      // else {
+      //   state.calculations =  getCalculations();
+      // }
     },
     setHeader: function (state, action) {
       // console.log("setHeader", action);

@@ -13,8 +13,7 @@ const { openStations, closeStations, openFileDialog, openNewProject, closeNewPro
 const global = require("./global");
 const menuTemplate = require("./menuTemplate");
 const { getStations, initStations } = require("./StationsHR");
-
-// console.log("log", log.transports.file.resolvePath());
+const windowStateKeeper = require("electron-window-state");
 
 
 // Conditionally include the dev tools installer to load React Dev Tools
@@ -36,12 +35,19 @@ let mainWindow;
 // console.log("userData", app.getPath("userData"));
 
 function createWindow() {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1200,
+    defaultHeight: 800
+  });
+
   mainWindow = new BrowserWindow({
     title: "Klimasoft",
-    width: 1200,
-    height: 800,
-    minWidth: 1180,
-    minHeight: 600,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    minWidth: 980,
+    minHeight: 750,
     icon: path.join(__dirname, "favicon.ico"),
     webPreferences: {
       nodeIntegration: false,
@@ -51,23 +57,11 @@ function createWindow() {
     },
   });
 
+  mainWindowState.manage(mainWindow);
+
   const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, global.activeProject));
   Menu.setApplicationMenu(menu);
 
-
-  // Load from localhost if in development
-  // Otherwise load index.html file 
-  // if (isDev) {
-  //   mainWindow.loadURL("http://localhost:3000");
-  // }
-  // else {
-  //   console.log("PATH", path.join(__dirname, '../build/index.html'));
-  //   mainWindow.loadURL(url.format({
-  //     pathname: path.join(__dirname, '../build/index.html'),
-  //     protocol: 'file:',
-  //     slashes: true
-  //   }));
-  // }
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${__dirname}/../build/index.html`);
 
   // mainWindow.loadURL(
@@ -80,6 +74,8 @@ function createWindow() {
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
+
+  
 
   mainWindow.on("closed", () => (mainWindow = null));
 }
