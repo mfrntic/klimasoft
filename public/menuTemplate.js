@@ -56,7 +56,7 @@ const menuTemplate = (window) => {
                     }
                 },
                 { type: "separator" },
-                { label: "O programu KlimaSoft..." }
+                { role: "about", label: "O programu KlimaSoft..." }
             ]
         }
     ];

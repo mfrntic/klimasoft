@@ -4,25 +4,34 @@
 
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const isDev = require("electron-is-dev");
-
+const updater = require("./updater");
 const path = require("path");
 // const url = require("url");
 
-const { openStations, closeStations, openFileDialog, openNewProject, closeNewProject, confirmNewProject,
-  deactivateProjectDialog, saveFileData, importFileDialog, importFileDialogClose, confirmImport } = require("./actions");
+const {
+  openStations,
+  closeStations,
+  openFileDialog,
+  openNewProject,
+  closeNewProject,
+  confirmNewProject,
+  deactivateProjectDialog,
+  saveFileData,
+  importFileDialog,
+  importFileDialogClose,
+  confirmImport,
+} = require("./actions");
 const global = require("./global");
 const menuTemplate = require("./menuTemplate");
 const { getStations, initStations } = require("./StationsHR");
 const windowStateKeeper = require("electron-window-state");
 
-
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS;
 
 //lang
-app.commandLine.appendSwitch('lang', 'hr');
+app.commandLine.appendSwitch("lang", "hr");
 // app.commandLine.appendSwitch("enable-logging=file");
-
 
 if (isDev) {
   const devTools = require("electron-devtools-installer");
@@ -35,13 +44,16 @@ let mainWindow;
 // console.log("userData", app.getPath("userData"));
 
 function createWindow() {
+  //check for update
+  setTimeout(updater, 1500);
+  //define mainwindow
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1200,
-    defaultHeight: 800
+    defaultHeight: 800,
   });
 
   mainWindow = new BrowserWindow({
-    title: "Klimasoft",
+    title: "Klimasoft SE",
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: mainWindowState.width,
@@ -56,27 +68,18 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
-
+  //manage size & position of mainwindow
   mainWindowState.manage(mainWindow);
-
+  //build app menu
   const menu = Menu.buildFromTemplate(menuTemplate(mainWindow, global.activeProject));
   Menu.setApplicationMenu(menu);
-
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${__dirname}/../build/index.html`);
-
-  // mainWindow.loadURL(
-  //   isDev
-  //     ? "http://localhost:3000"
-  //     : `file://${path.join(__dirname, "../build/index.html")}`
-  // );
+  //load content
+  mainWindow.loadURL(isDev ? "http://localhost:3000" : `file://${__dirname}/../build/index.html`);
 
   // Open DevTools if in dev mode
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
-
-  
-
   mainWindow.on("closed", () => (mainWindow = null));
 }
 
@@ -91,12 +94,9 @@ app.whenReady().then(() => {
     installExtension(REDUX_DEVTOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((error) => console.log(`An error occurred: , ${error}`));
-
   }
 
   createWindow();
-
-
 });
 
 // Add a new listener that tries to quit the application when
@@ -117,7 +117,6 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
 
 //-----------------------------------------------
 //stations dialog
