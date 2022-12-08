@@ -1,4 +1,4 @@
-const { openStations, openFileDialog, openNewProject, deactivateProjectDialog, saveFileDialog, climateReference } = require("./actions");
+const { openStations, openFileDialog, openNewProject, deactivateProjectDialog, saveFileDialog, climateReference, about } = require("./actions");
 
 const isMac = process.platform === 'darwin';
 // const isDev = require("electron-is-dev");
@@ -43,20 +43,20 @@ const menuTemplate = (window) => {
             ]
         },
         {
-            role: 'help',
+
             label: "Pomoć",
-            submenu: [             
+            submenu: [
                 {
                     id: "cr",
-                    label: "Klimatska referenca", 
-                    type: "checkbox", 
+                    label: "Klimatska referenca",
+                    type: "checkbox",
                     click: () => {
-                       
+
                         climateReference(window);
                     }
                 },
                 { type: "separator" },
-                { role: "about", label: "O programu KlimaSoft..." }
+                { label: "O programu...", click: () => { about(window); } }
             ]
         }
     ];

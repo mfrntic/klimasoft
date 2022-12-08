@@ -263,3 +263,13 @@ exports.climateReference = function (mainWindow) {
 
     mainWindow.webContents.send("climate-reference", m.checked);
 }
+
+exports.about = function (mainWindow) {
+    dialog.showMessageBox(mainWindow, {
+        type: "info",
+        title: "O Programu",
+        message: "Klimasoft SE " + app.getVersion(),
+        buttons: ["U redu"]
+
+    });
+}
