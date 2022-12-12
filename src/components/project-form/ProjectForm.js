@@ -10,11 +10,11 @@ function ProjectForm() {
 
     const [searchParams] = useSearchParams();
     const loadactive = searchParams.get("loadactive") === "true";
-    console.log("loadActive", loadactive);
+    // console.log("loadActive", loadactive);
     let data;
     if (loadactive) {
         data = window.api.getActiveProject()?.header;
-        console.log("activeProject", data);
+        // console.log("activeProject", data);
     }
     const [selectedLokacija, setSelectedLokacija] = useState(data?.station);
     const [hasError, setHasError] = useState(false);

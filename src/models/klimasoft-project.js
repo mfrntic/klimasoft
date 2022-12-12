@@ -105,7 +105,7 @@ export class ProjectData {
             case "percipitation":
                 return this.percipitation && this.percipitation.length > 0;
             default:
-                console.log("hasdata");
+                // console.log("hasdata");
                 return (this.meanTemp && this.meanTemp.length > 0) ||
                     (this.avgMaxTemp && this.avgMaxTemp.length > 0) ||
                     (this.avgMinTemp && this.avgMinTemp.length > 0) ||

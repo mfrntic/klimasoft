@@ -41,7 +41,7 @@ function App() {
       dispatch(projectActions.setHeader(active.header));
       dispatch(projectActions.setData(active.data));
       dispatch(projectActions.setCalculations(active.calculations));
-      console.log("active", active.calculations);
+      // console.log("active", active.calculations);
     }
 
   }, [dispatch]);
@@ -78,7 +78,7 @@ function App() {
   });
 
   window.api.climateReferenceHandler((e, res) => {
-    console.log("crh", res);
+    // console.log("crh", res);
     if (res) {
       navigate("/reference");
     }

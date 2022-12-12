@@ -24,13 +24,13 @@ function ImportFileDialog() {
     });
 
     const onDataChangeHandler = useCallback(function (data) {
-        console.log("onDataChangeHandler", data);
+        // console.log("onDataChangeHandler", data);
         setData4Import({ ...data });
     }, [])
 
     function onImportHandler() {
         //import data
-        console.log("data4import", data4Import);
+        // console.log("data4import", data4Import);
         window.api.confirmImport(data4Import);
     }
 

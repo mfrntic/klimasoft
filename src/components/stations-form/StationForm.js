@@ -69,10 +69,10 @@ function StationForm({ station, onCancel }) {
             isNew: !station.IDStation
         }
 
-        console.log("SAVE", s);
+        // console.log("SAVE", s);
         window.api.saveStation(s);
         dispatch(stationsActions.add(s));
-        console.log("SAVE-DISPATCHED");
+        // console.log("SAVE-DISPATCHED");
         onCancel();
     }
 

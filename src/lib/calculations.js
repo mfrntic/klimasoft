@@ -1,7 +1,6 @@
- 
+
 import * as klimasoft from "./klimatskeformule";
- 
- 
+
 
 function getParams(formula) {
 
@@ -32,9 +31,8 @@ function getParams(formula) {
 
   result.forEach(element => {
     // Removing any default value
-     element = element.replace(/=[\s\S]*/g, '').trim();
+    element = element.replace(/=[\s\S]*/g, '').trim();
 
-   
     if (element.length > 0)
       params.push(element);
   });
@@ -50,18 +48,20 @@ export function getCalculations() {
       formule.push(klimasoft[formula]);
     }
   }
+
   return formule.map((f) => {
     const params = getParams(f);
-   
+    // console.log("PARAMS", params);
     return {
       selected: false,
       name: f.name,
       type: f.type,
       title: f.title,
       parameters: params.map((p) => {
+        // console.log("param", p);
         return {
           parameter: p,
-          value: p === "oborine" ? "percipitation" : p === "temperatura" ? "meanTemp" : (f.defaultParamValues ? f.defaultParamValues[p] : "") 
+          value: p === "oborine" ? "percipitation" : p === "temperatura" ? "meanTemp" : (f.defaultParamValues ? f.defaultParamValues[p] : "")
         };
       }),
     };

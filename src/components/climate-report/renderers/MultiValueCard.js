@@ -4,40 +4,48 @@ import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { Measures } from "../../../data/Measures";
 import * as klimasoft from "../../../lib/klimatskeformule";
-import { describe } from "../../../lib/mathUtils";
+// import { describe } from "../../../lib/mathUtils";
 import GridToolbar from "../../project/GridToolbar";
 import style from "./MultiValueCard.module.css";
 // const {describe} = require("../../../lib/mathUtils");
 function MultiValueCard({ calculation }) {
 
-
     const data = useSelector(a => a.project.data);
-
-
     const jRef = useRef(null);
+
 
     useEffect(() => {
         if (!jRef.current) return;
         if (!jRef.current.jspreadsheet) {
 
+            let cols = [
+                // { title: ' ', width: 80 },
+                { title: 'Godina', width: 80 },
+                { title: 'Oborine', width: 80 },
+                { title: 'Anomaly', width: 80 },
+                { title: 'RAI', width: 80 },
+            ];
+            if (calculation.name === "percentOfNormalPercipitation") {
+                cols = [
+                    // { title: ' ', width: 80 },
+                    { title: 'Godina', width: 106 },
+                    { title: 'Oborine', width: 106 },
+                    { title: 'PN', width: 106 },
+                ]
+            }
+            else if (calculation.name === "drySeasonDuration"){
+                cols = [
+                    // { title: ' ', width: 80 },
+                    { title: 'Godina', width: 106 },
+                    { title: 'Mjeseci', width: 106 },
+                    { title: 'LDS', width: 106 }, 
+                ]
+            }
+
             const options = {
                 // data: [...d],
-                minDimensions: [12, 1],
-                columns: [
-                    // { title: ' ', width: 80 },
-                    { title: 'sij', width: 80 },
-                    { title: 'velj', width: 80 },
-                    { title: 'ožu', width: 80 },
-                    { title: 'tra', width: 80 },
-                    { title: 'svi', width: 80 },
-                    { title: 'lip', width: 80 },
-                    { title: 'srp', width: 80 },
-                    { title: 'kol', width: 80 },
-                    { title: 'ruj', width: 80 },
-                    { title: 'lis', width: 80 },
-                    { title: 'stu', width: 80 },
-                    { title: 'pro', width: 80 }, 
-                ],
+                // minDimensions: [3, 1],
+                columns: cols,
                 contextMenu: false,
                 editable: false
             };
@@ -45,17 +53,20 @@ function MultiValueCard({ calculation }) {
             jspreadsheet(jRef.current, options);
             jRef.current.jspreadsheet.hideIndex(0);
         }
-    }, [])
+    }, [calculation.name])
 
     useEffect(() => {
         if (data) {
-            const finalResult = [];
+            console.log("MultiValueCard", data,calculation.parameters);
+            // const finalResult = [];
             const parameters = calculation.parameters.map(p => {
                 const measure = Measures.find(a => a.IDMeasure === p.value);
                 if (measure) {
-                    const r = describe(data[p.value], measure.Aggregation, false)[0];
-                    finalResult.push(r);
-                    return r;
+                    // const r = describe(data[p.value], measure.Aggregation, false)[0];
+                    // finalResult.push(r);
+                    // return r;
+                    // finalResult.push(data[p.value]);
+                    return data[p.value];
                 }
                 else {
                     return p.value;
@@ -64,15 +75,16 @@ function MultiValueCard({ calculation }) {
             const func = klimasoft[calculation.name].calculate;
             const res = func(...parameters);
 
+            console.log("final", parameters, res.result);
 
-            if (Array.isArray(res.result) && Array.isArray(res.value)) {
+            // if (Array.isArray(res.result) && Array.isArray(res.value)) {
 
-                finalResult.push([...res.value], [...res.result]);
-                jRef.current.jspreadsheet.setData(finalResult);
-            }
-            else {
-                jRef.current.jspreadsheet.setData([[...res.result, res.value]]);
-            }
+
+            jRef.current.jspreadsheet.setData(res.result);
+            // }
+            // else {
+            //     jRef.current.jspreadsheet.setData([[...res.result, res.value]]);
+            // }
         }
     }, [calculation.name, calculation.parameters, data])
 
@@ -80,9 +92,11 @@ function MultiValueCard({ calculation }) {
     return (
         <div>
             <h3>{calculation.title}</h3>
+            <p className={style.description}>{klimasoft[calculation.name].description}</p>
             <div ref={jRef} className={style.gridtotal}>
                 <GridToolbar jRef={jRef} />
             </div>
+       
         </div>
 
     )

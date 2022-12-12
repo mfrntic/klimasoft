@@ -5,7 +5,7 @@ import GridTotal from "../../project/GridTotal";
 
 function DescriptivePercipitation({calculation}) {
     const measures = Measures.filter(a=>a.GroupName === "Oborine");
-    console.log("DT", measures);
+    // console.log("DT", measures);
     const data = useSelector(a=>a.project.data);
 
     return (

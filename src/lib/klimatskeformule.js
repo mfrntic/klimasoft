@@ -1,7 +1,7 @@
 // const { round, average, sum, max, min } = require("./mathUtils");
 // const MoonSunCalc = require("./moonsuncalc");
 
-import { round, average, sum, max, min  } from "./mathUtils";
+import { round, average, sum, max, min } from "./mathUtils";
 import MoonSunCalc from "./moonsuncalc";
 
 export const aridityIndexDeMartonne = {
@@ -437,7 +437,7 @@ export const thermicCharacterGracanin = {
             arr1.push(getVal(temperatura[i]).result);
         }
 
-      
+
         return {
             value: arr,
             result: arr1
@@ -730,18 +730,45 @@ export const drySeasonWaterDeficit = {
 
 export const drySeasonDuration = {
     calculate: function (temperatura, oborine) {
-        let res = 0;
+
+        console.log("LDS", temperatura, oborine);
+
         const resArr = [];
-        for (let i = 0; i < 12; i++) {
-            const t = temperatura[i];
-            const p = oborine[i];
-            resArr.push(round(p - 2 * t, 2));
-            if (p <= 2 * t) {
-                res++;
+        for (let k = 0; k < temperatura.length; k++) {
+
+            const temp = temperatura[k];
+            const ob = oborine.find(a => a[0] == temp[0]);
+            let res = 0;
+            let months = [];
+            if (ob) {
+                let skip = false;
+                for (let i = 1; i < 13; i++) {
+                    const t = temp[i];
+                    const p = ob[i];
+                    if (!!t || !!p) {
+                        skip = false;
+                        console.log("LDS-" + temp[0] + "-" + i, p, t, t * 2);
+                        if (p <= 2 * t) {
+                            res++;
+                            months.push(i);
+                        }
+                    }
+                    else {
+                        skip = true;
+                    }
+
+                }
+                if (!skip) {
+                    resArr.push([temp[0], months.join(", "), res]);
+                }
             }
+            else {
+                resArr.push([temp[0], "", ""]);
+            }
+
         }
         return {
-            value: res,
+            value: round(average(resArr[1]), 2),
             result: resArr
         }
     },
@@ -754,42 +781,56 @@ export const drySeasonDuration = {
 
 export const rainfallAnomalyIndex = {
     calculate: function (oborine) {
-        let low = [...oborine];
-        low.sort((a, b) => a - b);
-        low = low.slice(0, 10);
-        let high = [...oborine]
-        high.sort((a, b) => b - a);
-        high = high.slice(0, 10);
+        // console.log("rai-ulaz-oborine", oborine);
 
-        const p_avg = round(average(oborine), 2);
+        const oborine_agg = oborine.map(a => {
+            const godina = a[0];
+            const value = round(average(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
+            return { godina, value }
+        });
+
+        let low = [...oborine_agg];
+        low.sort((a, b) => a.value - b.value);
+        low = low.slice(0, 10).map(a => a.value);
+        let high = [...oborine_agg]
+        high.sort((a, b) => b.value - a.value);
+        high = high.slice(0, 10).map(a => a.value);
+
+        const p_avg = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
         const high_avg = round(average(high), 2);
         const low_avg = round(average(low), 2);
-        // console.log(oborine, high, low);
-        // console.log("p_avg, high_avg, low_avg", p_avg, high_avg, low_avg);
+        console.log(high, low);
+        console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
 
         const res = [];
-        for (const p of oborine) {
+        for (const p of oborine_agg) {
 
-            const anom = round(p - p_avg, 1);
+            const anom = round(p.value - p_avg, 1);
+            // console.log("anomaly", anom);
 
             let ind;
             if (anom < 0) {
-                ind = -3 * (anom / (low_avg - p_avg));
+                ind = -3 * (anom / (low_avg - p.value));
                 //ind = -3 * anom / (high_avg - p_avg);
             }
             else {
-                ind = 3 * anom / (high_avg - p_avg);
+                ind = 3 * anom / (high_avg - p.value);
             }
 
-            console.log("p/anomaly/rai", p, anom, round(ind, 2));
-            res.push(round(ind, 2));
+            // console.log("p/anomaly/rai", p, anom, round(ind, 2));
+            if (!isNaN(p.value)) {
+                res.push([p.godina, p.value, anom, round(ind, 2)]);
+            }
+            else {
+                res.push([p.godina, "", "", ""]);
+            }
         }
 
+        console.log("rai-res", res);
         return {
-            value: round(average(res), 2),
+            value: round(average(res[3]), 2),
             result: res
         }
-
     },
     name: "rainfallAnomalyIndex",
     title: "Rainfall Anomaly Index [RAI]",
@@ -800,11 +841,26 @@ export const rainfallAnomalyIndex = {
 
 export const percentOfNormalPercipitation = {
     calculate: function (oborine) {
-        const meanP = round(average(oborine), 2);
+
+        const oborine_agg = oborine.map(a => {
+            const godina = a[0];
+            const value = round(average(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
+            return { godina, value }
+        });
+
+        console.log("oborine_agg", oborine_agg);
+
+        const meanP = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
+
 
         const resArr = [];
-        for (const p of oborine) {
-            resArr.push(round(p / meanP * 100, 2));
+        for (const p of oborine_agg) {
+            if (!isNaN(p.value)) {
+                resArr.push([p.godina, p.value, round(p.value / meanP * 100, 2)]);
+            }
+            else {
+                resArr.push([p.godina, "", ""]);
+            }
         }
 
         return {

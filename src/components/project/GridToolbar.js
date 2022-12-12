@@ -39,19 +39,17 @@ function GridToolbar({ jRef, measure }) {
         }
         navigator.clipboard.readText().then(function (text) {
             if (text) {
-                console.log("paste", text);
+                // console.log("paste", text);
                 jRef.current.jspreadsheet.paste(selCell[0], selCell[1], text);
             }
         });
     }
 
     function onUndoHandler() {
-        console.log("undo");
         jRef.current.jspreadsheet.undo();
     }
 
     function onRedoHandler() {
-        console.log("redo");
         jRef.current.jspreadsheet.redo();
     }
 
@@ -66,7 +64,7 @@ function GridToolbar({ jRef, measure }) {
                 {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Ponovi poništeno" onClick={onRedoHandler}><FaRedo /></button>}
                 <button type="button" title="Odaberi sve" onClick={onSelectAllHandler}><MdTabUnselected /></button>
                 <button type="button" title="Kopiraj" onClick={onCopyHandler} ><MdContentCopy /></button>
-                <button type="button" title="Zalijepi" onClick={onPasteHandler}><MdContentPaste /></button>
+                {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Zalijepi" onClick={onPasteHandler}><MdContentPaste /></button>}
 
                 {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Uvoz podataka" className={style.importData} onClick={onImportDataHandler}><FaFileImport /></button>}
                 {jRef.current?.jspreadsheet?.options.editable && <button type="button" title="Očisti sadržaj tablice" className={style.clearTable} onClick={onClearDataHandler}><FaEraser /></button>}

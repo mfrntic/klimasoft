@@ -5,7 +5,7 @@ import { projectActions } from "../../store/projectSlice";
 
 function ParameterItem(props) {
     const { parameter, value } = props.parameter;
-    console.log("parameter", parameter);
+    // console.log("parameter", parameter);
 
     const functionName = props.functionName;
 

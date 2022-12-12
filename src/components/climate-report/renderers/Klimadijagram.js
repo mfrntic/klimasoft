@@ -92,7 +92,7 @@ function Klimadijagram({ calculation }) {
 
     function onCopyImageHandler() {
         const dataURL = diag.current.toImage("dataurl");
-        console.log("dataURL", dataURL);
+        // console.log("dataURL", dataURL);
         window.api.copyImage(dataURL);
     }
 
