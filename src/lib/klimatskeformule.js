@@ -1,7 +1,7 @@
 // const { round, average, sum, max, min } = require("./mathUtils");
 // const MoonSunCalc = require("./moonsuncalc");
 
-import { round, average, sum, max, min } from "./mathUtils";
+import { round, average, sum, max, min, isNumber, describe } from "./mathUtils";
 import MoonSunCalc from "./moonsuncalc";
 
 export const aridityIndexDeMartonne = {
@@ -57,42 +57,50 @@ export const aridityIndexDeMartonne = {
 export const aridityIndexGracanin = {
     calculate: function (oborine, temperatura) {
 
-        //izračunaj prosjek
-        const annualPerc = sum(oborine);
-        const meanTemp = average(temperatura);
+        const arr = [], arr1 = [];
 
-        // console.log(annualPerc, meanTemp);
-        //result
-        const res = {
-            value: null,
-            result: ""
-        }
+        const getVal = (o, t) => {
+            t = Math.abs(round(o / t, 1));
+            const res = {
+                value: t,
+                result: ""
+            };
 
-        //result description
-        res.value = Math.abs(round(annualPerc / meanTemp, 1));
-        if (res.value < 3.3) {
-            res.result = "aridno";
-        }
-        else if (res.value < 5) {
-            res.result = "semiaridno";
-        }
-        else if (res.value < 6.6) {
-            res.result = "semihumidno";
-        }
-        else if (res.value < 13.3) {
-            res.result = "humidno";
-        }
-        else {
-            res.result = "perhumidno";
+            if (res.value < 3.3) {
+                res.result = "aridno";
+            }
+            else if (res.value < 5) {
+                res.result = "semiaridno";
+            }
+            else if (res.value < 6.6) {
+                res.result = "semihumidno";
+            }
+            else if (res.value < 13.3) {
+                res.result = "humidno";
+            }
+            else {
+                res.result = "perhumidno";
+            }
+            return res;
         }
 
-        return res;
+        for (let i = 0; i < oborine.length; i++) {
+            arr.push(getVal(oborine[i], temperatura[i]).value);
+            arr1.push(getVal(oborine[i], temperatura[i]).result);
+        }
+
+        console.log("arr", arr1)
+        return {
+            value: arr,
+            result: arr1
+        };
+
     },
     name: "aridityIndexGracanin",
     title: "Aridity index [Ag], Gračanin",
     group: "Vodni režim",
-    type: "SingleValueDescription",
-    description: "Indeks mjesečne aridnosti prema Gračaninu (Pm - srednja mjesečna količina oborina, Tm - srenja mjesečna temperatura)"
+    type: "MultiValueDescription",
+    description: "Indeks mjesečne aridnosti prema Gračaninu (Pm - srednja mjesečna količina oborina, Tm - srednja mjesečna temperatura)"
 
 }
 
@@ -490,20 +498,48 @@ export const thornthwaitePET = {
 export const thornthwaiteWaterBalance = {
     calculate: function (oborine, temperatura, lat, lon) {
 
-        const thornthwaite_pet_monthly = thornthwaitePET.calculate(temperatura, lat, lon).result;
-        const vodna_bilanca = [];
-        for (let m = 0; m < oborine.length; m++) {
-            vodna_bilanca.push(round(oborine[m] - thornthwaite_pet_monthly[m], 2));
+        const ob = describe(oborine, "avg", false)[0];
+        const temp = describe(temperatura, "avg", false)[0];
+        console.log(ob, temp);
+
+        const thornthwaite_pet_monthly = thornthwaitePET.calculate(temp, lat, lon).result;
+        const vodna_bilanca = ["BILANCA"], zaliha = ["ZALIHA"], set = ["SET"];
+        let zaliha_kumulativ = 100;
+
+
+        for (let m = 0; m < ob.length; m++) {
+            const o = ob[m];
+            const pet = thornthwaite_pet_monthly[m]
+            const razlika_o_pet = round(o - pet, 2);
+            vodna_bilanca.push(razlika_o_pet);
+            if (razlika_o_pet < 0 && zaliha_kumulativ > 0) {
+                //deficit vode
+                zaliha_kumulativ = round(zaliha_kumulativ + razlika_o_pet, 2);
+                zaliha.push(zaliha_kumulativ);
+                if (zaliha_kumulativ < 0) {
+                    set.push(round(pet - zaliha_kumulativ, 2));
+                    zaliha_kumulativ = 0;
+                }
+                else {
+                    set.push(pet);
+                }
+            } else {
+                zaliha.push(zaliha_kumulativ);
+                set.push(pet);
+            }
+
+          
+
         }
         return {
-            value: round(sum(vodna_bilanca), 2),
-            result: vodna_bilanca,
+            value: 0,//round(sum(vodna_bilanca), 2),
+            result: [["PET", ...thornthwaite_pet_monthly], ["P", ...ob], zaliha, set, vodna_bilanca],
         }
     },
     name: "thornthwaiteWaterBalance",
     title: "Thornthwaite water balance",
     group: "Vodni režim",
-    type: "MultiValueTotal",
+    type: "MultiValue",
     formulaDescription: "Vodna bilanca (vodni suficit/deficit) s obzirom na potencijalnu evapotranspiraciju"
 }
 
@@ -542,7 +578,7 @@ export const continentalityIndex = {
     calculate: function (temperatura) {
         const tmin = min(temperatura);
         const tmax = max(temperatura);
-        const res = tmax - tmin;
+        const res = round(tmax - tmin, 2);
         let result = "";
         if (res < 2.5) {
             result = "equatorial";
@@ -707,15 +743,38 @@ export const ombroEvapotranspirationIndex = {
 export const drySeasonWaterDeficit = {
     calculate: function (temperatura, oborine, lat, lon) {
         const resArr = [];
-        for (let i = 0; i < oborine.length; i++) {
-            if (temperatura[i] > 0) {
-                const pet = thornthwaitePET.calculate(temperatura, lat, lon);
-                resArr.push(round(oborine[i] - pet.result[i], 2));
+
+        for (let k = 0; k < temperatura.length; k++) {
+            const temp = temperatura[k].slice(1, 13).filter(a => isNumber(a));
+            let ob = oborine.find(a => a[0] == temperatura[k][0]);
+            ob = ob.slice(1, 13);
+            console.log("DSWD", temp, ob);
+
+            let res = [temperatura[k][0]];
+            if (Array.isArray(ob) && ob.length === 12) {
+                const pet = thornthwaitePET.calculate(temp, lat, lon);
+                // resArr.push(round(oborine[i] - pet.result[i], 2));
+                for (let i = 0; i < 12; i++) {
+                    res.push(round(ob[i] - pet.result[i], 2));
+                }
+                resArr.push(res);
+                console.log("resArr", resArr);
             }
-            else {
-                resArr.push(0);
-            }
+            // else {
+            //     resArr.push([temp[0], "", ""]);
+            // }
         }
+
+        // for (let i = 0; i < oborine.length; i++) {
+        //     if (temperatura[i] > 0) {
+        //         const pet = thornthwaitePET.calculate(temperatura, lat, lon);
+        //         resArr.push(round(oborine[i] - pet.result[i], 2));
+        //     }
+        //     else {
+        //         resArr.push(0);
+        //     }
+        // }
+
         return {
             value: sum(resArr),
             result: resArr
@@ -731,7 +790,7 @@ export const drySeasonWaterDeficit = {
 export const drySeasonDuration = {
     calculate: function (temperatura, oborine) {
 
-        console.log("LDS", temperatura, oborine);
+        //console.log("LDS", temperatura, oborine);
 
         const resArr = [];
         for (let k = 0; k < temperatura.length; k++) {
@@ -747,7 +806,7 @@ export const drySeasonDuration = {
                     const p = ob[i];
                     if (!!t || !!p) {
                         skip = false;
-                        console.log("LDS-" + temp[0] + "-" + i, p, t, t * 2);
+                        // console.log("LDS-" + temp[0] + "-" + i, p, t, t * 2);
                         if (p <= 2 * t) {
                             res++;
                             months.push(i);
@@ -799,8 +858,8 @@ export const rainfallAnomalyIndex = {
         const p_avg = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
         const high_avg = round(average(high), 2);
         const low_avg = round(average(low), 2);
-        console.log(high, low);
-        console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
+        // console.log(high, low);
+        // console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
 
         const res = [];
         for (const p of oborine_agg) {
@@ -826,7 +885,7 @@ export const rainfallAnomalyIndex = {
             }
         }
 
-        console.log("rai-res", res);
+        // console.log("rai-res", res);
         return {
             value: round(average(res[3]), 2),
             result: res
@@ -848,10 +907,8 @@ export const percentOfNormalPercipitation = {
             return { godina, value }
         });
 
-        console.log("oborine_agg", oborine_agg);
-
+        // console.log("oborine_agg", oborine_agg);
         const meanP = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
-
 
         const resArr = [];
         for (const p of oborine_agg) {

@@ -43,6 +43,14 @@ export const projectSlice = createSlice({
     },
     setCalculations: function (state, action) {
       // console.log("setCalculations", action.payload);
+      const calcs = getCalculations();
+      calcs.forEach(item => {
+        const c = action.payload.find(a=>a.name === item.name);
+        if (c){
+          c.type = item.type;
+          c.title = item.title;
+        }
+      })
       state.calculations = action.payload;
       // if (Array.isArray(action) && action.length > 0) {
       //   state.calculations = action.payload;

@@ -152,4 +152,8 @@ const describe = function (month_matrix, calc_type = "all", full_row = true) {
     return res;
 }
 
-export {round, sum, average, max, min, stdev, variance, calculate, describe};
+const isNumber = function isNumber(value) {
+    return typeof value === 'number' && isFinite(value);
+}
+
+export { round, sum, average, max, min, stdev, variance, calculate, describe, isNumber };

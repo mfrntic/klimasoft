@@ -33,14 +33,33 @@ function MultiValueCard({ calculation }) {
                     { title: 'PN', width: 106 },
                 ]
             }
-            else if (calculation.name === "drySeasonDuration"){
+            else if (calculation.name === "drySeasonDuration") {
                 cols = [
                     // { title: ' ', width: 80 },
                     { title: 'Godina', width: 106 },
                     { title: 'Mjeseci', width: 106 },
-                    { title: 'LDS', width: 106 }, 
+                    { title: 'LDS', width: 106 },
                 ]
             }
+            else if (calculation.name === "drySeasonWaterDeficit" ||
+                    calculation.name === "thornthwaiteWaterBalance") {
+                cols = [
+                    { title: 'Godina', width: 80 },
+                    { title: 'sij', width: 80 },
+                    { title: 'velj', width: 80 },
+                    { title: 'ožu', width: 80 },
+                    { title: 'tra', width: 80 },
+                    { title: 'svi', width: 80 },
+                    { title: 'lip', width: 80 },
+                    { title: 'srp', width: 80 },
+                    { title: 'kol', width: 80 },
+                    { title: 'ruj', width: 80 },
+                    { title: 'lis', width: 80 },
+                    { title: 'stu', width: 80 },
+                    { title: 'pro', width: 80 },
+                ]
+            }
+
 
             const options = {
                 // data: [...d],
@@ -57,7 +76,7 @@ function MultiValueCard({ calculation }) {
 
     useEffect(() => {
         if (data) {
-            console.log("MultiValueCard", data,calculation.parameters);
+            // console.log("MultiValueCard", data,calculation.parameters);
             // const finalResult = [];
             const parameters = calculation.parameters.map(p => {
                 const measure = Measures.find(a => a.IDMeasure === p.value);
@@ -75,7 +94,7 @@ function MultiValueCard({ calculation }) {
             const func = klimasoft[calculation.name].calculate;
             const res = func(...parameters);
 
-            console.log("final", parameters, res.result);
+            // console.log("final", parameters, res.result);
 
             // if (Array.isArray(res.result) && Array.isArray(res.value)) {
 
@@ -96,7 +115,7 @@ function MultiValueCard({ calculation }) {
             <div ref={jRef} className={style.gridtotal}>
                 <GridToolbar jRef={jRef} />
             </div>
-       
+
         </div>
 
     )
