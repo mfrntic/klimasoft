@@ -500,40 +500,56 @@ export const thornthwaiteWaterBalance = {
 
         const ob = describe(oborine, "avg", false)[0];
         const temp = describe(temperatura, "avg", false)[0];
-        console.log(ob, temp);
+
+        console.log(ob, temp, lat, lon);
 
         const thornthwaite_pet_monthly = thornthwaitePET.calculate(temp, lat, lon).result;
-        const vodna_bilanca = ["BILANCA"], zaliha = ["ZALIHA"], set = ["SET"];
+        const visak = ["VIŠAK"], manjak = ["MANJAK"], zaliha = ["ZALIHA"], set = ["SET"];
         let zaliha_kumulativ = 100;
 
+        console.log(thornthwaite_pet_monthly);
 
-        for (let m = 0; m < ob.length; m++) {
+        for (let m = 0; m < oborine.length; m++) {
             const o = ob[m];
             const pet = thornthwaite_pet_monthly[m]
             const razlika_o_pet = round(o - pet, 2);
-            vodna_bilanca.push(razlika_o_pet);
-            if (razlika_o_pet < 0 && zaliha_kumulativ > 0) {
-                //deficit vode
-                zaliha_kumulativ = round(zaliha_kumulativ + razlika_o_pet, 2);
-                zaliha.push(zaliha_kumulativ);
-                if (zaliha_kumulativ < 0) {
-                    set.push(round(pet - zaliha_kumulativ, 2));
-                    zaliha_kumulativ = 0;
-                }
-                else {
-                    set.push(pet);
-                }
-            } else {
-                zaliha.push(zaliha_kumulativ);
+            // vodna_bilanca.push(razlika_o_pet);
+            console.log(o, pet, razlika_o_pet);
+
+            zaliha_kumulativ = round(zaliha_kumulativ + razlika_o_pet, 2);
+            if (zaliha_kumulativ < 0) {
+                set.push(round(pet + razlika_o_pet, 2));
+                zaliha_kumulativ = 0;
+            }
+            else if (zaliha_kumulativ > 100) {
+
+                zaliha_kumulativ = 100;
+
+            }
+            else {
                 set.push(pet);
             }
 
-          
+            if (razlika_o_pet < 0) {
+                //deficit vode
+                visak.push("");
+                if (zaliha_kumulativ < 0) {
+                    manjak.push(-razlika_o_pet);
+                }
 
+
+            } else {
+                visak.push(razlika_o_pet);
+                manjak.push("");
+                // set.push(pet);
+            }
+
+            zaliha.push(zaliha_kumulativ);
         }
+
         return {
             value: 0,//round(sum(vodna_bilanca), 2),
-            result: [["PET", ...thornthwaite_pet_monthly], ["P", ...ob], zaliha, set, vodna_bilanca],
+            result: [["PET", ...thornthwaite_pet_monthly], ["P", ...ob], zaliha, set, visak, manjak],
         }
     },
     name: "thornthwaiteWaterBalance",
@@ -748,7 +764,7 @@ export const drySeasonWaterDeficit = {
             const temp = temperatura[k].slice(1, 13).filter(a => isNumber(a));
             let ob = oborine.find(a => a[0] == temperatura[k][0]);
             ob = ob.slice(1, 13);
-            console.log("DSWD", temp, ob);
+            // console.log("DSWD", temp, ob);
 
             let res = [temperatura[k][0]];
             if (Array.isArray(ob) && ob.length === 12) {
@@ -758,7 +774,7 @@ export const drySeasonWaterDeficit = {
                     res.push(round(ob[i] - pet.result[i], 2));
                 }
                 resArr.push(res);
-                console.log("resArr", resArr);
+                // console.log("resArr", resArr);
             }
             // else {
             //     resArr.push([temp[0], "", ""]);
