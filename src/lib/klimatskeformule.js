@@ -514,16 +514,17 @@ export const thornthwaiteWaterBalance = {
             const pet = thornthwaite_pet_monthly[m]
             const razlika_o_pet = round(o - pet, 2);
             // vodna_bilanca.push(razlika_o_pet);
-            console.log(o, pet, razlika_o_pet);
+
 
             zaliha_kumulativ = round(zaliha_kumulativ + razlika_o_pet, 2);
+
             if (zaliha_kumulativ < 0) {
                 set.push(round(pet + razlika_o_pet, 2));
-                zaliha_kumulativ = 0;
+                // zaliha_kumulativ = 0;
             }
             else if (zaliha_kumulativ > 100) {
 
-                zaliha_kumulativ = 100;
+                // zaliha_kumulativ = 100;
 
             }
             else {
@@ -536,15 +537,23 @@ export const thornthwaiteWaterBalance = {
                 if (zaliha_kumulativ < 0) {
                     manjak.push(-razlika_o_pet);
                 }
+                else {
+                    manjak.push("");
+                }
 
 
             } else {
-                visak.push(razlika_o_pet);
+                if (zaliha_kumulativ > pet) {
+                    visak.push(razlika_o_pet);
+                }
+                else {
+                    visak.push("");
+                }
                 manjak.push("");
                 // set.push(pet);
             }
 
-            zaliha.push(zaliha_kumulativ);
+            zaliha.push(zaliha_kumulativ > 100 ? 100 : (zaliha_kumulativ < 0 ? 0 : zaliha_kumulativ));
         }
 
         return {
