@@ -7,10 +7,11 @@ import * as klimasoft from "../../../lib/klimatskeformule";
 // import { describe } from "../../../lib/mathUtils";
 import GridToolbar from "../../project/GridToolbar";
 import style from "./MultiValueCard.module.css";
-const {describe} = require("../../../lib/mathUtils");
+const { describe } = require("../../../lib/mathUtils");
 function MultiTotalCard({ calculation }) {
 
     const data = useSelector(a => a.project.data);
+    const station = useSelector(a => a.project.header.station);
 
     const jRef = useRef(null);
     console.log("MultiTotalCard", calculation);
@@ -35,7 +36,7 @@ function MultiTotalCard({ calculation }) {
                     { title: 'ruj', width: 80 },
                     { title: 'lis', width: 80 },
                     { title: 'stu', width: 80 },
-                    { title: 'pro', width: 80 }, 
+                    { title: 'pro', width: 80 },
                 ],
                 contextMenu: false,
                 editable: false
@@ -56,13 +57,21 @@ function MultiTotalCard({ calculation }) {
                     finalResult.push(r);
                     return r;
                 }
+                else if (p.parameter === "lat") {
+                    return station.Latitude;
+                }
+                else if (p.parameter === "lon") {
+                    return station.Longitude;
+                }
                 else {
-                    return p.value;
+                    return p.value
                 }
             });
+
+            console.log("parametri", station, parameters);
+
             const func = klimasoft[calculation.name].calculate;
             const res = func(...parameters);
-
 
             if (Array.isArray(res.result) && Array.isArray(res.value)) {
 
