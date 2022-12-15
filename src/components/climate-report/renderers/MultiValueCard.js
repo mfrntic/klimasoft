@@ -12,6 +12,7 @@ function MultiValueCard({ calculation }) {
 
     const data = useSelector(a => a.project.data);
     const jRef = useRef(null);
+    const station = useSelector(a => a.project.header.station);
 
 
     useEffect(() => {
@@ -42,9 +43,10 @@ function MultiValueCard({ calculation }) {
                 ]
             }
             else if (calculation.name === "drySeasonWaterDeficit" ||
-                    calculation.name === "thornthwaiteWaterBalance") {
+                calculation.name === "thornthwaiteWaterBalance" ||
+                calculation.name === "thornthwaitePET") {
                 cols = [
-                    { title: 'Godina', width: 80 },
+                    { title: ' ', width: 80 },
                     { title: 'sij', width: 80 },
                     { title: 'velj', width: 80 },
                     { title: 'ožu', width: 80 },
@@ -87,8 +89,14 @@ function MultiValueCard({ calculation }) {
                     // finalResult.push(data[p.value]);
                     return data[p.value];
                 }
+                else if (p.parameter === "lat") {
+                    return station.Latitude;
+                }
+                else if (p.parameter === "lon") {
+                    return station.Longitude;
+                }
                 else {
-                    return p.value;
+                    return p.value
                 }
             });
             const func = klimasoft[calculation.name].calculate;

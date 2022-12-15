@@ -156,6 +156,8 @@ export const embergerPluviotermicQuotient = {
 
 export const continentalityIndexConrad = {
     calculate: function (temperatura, lat) {
+
+        console.log("conrad-lat", lat);
         const res = {
             value: null,
             result: ""
@@ -460,100 +462,116 @@ export const thermicCharacterGracanin = {
 
 export const thornthwaitePET = {
     calculate: function (temperatura, lat, lon) {
+
+        const temp = describe(temperatura, "avg", false)[0];
+        // console.log("temperatura", temp);
+
         let year_from = 0, year_to = 0;
         if (year_from === 0) year_from = new Date().getFullYear();
         if (year_to === 0) year_to = new Date().getFullYear();
         let I = 0;
         for (let m = 1; m <= 12; m++) {
-            if (temperatura[m - 1] > 0) {
-                I += Math.pow(temperatura[m - 1] / 5, 1.514);
+            if (temp[m - 1] > 0) {
+                I += Math.pow(temp[m - 1] / 5, 1.514);
             }
         }
         const a = 0.000000675 * Math.pow(I, 3) - 0.0000771 * Math.pow(I, 2) + 0.01792 * I + 0.49239;
-        const pe_monthly = [];
+        const pe_monthly = [], kf = [];
         for (let m = 1; m <= 12; m++) {
             let pe = 0;
-            if (temperatura[m - 1] > 0) {
-                const korektFakt = (MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon) / 12) * (new Date(2000, m - 1, 0).getDate() / 30);
-                pe = (16 * Math.pow(10 * temperatura[m - 1] / I, a)) * korektFakt;
+            let korektFakt = 1;
+            if (temp[m - 1] > 0) {
+                korektFakt = (MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon) / 12) * (new Date(2000, m - 1, 0).getDate() / 30);
+                // console.log("korektFakt " + m, korektFakt, MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon));
+
+                pe = (16 * Math.pow(10 * temp[m - 1] / I, a)) * korektFakt;
             }
+            kf.push(round(korektFakt, 2));
             pe_monthly.push(round(pe, 2));
         }
         // console.log("pe_monthly", pe_monthly);
         // const result = `PET: ${month === 0 ? sum(pe_monthly) : pe_monthly[month - 1]} | ${month === 0 ? "total" : `month (${month})`}`;
 
         return {
-            value: sum(pe_monthly),
-            result: pe_monthly
+            value: pe_monthly,
+            result: [["t", ...temp], ["KF", ...kf], ["PET", ...pe_monthly]]
         }
     },
     name: "thornthwaitePET",
     title: "Thornthwaite potential evapotranspiration [PET]",
     group: "Vodni režim",
-    type: "MultiValueTotal",
-    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available",
+    type: "MultiValue",
+    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available. Function outputs mean temperature (t), correction daylight factor (KF) and calculated potential evapotranspiration (PET).",
 
 }
 
 export const thornthwaiteWaterBalance = {
     calculate: function (oborine, temperatura, lat, lon) {
 
+
         const ob = describe(oborine, "avg", false)[0];
         const temp = describe(temperatura, "avg", false)[0];
 
         console.log(ob, temp, lat, lon);
 
-        const thornthwaite_pet_monthly = thornthwaitePET.calculate(temp, lat, lon).result;
+        const thornthwaite_pet_monthly = thornthwaitePET.calculate(temperatura, lat, lon).value;
         const visak = ["VIŠAK"], manjak = ["MANJAK"], zaliha = ["ZALIHA"], set = ["SET"];
         let zaliha_kumulativ = 100;
 
-        console.log(thornthwaite_pet_monthly);
+        // console.log(thornthwaite_pet_monthly);
 
         for (let m = 0; m < oborine.length; m++) {
             const o = ob[m];
             const pet = thornthwaite_pet_monthly[m]
             const razlika_o_pet = round(o - pet, 2);
-            // vodna_bilanca.push(razlika_o_pet);
-
 
             zaliha_kumulativ = round(zaliha_kumulativ + razlika_o_pet, 2);
-
-            if (zaliha_kumulativ < 0) {
-                set.push(round(pet + razlika_o_pet, 2));
-                // zaliha_kumulativ = 0;
-            }
-            else if (zaliha_kumulativ > 100) {
-
-                // zaliha_kumulativ = 100;
-
-            }
-            else {
-                set.push(pet);
-            }
 
             if (razlika_o_pet < 0) {
                 //deficit vode
                 visak.push("");
-                if (zaliha_kumulativ < 0) {
+                if (zaliha_kumulativ <= 0)
                     manjak.push(-razlika_o_pet);
-                }
-                else {
+                else
                     manjak.push("");
-                }
-
-
+                //set.push(zaliha_kumulativ);
             } else {
-                if (zaliha_kumulativ > pet) {
+                //višak vode
+                if (zaliha_kumulativ >= 100)
                     visak.push(razlika_o_pet);
-                }
-                else {
+                else
                     visak.push("");
-                }
                 manjak.push("");
-                // set.push(pet);
             }
 
-            zaliha.push(zaliha_kumulativ > 100 ? 100 : (zaliha_kumulativ < 0 ? 0 : zaliha_kumulativ));
+            if (zaliha_kumulativ > 100) zaliha_kumulativ = 100;
+            if (zaliha_kumulativ < 0) zaliha_kumulativ = 0;
+
+            zaliha.push(zaliha_kumulativ);
+
+            if (zaliha_kumulativ > 0 || o > pet) {
+                set.push(pet);
+            }
+            // else if (zaliha_kumulativ <= 0 && o < pet) {
+            //     set.push(round(pet + razlika_o_pet));
+            // }
+            else {
+                set.push(round(pet + razlika_o_pet));
+            }
+
+
+            // if (zaliha_kumulativ < 0) {
+            //     set.push(round(pet + razlika_o_pet, 2));
+            //     zaliha_kumulativ = 0;
+            // }
+            // else if (zaliha_kumulativ > 100) {
+            //     zaliha_kumulativ = 100;
+            // }
+            // else {
+            //     set.push(pet);
+            // }
+
+
         }
 
         return {

@@ -5,6 +5,7 @@ import { FaUndo, FaRedo, FaEraser, FaFileImport } from 'react-icons/fa';
 import { MdTabUnselected, MdContentCopy, MdContentPaste } from "react-icons/md";
 import { projectActions } from "../../store/projectSlice";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 function GridToolbar({ jRef, measure }) {
 
@@ -29,6 +30,7 @@ function GridToolbar({ jRef, measure }) {
 
     function onCopyHandler() {
         jRef.current.jspreadsheet.copy(true);
+        toast("Kopirano u međuspremnik (možete zalijepiti npr. u Excel)")
     }
 
     function onPasteHandler() {

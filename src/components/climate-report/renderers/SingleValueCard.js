@@ -11,22 +11,28 @@ function SingleValueCard({ calculation, showDescription }) {
 
     const func = klimasoft[calculation.name];
     const data = useSelector(a => a.project.data);
+    const station = useSelector(a => a.project.header.station);
+
     const parameters = calculation.parameters.map(p => {
         const measure = Measures.find(a => a.IDMeasure === p.value);
         if (measure) {
             return describe(data[p.value], measure.Aggregation, false)[0];
         }
-
-
+        else if (p.parameter === "lat") {
+            return station.Latitude;
+        }
+        else if (p.parameter === "lon") {
+            return station.Longitude;
+        }
         else {
-            return p.value;
+            return p.value
         }
     });
 
 
 
     const res = func.calculate(...parameters);
-    //    console.log("p", res);
+    console.log("parametri", res)
 
     function onCopyHandler() {
         navigator.clipboard.writeText(res.result);
