@@ -9,4 +9,10 @@
   }
   
  
-   
+   .info{
+    font-size: 0.9em;
+   }
+
+   .info label{
+    color: gray;
+   }

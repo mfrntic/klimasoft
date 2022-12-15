@@ -113,7 +113,7 @@ function MultiValueCard({ calculation }) {
             //     jRef.current.jspreadsheet.setData([[...res.result, res.value]]);
             // }
         }
-    }, [calculation.name, calculation.parameters, data])
+    }, [calculation.name, calculation.parameters, data, station.Latitude, station.Longitude])
 
 
     return (

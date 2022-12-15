@@ -1,18 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import KD from "../../../lib/klimadijagram";
 
 import Project, { Period, ProjectData, ProjectHeader } from "../../../models/klimasoft-project";
 import { IconContext } from "react-icons";
 import { FaDownload, FaCopy } from 'react-icons/fa';
-import style from "./Klimadijagram.module.css"; 
+import style from "./Klimadijagram.module.css";
 import { calculate, describe } from "../../../lib/mathUtils";
 // const { calculate, describe } = require("../../../lib/mathUtils");
 
 function Klimadijagram({ calculation }) {
 
     // console.log("Klimadijagram", calculation);
-
+    const [aridDur, setAridDur] = useState();
+    const [aridnessDur, setAridnessDur] = useState();
     const projData = useSelector(a => a.project);
 
     const diag = useRef();
@@ -78,6 +79,15 @@ function Klimadijagram({ calculation }) {
             credits: "sumfak.unizg.hr",
             onready: () => {
                 diag.current.draw();
+                const arid = diag.current.aridPeriodDuration();
+                const aridness = diag.current.aridnessPeriodDuration();
+
+                if (arid.totalDays > 0) {
+                    setAridDur(arid.periodText() + " (" + arid.totalDays + " dana)");
+                }
+                if (aridness.totalDays > 0) {
+                    setAridnessDur(aridness.periodText() + " (" + aridness.totalDays + " dana)");
+                }
             }
             //margin_left: 0
         };
@@ -105,10 +115,16 @@ function Klimadijagram({ calculation }) {
                     <button type="button" title="Kopiraj sliku" onClick={onCopyImageHandler}><FaCopy /></button>
                 </IconContext.Provider>
             </div>
-
-
-
             <canvas id="kd" width="400" height="550" ></canvas>
+
+            {aridDur && <p className={style.info}>
+                <label>Razdoblje suše: </label>
+                <span>{aridDur}</span>
+            </p>}
+            {aridnessDur && <p className={style.info}>
+                <label>Razdoblje suhoće: </label>
+                <span>{aridnessDur}</span>
+            </p>}
         </div>
     )
 }

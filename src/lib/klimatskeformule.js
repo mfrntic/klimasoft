@@ -510,9 +510,9 @@ export const thornthwaiteWaterBalance = {
 
 
         const ob = describe(oborine, "avg", false)[0];
-        const temp = describe(temperatura, "avg", false)[0];
+        // const temp = describe(temperatura, "avg", false)[0];
 
-        console.log(ob, temp, lat, lon);
+        // console.log(ob, temp, lat, lon);
 
         const thornthwaite_pet_monthly = thornthwaitePET.calculate(temperatura, lat, lon).value;
         const visak = ["VIŠAK"], manjak = ["MANJAK"], zaliha = ["ZALIHA"], set = ["SET"];
@@ -583,7 +583,7 @@ export const thornthwaiteWaterBalance = {
     title: "Thornthwaite water balance",
     group: "Vodni režim",
     type: "MultiValue",
-    formulaDescription: "Vodna bilanca (vodni suficit/deficit) s obzirom na potencijalnu evapotranspiraciju"
+    description: "Vodna bilanca (vodni suficit/deficit) s obzirom na potencijalnu evapotranspiraciju"
 }
 
 export const thornthwaitePercipitationEfficiency = {
