@@ -29,13 +29,21 @@ function Klimadijagram({ calculation }) {
         const meanTemp = describe(data.meanTemp).filter(a => a[0] === "avg")[0].slice(1, 13);
         const percs = describe(data.percipitation).filter(a => a[0] === "avg")[0].slice(1, 13);
         const ztm = [];
+
+
         const absMins = describe(data.absMinTemp).filter(a => a[0] === "min")[0].slice(1, 13);
         const avgMins = describe(data.avgMinTemp).filter(a => a[0] === "avg")[0].slice(1, 13);
+        // console.log("avgMins", avgMins);
+        const canCalcAbsMin =  calculate(data.absMinTemp, 0, "count", 0) > 1;
+        const canCalcAvgMin = calculate(data.avgMinTemp, 0, "count", 0)  > 1;
+
+        console.log(canCalcAbsMin)
+
         for (let i = 0; i < 12; i++) {
-            if (avgMins.length >= i && avgMins[i] <= 0) {
+            if (canCalcAvgMin && avgMins.length >= i && avgMins[i] <= 0) {
                 ztm.push("s");
             }
-            else if (absMins.length >= i && absMins[i] <= 0) {
+            else if (canCalcAbsMin && absMins.length >= i && absMins[i] <= 0) {
                 ztm.push("a");
             }
             else {

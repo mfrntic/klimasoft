@@ -24,6 +24,10 @@ module.exports = () => {
         }
     });
 
+    autoUpdater.on("download-progress", (progressInfo) => {
+        console.log(progressInfo.percent);
+    });
+
     autoUpdater.on("update-downloaded", async () => {
         //Prompt the user to install the update
         const res = await dialog.showMessageBox({
@@ -33,7 +37,7 @@ module.exports = () => {
             buttons: ["Nadogradi odmah", "Nadogradi kasnije"]
         });
 
-        if (res.response === 0){
+        if (res.response === 0) {
             autoUpdater.quitAndInstall(false, true);
         }
     });

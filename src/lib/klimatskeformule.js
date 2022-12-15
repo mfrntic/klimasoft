@@ -463,7 +463,13 @@ export const thermicCharacterGracanin = {
 export const thornthwaitePET = {
     calculate: function (temperatura, lat, lon) {
 
-        const temp = describe(temperatura, "avg", false)[0];
+        let temp;
+        if (Array.isArray(temperatura) && Array.isArray(temperatura[0])) {
+            temp = describe(temperatura, "avg", false)[0];
+        }
+        else {
+            temp = temperatura;
+        }
         // console.log("temperatura", temp);
 
         let year_from = 0, year_to = 0;
@@ -508,8 +514,15 @@ export const thornthwaitePET = {
 export const thornthwaiteWaterBalance = {
     calculate: function (oborine, temperatura, lat, lon) {
 
+        let ob;
+        if (Array.isArray(oborine) && Array.isArray(oborine[0])) {
+            ob = describe(oborine, "avg", false)[0];
+        }
+        else {
+            ob = oborine;
+        }
 
-        const ob = describe(oborine, "avg", false)[0];
+
         // const temp = describe(temperatura, "avg", false)[0];
 
         // console.log(ob, temp, lat, lon);
@@ -769,7 +782,7 @@ export const ombroEvapotranspirationIndex = {
     calculate: function (temperatura, oborine, lat, lon) {
         const pet = thornthwaitePET.calculate(temperatura, lat, lon).value;
         const annualPerc = sum(oborine);
-        const res = round(annualPerc / pet, 2);
+        const res = round(annualPerc / sum(pet), 2);
 
         return {
             value: res,
@@ -791,6 +804,9 @@ export const drySeasonWaterDeficit = {
             const temp = temperatura[k].slice(1, 13).filter(a => isNumber(a));
             let ob = oborine.find(a => a[0] == temperatura[k][0]);
             ob = ob.slice(1, 13);
+            if (ob[0] === "") {
+                continue;
+            }
             // console.log("DSWD", temp, ob);
 
             let res = [temperatura[k][0]];
@@ -798,7 +814,7 @@ export const drySeasonWaterDeficit = {
                 const pet = thornthwaitePET.calculate(temp, lat, lon);
                 // resArr.push(round(oborine[i] - pet.result[i], 2));
                 for (let i = 0; i < 12; i++) {
-                    res.push(round(ob[i] - pet.result[i], 2));
+                    res.push(round(ob[i] - pet.value[i], 2));
                 }
                 resArr.push(res);
                 // console.log("resArr", resArr);
