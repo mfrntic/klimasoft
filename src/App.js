@@ -17,6 +17,7 @@ import ImportFileDialog from "./pages/ImportFileDialog";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import Reference from "./pages/Reference";
+import { getCalculations } from "./lib/calculations";
 
 function App() {
 
@@ -40,7 +41,7 @@ function App() {
     if (active) {
       dispatch(projectActions.setHeader(active.header));
       dispatch(projectActions.setData(active.data));
-      dispatch(projectActions.setCalculations(active.calculations));
+      dispatch(projectActions.setCalculations(active.calculations ?? getCalculations()));
       // console.log("active", active.calculations);
     }
 
@@ -51,7 +52,7 @@ function App() {
   window.api.openFileDialogHandler((e, res) => {
     dispatch(projectActions.setHeader(res.project.header));
     dispatch(projectActions.setData(res.project.data));
-    dispatch(projectActions.setCalculations(res.project.calculations));
+    dispatch(projectActions.setCalculations(res.project.calculations ?? getCalculations()));
     // console.log("open-dialog", res.project.calculations);
 
   });

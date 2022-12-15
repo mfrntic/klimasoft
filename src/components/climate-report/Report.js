@@ -4,21 +4,23 @@ import FormulaRenderer from "./FormulaRenderer";
 import * as klimasoft from "../../lib/klimatskeformule";
 
 function Report() {
-    let calculations = useSelector(a => a.project.calculations);
-    calculations = calculations.filter(a => klimasoft[a.name]?.title.length > 0);
-
     const grupe = [];
+    let calculations = useSelector(a => a.project.calculations);
+    try {
+        calculations = calculations.filter(a => klimasoft[a.name]?.title.length > 0);
 
-    for (const f of calculations) {
-        const calc = klimasoft[f.name];
-        // console.log(calc);
-        if (calc.group) {
-            if (!grupe.includes(calc.group)) {
-                grupe.push(calc.group);
+        for (const f of calculations) {
+            const calc = klimasoft[f.name];
+            // console.log(calc);
+            if (calc.group) {
+                if (!grupe.includes(calc.group)) {
+                    grupe.push(calc.group);
+                }
             }
         }
+        grupe.sort();
     }
-    grupe.sort();
+    catch { }
     //console.log("grupe", grupe);
     return <section className={style.report}>
         {grupe.map(g => {

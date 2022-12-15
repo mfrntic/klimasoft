@@ -10,21 +10,28 @@ function FunctionList() {
   const [searchValue, setSearchValue] = useState("");
   let formule = useSelector((a) => a.project.calculations);
   // console.log("formule", formule);
-  formule = formule.filter(a => klimasoft[a.name]?.title.length > 0);
-  // console.log("formule 2", formule);
-  // formule.sort((a, b) => { return a.type.localeCompare(b.type)});
 
   const grupe = [];
-  for (const f of formule) {
-    const calc = klimasoft[f.name];
-    // console.log(calc);
-    if (calc.group) {
-      if (!grupe.includes(calc.group)) {
-        grupe.push(calc.group);
+
+  try {
+    formule = formule.filter(a => klimasoft[a.name]?.title.length > 0);
+    // console.log("formule 2", formule);
+    // formule.sort((a, b) => { return a.type.localeCompare(b.type)});
+
+    for (const f of formule) {
+      const calc = klimasoft[f.name];
+      // console.log(calc);
+      if (calc.group) {
+        if (!grupe.includes(calc.group)) {
+          grupe.push(calc.group);
+        }
       }
     }
+    grupe.sort();
   }
-  grupe.sort();
+  catch {
+
+  }
 
   function onSearchChangeHandler(e) {
     const val = e.target.value;

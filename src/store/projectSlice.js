@@ -45,7 +45,7 @@ export const projectSlice = createSlice({
       // console.log("setCalculations", action.payload);
       const calcs = getCalculations();
       calcs.forEach(item => {
-        const c = action.payload.find(a=>a.name === item.name);
+        const c = action.payload?.find(a=>a.name === item.name);
         if (c){
           c.type = item.type;
           c.title = item.title;
