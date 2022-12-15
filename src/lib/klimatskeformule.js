@@ -501,7 +501,7 @@ export const thornthwaitePET = {
     title: "Thornthwaite potential evapotranspiration [PET]",
     group: "Vodni režim",
     type: "MultiValue",
-    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available",
+    description: "Thornthwaite equation (1948). Potential evaporation (PE) or potential evapotranspiration (PET) is defined as the amount of evaporation that would occure if a sufficient water source were available. Function outputs mean temperature (t), correction daylight factor (KF) and calculated potential evapotranspiration (PET).",
 
 }
 
