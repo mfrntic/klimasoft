@@ -48,6 +48,7 @@ export const aridityIndexDeMartonne = {
         return res;
     },
     name: "aridityIndexDeMartonne",
+    parameters: ["oborine", "temperatura"],
     title: "Aridity index [DMI], De Martonne (1926.)",
     group: "Vodni režim",
     type: "SingleValueDescription",
@@ -97,6 +98,7 @@ export const aridityIndexGracanin = {
 
     },
     name: "aridityIndexGracanin",
+    parameters: ["oborine", "temperatura"],
     title: "Aridity index [Ag], Gračanin",
     group: "Vodni režim",
     type: "MultiValueDescription",
@@ -123,6 +125,7 @@ export const ellenbergEQ = {
         return res;
     },
     name: "ellenbergEQ",
+    parameters: ["oborine", "temperatura"],
     title: "Ellenberg's climate quotient [EQ]",
     group: "Klimatski indeksi",
     type: "SingleValue",
@@ -148,6 +151,7 @@ export const embergerPluviotermicQuotient = {
         return res;
     },
     name: "embergerPluviotermicQuotient",
+    parameters: ["oborine", "temperatura"],
     title: "Emberger's pluviometric quotient [Q₂]",
     group: "Klimatski indeksi",
     type: "SingleValue",
@@ -179,6 +183,7 @@ export const continentalityIndexConrad = {
         return res;
     },
     name: "continentalityIndexConrad",
+    parameters: ["temperatura", "lat"],
     title: "Continentality index (Conrad)",
     group: "Klimatski indeksi",
     type: "SingleValueDescription",
@@ -359,6 +364,7 @@ export const koppenClimateFormula = {
         return res;
     },
     name: "koppenClimateFormula",
+    parameters: ["oborine", "temperatura", "lat"],
     description: "Köppen’s classification is based on a subdivision of terrestrial climates into five major types, which are represented by the capital letters A, B, C, D, and E. Each of these climate types except for B is defined by temperature criteria. Type B designates climates in which the controlling factor on vegetation is dryness (rather than coldness). Aridity is not a matter of precipitation alone but is defined by the relationship between the precipitation input to the soil in which the plants grow and the evaporative losses. Since evaporation is difficult to evaluate and is not a conventional measurement at meteorological stations, Köppen was forced to substitute a formula that identifies aridity in terms of a temperature-precipitation index (that is, evaporation is assumed to be controlled by temperature). Dry climates are divided into arid (BW) and semiarid (BS) subtypes, and each may be differentiated further by adding a third code, h for warm and k for cold.",
     group: "Klimatski indeksi",
     type: "SingleValueDescription",
@@ -397,6 +403,7 @@ export const langsRainfallFactor = {
         return res;
     },
     name: "langsRainfallFactor",
+    parameters: ["oborine", "temperatura"],
     title: "Lang’s rainfall factor [LRF]",
     group: "Vodni režim",
     type: "SingleValueDescription",
@@ -454,6 +461,7 @@ export const thermicCharacterGracanin = {
         };
     },
     name: "thermicCharacterGracanin",
+    parameters: ["temperatura"],
     title: "Toplinski karakter klime po Gračaninu",
     group: "Klimatski indeksi",
     type: "MultiValueDescription",
@@ -504,6 +512,7 @@ export const thornthwaitePET = {
         }
     },
     name: "thornthwaitePET",
+    parameters: ["temperatura", "lat", "lon"],
     title: "Thornthwaite potential evapotranspiration [PET]",
     group: "Vodni režim",
     type: "MultiValue",
@@ -593,6 +602,7 @@ export const thornthwaiteWaterBalance = {
         }
     },
     name: "thornthwaiteWaterBalance",
+    parameters: ["oborine", "temperatura", "lat", "lon"],
     title: "Thornthwaite water balance",
     group: "Vodni režim",
     type: "MultiValue",
@@ -623,6 +633,7 @@ export const thornthwaitePercipitationEfficiency = {
             result: result,
         }
     },
+    parameters: ["oborine", "temperatura"],
     name: "thornthwaitePercipitationEfficiency",
     title: "Thornthwaite percipitation efficiency",
     group: "Vodni režim",
@@ -658,6 +669,7 @@ export const continentalityIndex = {
         }
     },
     name: "continentalityIndex",
+    parameters: ["temperatura"],
     title: "Continentality index [CONTINENTY]",
     group: "Klimatski indeksi",
     type: "SingleValueDescription",
@@ -710,6 +722,7 @@ export const ombrothermicIndex = {
         }
     },
     name: "ombrothermicIndex",
+    parameters: ["temperatura", "oborine"],
     title: "Ombrothermic Index [Io]",
     group: "Vodni režim",
     type: "SingleValueDescription",
@@ -753,6 +766,7 @@ export const ombrothermicIndexSummerQuarter = {
         }
     },
     name: "ombrothermicIndexSummerQuarter",
+    parameters: ["temperatura", "oborine"],
     title: "Ombrothermic index of the summer quarter [Iosq]",
     group: "Vodni režim",
     type: "SingleValueDescription",
@@ -772,6 +786,7 @@ export const thermicityIndex = {
         }
     },
     name: "thermicityIndex",
+    parameters: ["temperatura"],
     title: "Thermicity Index [It]",
     group: "Klimatski indeksi",
     type: "SingleValue",
@@ -790,6 +805,7 @@ export const ombroEvapotranspirationIndex = {
         }
     },
     name: "ombroEvapotranspirationIndex",
+    parameters: ["temperatura"],
     title: "Ombro-evapotranspiration index [Ioe]",
     group: "Vodni režim",
     type: "SingleValue",
@@ -840,6 +856,7 @@ export const drySeasonWaterDeficit = {
         }
     },
     name: "drySeasonWaterDeficit",
+    parameters: ["temperatura", "oborine", "lat", "lon"],
     title: "Dry season water deficit [DSWD]",
     group: "Vodni režim",
     type: "MultiValue",
@@ -891,6 +908,7 @@ export const drySeasonDuration = {
         }
     },
     name: "drySeasonDuration",
+    parameters: ["temperatura", "oborine"],
     title: "Duration of the dry season [LDS]",
     group: "Vodni režim",
     type: "MultiValue",
@@ -951,6 +969,7 @@ export const rainfallAnomalyIndex = {
         }
     },
     name: "rainfallAnomalyIndex",
+    parameters: ["oborine"],
     title: "Rainfall Anomaly Index [RAI]",
     group: "Vodni režim",
     type: "MultiValueAverage",
@@ -985,6 +1004,7 @@ export const percentOfNormalPercipitation = {
         }
     },
     name: "percentOfNormalPercipitation",
+    parameters: ["oborine"],
     title: "Percent of Normal Percipitation [PN]",
     group: "Vodni režim",
     type: "MultiValueAverage",
@@ -1025,6 +1045,7 @@ export const hydrothermicIndexSeljaninov = {
         }
     },
     name: "hydrothermicIndexSeljaninov",
+    parameters: ["temperatura", "oborine", "vegetation_temp_treshold"],
     title: "Seljaninov's hydrothermic index [HTC]",
     group: "Vodni režim",
     type: "SingleValueDescription",
@@ -1037,6 +1058,7 @@ export const hydrothermicIndexSeljaninov = {
 export const walterClimateDiagram = {
     calculate: function (show_aridness, show_months, show_vegetation_period) { },
     name: "walterClimateDiagram",
+    parameters: ["show_aridness", "show_months", "show_vegetation_period"],
     title: "Walter Climate Diagram [WCD]",
     group: "Dijagrami",
     type: "Klimadijagram",
@@ -1051,6 +1073,7 @@ export const walterClimateDiagram = {
 export const walterKlimatogram = {
     calculate: (show_aridness, show_months, years_in_row) => { },
     name: "walterKlimatogram",
+    parameters: ["show_aridness", "show_months", "years_in_row"],
     title: "Walter Climatogram [WCG]",
     group: "Dijagrami",
     type: "Klimatogram",
@@ -1065,6 +1088,7 @@ export const walterKlimatogram = {
 export const projectInfo = {
     calculate: function () { },
     name: "projectInfo",
+    parameters: [],
     title: "Osnovne informacije",
     group: "Deskriptiva",
     type: "ProjectInfo",
@@ -1073,6 +1097,7 @@ export const projectInfo = {
 
 export const descriptiveTemperature = {
     calculate: function () { },
+    parameters: [],
     name: "descriptiveTemperature",
     title: "Deskriptiva temperature",
     group: "Deskriptiva",
@@ -1082,6 +1107,7 @@ export const descriptiveTemperature = {
 
 export const descriptivePercipitation = {
     calculate: function () { },
+    parameters: [],
     name: "descriptivePercipitation",
     title: "Deskriptiva oborine",
     group: "Deskriptiva",
