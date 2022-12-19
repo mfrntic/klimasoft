@@ -49,6 +49,7 @@ export const projectSlice = createSlice({
         if (c){
           c.type = item.type;
           c.title = item.title;
+          c.parameters = item.parameters;
         }
       })
       state.calculations = action.payload;

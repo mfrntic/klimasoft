@@ -12,7 +12,7 @@ import NewProjectDialog from "./pages/NewProjectDialog";
 import { stationsActions } from "./store/stationsSlice";
 import { projectActions } from "./store/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import ImportFileDialog from "./pages/ImportFileDialog";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -54,7 +54,6 @@ function App() {
     dispatch(projectActions.setData(res.project.data));
     dispatch(projectActions.setCalculations(res.project.calculations ?? getCalculations()));
     // console.log("open-dialog", res.project.calculations);
-
   });
 
   //file open dialog handler (učitavnje projekta iz datoteke)
@@ -88,6 +87,21 @@ function App() {
       navigate(-1);
     }
   });
+
+  const toastUpdateId = useRef(null);
+  //update progress
+  window.api.updateProgress((e, info) => {
+    if (!toastUpdateId.current) {
+      toastUpdateId.current = toast(info, { autoClose: false });
+    }
+    else if (info !== "finished") {
+      toast.update(toastUpdateId.current, { render: info });
+    }
+    else {
+      toast.dismiss(toastUpdateId.current);
+    }
+  });
+
 
   return (
 

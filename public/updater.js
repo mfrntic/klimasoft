@@ -1,12 +1,13 @@
 const { dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
+ 
 
 //configure log debugging
 autoUpdater.logger = require("electron-log")
 autoUpdater.logger.transports.file.level = "info"
 autoUpdater.autoDownload = false;
 
-module.exports = () => {
+module.exports = (mainWindow) => {
     //check for updates
     autoUpdater.checkForUpdates();
 
@@ -20,12 +21,14 @@ module.exports = () => {
             buttons: ["Nadogradi", "Odustani"]
         });
         if (res.response === 0) {
+            mainWindow.webContents.send("update-progress", `Priprema aplikacije za nadogradnju... Pričekajte...`);
             autoUpdater.downloadUpdate();
         }
     });
 
     autoUpdater.on("download-progress", (progressInfo) => {
-        console.log(progressInfo.percent);
+        mainWindow.webContents.send("update-progress", `Preuzimanje nadogradnje... ${progressInfo.percent.toFixed(1)}%`);
+        // console.log(progressInfo.percent);
     });
 
     autoUpdater.on("update-downloaded", async () => {
@@ -40,5 +43,6 @@ module.exports = () => {
         if (res.response === 0) {
             autoUpdater.quitAndInstall(false, true);
         }
+        mainWindow.webContents.send("update-progress", "finished");
     });
 }

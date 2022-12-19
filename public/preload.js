@@ -110,6 +110,9 @@ contextBridge.exposeInMainWorld("api", {
         ipcRenderer.on("climate-reference", callback);
     },
 
-
+    updateProgress: (callback) => {
+        ipcRenderer.removeAllListeners("update-progress");
+        ipcRenderer.on("update-progress", callback);
+    },
 });
 

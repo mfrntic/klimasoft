@@ -44,8 +44,7 @@ let mainWindow;
 // console.log("userData", app.getPath("userData"));
 
 function createWindow() {
-  //check for update
-  setTimeout(updater, 1500);
+
   //define mainwindow
   let mainWindowState = windowStateKeeper({
     defaultWidth: 1200,
@@ -75,6 +74,11 @@ function createWindow() {
   Menu.setApplicationMenu(menu);
   //load content
   mainWindow.loadURL(isDev ? "http://localhost:3000" : `file://${__dirname}/../build/index.html`);
+
+  //check for update
+  setTimeout(() => {
+    updater(mainWindow);
+  }, 1500);
 
   // Open DevTools if in dev mode
   if (isDev) {

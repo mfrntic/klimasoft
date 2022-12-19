@@ -805,7 +805,7 @@ export const ombroEvapotranspirationIndex = {
         }
     },
     name: "ombroEvapotranspirationIndex",
-    parameters: ["temperatura"],
+    parameters: ["temperatura", "oborine", "lat", "lon"],
     title: "Ombro-evapotranspiration index [Ioe]",
     group: "Vodni režim",
     type: "SingleValue",
