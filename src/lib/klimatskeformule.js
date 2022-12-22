@@ -468,7 +468,10 @@ export const thermicCharacterGracanin = {
     description: "Toplinski karakter klime po Gračaninu"
 }
 
+const pet_faktori = [];
+
 export const thornthwaitePET = {
+
     calculate: function (temperatura, lat, lon) {
 
         let temp;
@@ -495,7 +498,14 @@ export const thornthwaitePET = {
             let pe = 0;
             let korektFakt = 1;
             if (temp[m - 1] > 0) {
-                korektFakt = (MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon) / 12) * (new Date(2000, m - 1, 0).getDate() / 30);
+                korektFakt = pet_faktori.find(a => a.month === m && a.year_from === year_from && a.year_to === year_to && a.lat === lat && a.lon === lon);
+                if (!korektFakt) {
+                    korektFakt = (MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon) / 12) * (new Date(2000, m - 1, 0).getDate() / 30);
+                    pet_faktori.push({month: m, year_from, year_to, lat, lon, korektFakt})
+                }
+                else{
+                    korektFakt = korektFakt.korektFakt;
+                }
                 // console.log("korektFakt " + m, korektFakt, MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon));
 
                 pe = (16 * Math.pow(10 * temp[m - 1] / I, a)) * korektFakt;
@@ -819,6 +829,9 @@ export const drySeasonWaterDeficit = {
         for (let k = 0; k < temperatura.length; k++) {
             const temp = temperatura[k].slice(1, 13).filter(a => isNumber(a));
             let ob = oborine.find(a => a[0] == temperatura[k][0]);
+            if (!ob) {
+                ob = oborine[0];
+            }
             ob = ob.slice(1, 13);
             if (ob[0] === "") {
                 continue;
@@ -1056,9 +1069,9 @@ export const hydrothermicIndexSeljaninov = {
 }
 
 export const walterClimateDiagram = {
-    calculate: function (show_aridness, show_months, show_vegetation_period) { },
+    calculate: function (show_aridness, show_months, show_vegetation_period, show_credits) { },
     name: "walterClimateDiagram",
-    parameters: ["show_aridness", "show_months", "show_vegetation_period"],
+    parameters: ["show_aridness", "show_months", "show_vegetation_period", "show_credits"],
     title: "Walter Climate Diagram [WCD]",
     group: "Dijagrami",
     type: "Klimadijagram",
@@ -1066,7 +1079,8 @@ export const walterClimateDiagram = {
     defaultParamValues: {
         show_aridness: true,
         show_months: true,
-        show_vegetation_period: false
+        show_vegetation_period: false,
+        show_credits: false
     },
 }
 

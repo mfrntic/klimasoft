@@ -139,7 +139,7 @@ const KD = {
             margin_top: 20,
             interactive: false,
             negative_axis_threshold: [-3.5, -13.5],
-            credits: "www.monachus-informatika.hr",
+            credits: "sumfak.unizg.hr",
             show_credits: true,
             onready: function () {
 

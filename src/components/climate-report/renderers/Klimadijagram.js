@@ -61,6 +61,9 @@ function Klimadijagram({ calculation }) {
         let show_vegetation_period = calculation.parameters.find(a => a.parameter === "show_vegetation_period")?.value;
         show_vegetation_period = (show_vegetation_period?.toString() === "true" ? true : false);
 
+        let show_credits = calculation.parameters.find(a => a.parameter === "show_credits")?.value;
+        show_credits = (show_credits?.toString() === "true" ? true : false);
+
         var options = {
             temp: meanTemp,
             perc: percs,
@@ -85,6 +88,7 @@ function Klimadijagram({ calculation }) {
                 avg_max: calculate(data.avgMaxTemp, 0, "max", 2)
             },
             credits: "sumfak.unizg.hr",
+            show_credits: show_credits,
             onready: () => {
                 diag.current.draw();
                 const arid = diag.current.aridPeriodDuration();
