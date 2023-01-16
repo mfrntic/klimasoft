@@ -74,8 +74,7 @@
     "productName": "Klimasoft SE",
     "copyright": "Monachus informatika d.o.o.",
     "publish": {
-      "provider": "github",
-      "token": "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"
+      "provider": "github"
     },
     "files": [
       "build/**/*",
