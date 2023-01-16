@@ -141,6 +141,7 @@ const KD = {
             negative_axis_threshold: [-3.5, -13.5],
             credits: "sumfak.unizg.hr",
             show_credits: true,
+            exportScale: 1,
             onready: function () {
 
             }
@@ -166,8 +167,8 @@ const KD = {
         //canvas
         this._canvas = canvas;
         //opći parametri - margine
-        let _margin_left = Math.round(this.options.margin_left * (this._canvas.clientWidth / 350.0));
-        let _margin_top = Math.round(this.options.margin_top * (this._canvas.clientWidth / 350.0));
+        let _margin_left = Math.round(this.options.margin_left * (this._canvas.width / 350.0));
+        let _margin_top = Math.round(this.options.margin_top * (this._canvas.width / 350.0));
 
         if (_margin_left < 4 && this.options.show_axis) {
             _margin_left = 4;
@@ -216,13 +217,13 @@ const KD = {
         }
         _i_patt_kd_1.src = require("../lib/img/pkd_2.png");
         _i_patt_kd_1.width = 8;
-        _i_patt_kd_1.height = 8;
+        _i_patt_kd_1.height = 8 * this.options.exportScale;
 
 
         //odredi veg. period
 
         if (!(this.options.vegetation_period.start < this.options.vegetation_period.end)) {
-            for (let i = 0; i < options.temp.length; i++) {
+            for (let i = 0; i < this.options.temp.length; i++) {
 
                 if (this.options.temp[i] > 6) {
                     if (this.options.vegetation_period.start === 0) {
@@ -460,8 +461,8 @@ const KD = {
             this.dr = {
                 x: _margin_left,
                 y: _margin_top,
-                width: this._canvas.clientWidth - _margin_left * 2,
-                height: this._canvas.clientHeight - (((this._canvas.clientWidth - _margin_left * 2) / 12) + _margin_top * 2),
+                width: this._canvas.width - _margin_left * 2,
+                height: this._canvas.height - (((this._canvas.width - _margin_left * 2) / 12) + _margin_top * 2),
                 bottom: function () {
                     return this.y + this.height;
                 },
@@ -471,13 +472,15 @@ const KD = {
             };
             this._drawingArea = this.dr;
 
+
             //clear context
             ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
+            ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+
 
             //outer border
             if (this.options.show_outer_border) {
-                ctx.strokeRect(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
+                ctx.strokeRect(0, 0, this._canvas.width, this._canvas.height);
             }
 
 
@@ -590,21 +593,21 @@ const KD = {
                 ctx.stroke();
             }
 
-            let mrgHd = 14 * (this._canvas.clientWidth / 350.0);
+            let mrgHd = 14 * (this._canvas.width / 350.0);
             //ispisi teksta
-            if (this._canvas.clientWidth > 150) {
+            if (this._canvas.width > 150) {
                 ctx.fillStyle = "black";
-                let fntSzAxis = Math.round(10 * (this._canvas.clientWidth / 350.0));
+                let fntSzAxis = Math.round(10 * (this._canvas.width / 350.0));
                 ctx.font = "italic " + fntSzAxis + "px Arial";
 
-                let fntSzHeader = Math.round(14 * (this._canvas.clientWidth / 350.0));
+                let fntSzHeader = Math.round(14 * (this._canvas.width / 350.0));
 
                 ctx.font = fntSzHeader + "px Arial";
                 //header - lijevo
-                ctx.fillText(this.options.header_data.station_name.toUpperCase() + " (" + this.options.header_data.station_altitude + ")", this.dr.x + mrgHd, this.dr.y + mrgHd * 2, this.dr.width * (this._canvas.clientWidth <= 200 ? 1 : 0.7));
+                ctx.fillText(this.options.header_data.station_name.toUpperCase() + " (" + this.options.header_data.station_altitude + ")", this.dr.x + mrgHd, this.dr.y + mrgHd * 2, this.dr.width * (this._canvas.width <= 200 ? 1 : 0.7));
                 ctx.fillText("[" + this.options.header_data.yow_period + "]", this.dr.x + mrgHd, this.dr.y + mrgHd * 2 + fntSzHeader * 1.4);
 
-                if (this._canvas.clientWidth > 200) {
+                if (this._canvas.width > 200) {
                     //header - desno
                     ctx.textAlign = "end";
                     ctx.fillText(this.options.avg_temp().toFixed(1) + "°C", this.dr.right() - mrgHd, this.dr.y + mrgHd * 2);
@@ -613,7 +616,7 @@ const KD = {
                     if (this.options.show_cardinal_temp) {
                         //cardinal temp
                         ctx.textBaseline = "middle";
-                        let fntSzCardinals = Math.round(12 * (this._canvas.clientWidth / 350.0));
+                        let fntSzCardinals = Math.round(12 * (this._canvas.width / 350.0));
 
                         ctx.font = fntSzCardinals + "px Arial";
                         if (this.options.cardinal_temp.abs_min !== null) {
@@ -634,18 +637,18 @@ const KD = {
                     }
                     //skale (desno)
                     if (this.options.show_axis && this.options.show_axis_scales) {
-                        let fntscale = 10 * (this._canvas.clientWidth / 350.0);
+                        let fntscale = 10 * (this._canvas.width / 350.0);
                         ctx.textAlign = "start";
                         ctx.textBaseline = "middle";
                         ctx.font = "italic " + fntscale + "px Arial";
-                        ctx.fillText("°C", this.dr.right() + 5, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 3));
-                        ctx.fillText("mm", this.dr.right() + 25, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 3));
+                        ctx.fillText("°C", this.dr.right() + 5 * this.options.exportScale, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 3));
+                        ctx.fillText("mm", this.dr.right() + 25 * this.options.exportScale, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 3));
                         //Skale
                         for (let i = 0; i <= num_of_y_ticks - 2; i++) {
                             if (i < 5) {
                                 let faktorXbase = Math.abs(Math.round((x_base - this.dr.bottom()) / this._y_height) * 10);
                                 //temp
-                                ctx.fillText(i * 10 - faktorXbase, this.dr.right() + 5, this.dr.bottom() - this._y_height * i);
+                                ctx.fillText(i * 10 - faktorXbase, this.dr.right() + 5 * this.options.exportScale, this.dr.bottom() - this._y_height * i);
                             }
 
                             //oborine
@@ -654,7 +657,7 @@ const KD = {
                                 ob = (i - 4) * 100;
                             }
                             ctx.textAlign = "end";
-                            ctx.fillText(ob, this.dr.right() + 38, x_base - this._y_height * i);
+                            ctx.fillText(ob, this.dr.right() + 38 * this.options.exportScale, x_base - this._y_height * i);
                             ctx.textAlign = "start";
 
                         }
@@ -663,7 +666,7 @@ const KD = {
             }
             ctx.textAlign = "start";
             //zero temperature months
-           
+
             if (this.options.zero_temp_months !== null) {
                 ctx.globalAlpha = 0.65;
                 for (let i = 0; i < this.options.zero_temp_months.length; i++) {
@@ -682,9 +685,9 @@ const KD = {
                 ctx.globalAlpha = 1;
 
             }
-            if (this._canvas.clientWidth > 150 && this.options.show_months && this.options.zero_temp_months !== null) {
+            if (this._canvas.width > 150 && this.options.show_months && this.options.zero_temp_months !== null) {
 
-                let mrgMths = 9 * (this._canvas.clientWidth / 350.0);
+                let mrgMths = 9 * (this._canvas.width / 350.0);
                 let oldFont = ctx.font;
                 ctx.font = mrgMths + "px Arial";
                 ctx.textBaseline = "middle";
@@ -711,7 +714,7 @@ const KD = {
             //inner border - axis
             if (this.options.show_axis) {
                 //okvir (osi)
-                if (this._canvas.clientWidth > 200) {
+                if (this._canvas.width > 200) {
                     ctx.lineWidth = 2;
                 }
                 else {
@@ -762,7 +765,7 @@ const KD = {
                 ctx.fillStyle = "blue";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "alphabetic";
-                ctx.fillText(this.options.credits, this._canvas.clientWidth / 2, this._canvas.clientHeight - 6);
+                ctx.fillText(this.options.credits, this._canvas.width / 2, this._canvas.height - 6);
                 ctx.textBaseline = "alphabetic";
                 ctx.textAlign = "start";
             }
@@ -864,37 +867,59 @@ const KD = {
             }
         }
 
-        this.toImage = function (returnType) {
-            let dataURL = this._canvas.toDataURL("image/png");
-            let ua = window.navigator.userAgent;
-            switch (returnType) {
-                case "dataurl":
-                    return dataURL;
-                case "imagedata":
-                    return _ctx.getImageData(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
-                case 'obj':
-                    let imgObj = new Image();
-                    imgObj.src = dataURL;
-                    document.getElementById('graphics').appendChild(imgObj);
-                    break;
-                case 'window':
-                    window.open(dataURL, "Canvas Image");
-                    break;
-                case 'download':
-                    if (ua.indexOf("Chrome") > 0) {
-                        let link = document.createElement('a');
-                        link.setAttribute("download", this.options.header_data.station_name + ".png");
-                        link.innerText = "Spremanje";
-                        link.href = this._canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-                        link.click();
-                    }
-                    else {
-                        console.warn("Download from client side is avialable only in Chrome. Please use Chrome!");
-                    }
-                    break;
-                default:
-                    return dataURL;
-            }
+        this.toImage = function (returnType, callback) {
+            //render offscreen
+            let cnv = document.createElement('canvas');
+            cnv.width = this._canvas.width * 3;
+            cnv.height = this._canvas.height * 3;
+            cnv.style.width = this._canvas.width + "px";
+            cnv.style.height = this._canvas.height + "px";
+
+            let d;
+            const opts = JSON.parse(JSON.stringify(this.options));
+            opts.exportScale = 3;
+            opts.onready = () => {
+                d.draw();
+
+                //convert to dataurl
+                const dataURL = cnv.toDataURL("image/png");
+                let ua = window.navigator.userAgent;
+                switch (returnType) {
+                    case "dataurl":
+                        callback(dataURL);
+                        return;
+                    case "imagedata":
+                        return _ctx.getImageData(0, 0, cnv.width, cnv.height);
+                    case 'obj':
+                        let imgObj = new Image();
+                        imgObj.src = dataURL;
+                        document.getElementById('graphics').appendChild(imgObj);
+                        break;
+                    case 'window':
+                        window.open(dataURL, "Canvas Image");
+                        break;
+                    case 'download':
+                        if (ua.indexOf("Chrome") > 0) {
+                            let link = document.createElement('a');
+                            link.setAttribute("download", opts.header_data.station_name + ".png");
+                            link.innerText = "Spremanje";
+                            link.href = dataURL.replace("image/png", "image/octet-stream");
+                            link.click();
+                        }
+                        else {
+                            console.warn("Download from client side is avialable only in Chrome. Please use Chrome!");
+                        }
+                        break;
+                    default:
+                        return dataURL;
+                }
+
+
+            };
+
+            d = new KD.Diagram(cnv, opts);
+
+
         }
     },
 
@@ -934,6 +959,7 @@ const KD = {
             show_months: true,
             margin_left: 20,
             margin_top: 20,
+            exportScale: 1,
             limited: false
         };
         for (let p in default_options) {
@@ -987,14 +1013,14 @@ const KD = {
             return;
         }
 
-        let _margin_left = Math.round(this.options.margin_left * (this._canvas.clientWidth / 750.0));
-        let _margin_top = Math.round(this.options.margin_top * (this._canvas.clientWidth / 750.0));
+        let _margin_left = Math.round(this.options.margin_left * (this._canvas.width / 750.0));
+        let _margin_top = Math.round(this.options.margin_top * (this._canvas.width / 750.0));
 
         let rows = Math.ceil(this.options.data.length / this.options.years_in_row);
 
 
         //klimatogram dimensions 
-        let kg_width = (this._canvas.clientWidth - 80) / this.options.years_in_row,
+        let kg_width = (this._canvas.width - 80) / this.options.years_in_row,
             kg_height = kg_width * 1.5;
         let footerHeight = 60 * (kg_width / 165);
         this._canvas.height = 20 + rows * (kg_height + footerHeight) + 2 * _margin_top;
@@ -1073,13 +1099,13 @@ const KD = {
         this.draw = function () {
             this.options.years_in_row = Number(this.options.years_in_row);
             rows = Math.ceil(this.options.data.length / this.options.years_in_row);
-            kg_width = (this._canvas.clientWidth - 80) / this.options.years_in_row;
+            kg_width = (this._canvas.width - 80) / this.options.years_in_row;
             kg_height = kg_width * 1.5;
             footerHeight = 60 * (kg_width / 165);
             this._canvas.height = 20 + rows * (kg_height + footerHeight) + 2 * _margin_top;
             //clear context
             _ctx.fillStyle = "white";
-            _ctx.fillRect(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
+            _ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
             //recalc data
             let perc = [];
             let perc_orig = [];
@@ -1169,7 +1195,7 @@ const KD = {
 
                 //outer border
                 //if (this.options.show_outer_border) {
-                //ctx.strokeRect(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
+                //ctx.strokeRect(0, 0, this._canvas.width, this._canvas.height);
                 //}
 
                 //dužina jednog mjeseca na skali
@@ -1398,8 +1424,8 @@ const KD = {
                         }
                         ctx.globalAlpha = 1;
 
-                        if (this._canvas.clientWidth > 400 && this.options.show_months) {
-                            let mrgMths = 8 * (this._canvas.clientWidth / 1100.0);
+                        if (this._canvas.width > 400 && this.options.show_months) {
+                            let mrgMths = 8 * (this._canvas.width / 1100.0);
                             ctx.font = mrgMths + "px Arial";
                             ctx.textBaseline = "middle";
                             ctx.textAlign = "center";
@@ -1425,14 +1451,14 @@ const KD = {
                     ctx.textBaseline = "middle";
                     ctx.fillStyle = "black";
                     ctx.font = "italic " + fntscale + "px Arial";
-                    ctx.fillText("°C", this.dr.right() + 5, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 2));
-                    ctx.fillText("mm", this.dr.right() + 25, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 2));
+                    ctx.fillText("°C", this.dr.right() + 5 * this.options.exportScale, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 2));
+                    ctx.fillText("mm", this.dr.right() + 25 * this.options.exportScale, this.dr.bottom() - (this._y_height * (num_of_y_ticks) - this._y_height / 2));
                     //Skale
                     for (let i = 0; i <= num_of_y_ticks - 2; i++) {
                         if (i < 5) {
                             let faktorXbase = Math.abs(Math.round((x_base - this.dr.bottom()) / this._y_height) * 10);
                             //temp
-                            ctx.fillText(i * 10 - faktorXbase, this.dr.right() + 5, this.dr.bottom() - this._y_height * i);
+                            ctx.fillText(i * 10 - faktorXbase, this.dr.right() + 5 * this.options.exportScale, this.dr.bottom() - this._y_height * i);
                         }
 
                         //oborine
@@ -1442,7 +1468,7 @@ const KD = {
                                 ob = (i - 4) * 100;
                             }
                             ctx.textAlign = "end";
-                            ctx.fillText(ob, this.dr.right() + 38, x_base - this._y_height * i);
+                            ctx.fillText(ob, this.dr.right() + 38 * this.options.exportScale, x_base - this._y_height * i);
                             ctx.textAlign = "start";
                         }
                     }
@@ -1451,12 +1477,66 @@ const KD = {
             }
         }
 
-        this.toImage = function (returnType) {
+        // this.toImage = function (returnType, callback) {
+        //     //render offscreen
+        //     let cnv = document.createElement('canvas');
+        //     cnv.width = this._canvas.width * 3;
+        //     cnv.height = this._canvas.height * 3;
+        //     cnv.style.width = this._canvas.width + "px";
+        //     cnv.style.height = this._canvas.height + "px";
+
+        //     let d;
+        //     const opts = JSON.parse(JSON.stringify(this.options));
+        //     console.log(opts);
+        //     opts.exportScale = 3;
+        //     d = new KD.Klimatogram(cnv, opts)
+
+        //     opts.onready = () => {
+        //         d.draw();
+
+        //         //convert to dataurl
+        //         let dataURL = cnv.toDataURL("image/png");
+        //         let ua = window.navigator.userAgent;
+        //         switch (returnType) {
+        //             case "dataurl":
+        //                 callback(dataURL);
+        //                 return;
+        //             case "imagedata":
+        //                 return _ctx.getImageData(0, 0, cnv.width, cnv.height);
+        //             case 'obj':
+        //                 let imgObj = new Image();
+        //                 imgObj.src = dataURL;
+        //                 document.getElementById('graphics').appendChild(imgObj);
+        //                 break;
+        //             case 'window':
+        //                 window.open(dataURL, "Canvas Image");
+        //                 break;
+        //             case 'download':
+        //                 if (ua.indexOf("Chrome") > 0) {
+        //                     let link = document.createElement('a');
+        //                     link.setAttribute("download", opts.header_data.station_name + ".png");
+        //                     link.innerText = "Spremanje";
+        //                     link.href = dataURL.replace("image/png", "image/octet-stream");
+        //                     link.click();
+        //                 }
+        //                 else {
+        //                     console.warn("Download from client side is avialable only in Chrome. Please use Chrome!");
+        //                 }
+        //                 break;
+        //             default:
+        //                 return dataURL;
+        //         }
+        //     };
+        //     d = new KD.Diagram(cnv, opts);
+        // }
+
+        this.toImage = function (returnType, callback) {
             let dataURL = this._canvas.toDataURL("image/png");
             let ua = window.navigator.userAgent;
             switch (returnType) {
                 case "dataurl":
-                    return dataURL;
+                    callback(dataURL);
+                    return;
                 case "imagedata":
                     return _ctx.getImageData(0, 0, this._canvas.clientWidth, this._canvas.clientHeight);
                 case 'obj':

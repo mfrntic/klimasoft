@@ -34,8 +34,8 @@ function Klimadijagram({ calculation }) {
         const absMins = describe(data.absMinTemp).filter(a => a[0] === "min")[0].slice(1, 13);
         const avgMins = describe(data.avgMinTemp).filter(a => a[0] === "avg")[0].slice(1, 13);
         // console.log("avgMins", avgMins);
-        const canCalcAbsMin =  calculate(data.absMinTemp, 0, "count", 0) > 1;
-        const canCalcAvgMin = calculate(data.avgMinTemp, 0, "count", 0)  > 1;
+        const canCalcAbsMin = calculate(data.absMinTemp, 0, "count", 0) > 1;
+        const canCalcAvgMin = calculate(data.avgMinTemp, 0, "count", 0) > 1;
 
         console.log(canCalcAbsMin)
 
@@ -113,9 +113,10 @@ function Klimadijagram({ calculation }) {
     }
 
     function onCopyImageHandler() {
-        const dataURL = diag.current.toImage("dataurl");
-        // console.log("dataURL", dataURL);
-        window.api.copyImage(dataURL);
+        diag.current.toImage("dataurl", (dataURL) => {
+            window.api.copyImage(dataURL);
+        });
+
     }
 
     return (
@@ -127,7 +128,7 @@ function Klimadijagram({ calculation }) {
                     <button type="button" title="Kopiraj sliku" onClick={onCopyImageHandler}><FaCopy /></button>
                 </IconContext.Provider>
             </div>
-            <canvas id="kd" width="400" height="550" ></canvas>
+            <canvas id="kd" width="400" height="550" style={{ width: 400, height: 550 }}></canvas>
 
             {aridDur && <p className={style.info}>
                 <label>Razdoblje suše: </label>

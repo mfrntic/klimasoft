@@ -102,9 +102,10 @@ function Klimatogram({ calculation }) {
     }
 
     function onCopyImageHandler() {
-        const dataURL = diag.current.toImage("dataurl");
-        // console.log("dataURL", dataURL);
-        window.api.copyImage(dataURL);
+        diag.current.toImage("dataurl", (dataURL) => {
+            // console.log("dataURL", dataURL);
+            window.api.copyImage(dataURL);
+        });
     }
 
     return (
