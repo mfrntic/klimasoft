@@ -1,6 +1,6 @@
 # Klimasoft SE
 Izrada klimatskih dijagrama po Walteru i izračun ostalih pokazatelja klime.\
-Program možete preuzeti ovdje https://github.com/mfrntic/klimasoft/releases
+Program možete preuzeti ovdje https://github.com/mfrntic/klimasoft/releases (Windows)
 
 ### Unos podataka
 ![image](https://user-images.githubusercontent.com/6986779/212732682-897ce2bd-e33b-45fb-a296-1d2591c0f96b.png)
