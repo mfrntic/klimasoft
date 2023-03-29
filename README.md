@@ -8,6 +8,12 @@ Program možete preuzeti ovdje https://github.com/mfrntic/klimasoft/releases (Wi
 ### Klimatske formule, prikazi i izračuni
 ![image](https://user-images.githubusercontent.com/6986779/212732377-16039c80-838c-49e1-a0a5-b871dbeb7920.png)
 
+### Lokacije / Meteorološke stanice
+Program dolazi sa predefiniranim meteorološkim stanicama (postajama) na području Republike Hrvatske. 
+Međutim moguće je upisati i vlastite lokacije. Upravljanje lokacijama dostupno je pomoću glavnog izbornika 'Datoteka' -> 'Lokacije/Postaje' ili odabirom tipkovničke kratice [Ctrl]+[P].
+
+![image](https://user-images.githubusercontent.com/6986779/228640116-a8fc1cde-694f-47d8-8174-29b005bf9ff2.png)
+
 ## Razvoj programa
 Program je napisan kao ElectronJS aplikacija (https://electronjs.org/), održavan i razvijen od strane Fakulteta šumarstva i drvne tehnologije u Zagrebu (https://www.sumfak.unizg.hr/).
 
