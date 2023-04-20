@@ -934,13 +934,14 @@ export const rainfallAnomalyIndex = {
 
         const oborine_agg = oborine.map(a => {
             const godina = a[0];
-            const value = round(average(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
+            const value = round(sum(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
             return { godina, value }
         });
 
         let low = [...oborine_agg];
         low.sort((a, b) => a.value - b.value);
         low = low.slice(0, 10).map(a => a.value);
+
         let high = [...oborine_agg]
         high.sort((a, b) => b.value - a.value);
         high = high.slice(0, 10).map(a => a.value);
@@ -948,8 +949,8 @@ export const rainfallAnomalyIndex = {
         const p_avg = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
         const high_avg = round(average(high), 2);
         const low_avg = round(average(low), 2);
-        // console.log(high, low);
-        // console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
+        console.log(high, low);
+         console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
 
         const res = [];
         for (const p of oborine_agg) {
@@ -959,11 +960,11 @@ export const rainfallAnomalyIndex = {
 
             let ind;
             if (anom < 0) {
-                ind = -3 * (anom / (low_avg - p.value));
+                ind = -3 * (anom / (low_avg - p_avg));
                 //ind = -3 * anom / (high_avg - p_avg);
             }
             else {
-                ind = 3 * anom / (high_avg - p.value);
+                ind = 3 * anom / (high_avg - p_avg);
             }
 
             // console.log("p/anomaly/rai", p, anom, round(ind, 2));
@@ -975,7 +976,7 @@ export const rainfallAnomalyIndex = {
             }
         }
 
-        // console.log("rai-res", res);
+        console.log("rai-res", res);
         return {
             value: round(average(res[3]), 2),
             result: res
