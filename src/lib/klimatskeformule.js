@@ -218,6 +218,10 @@ export const koppenClimateFormula = {
         // oborineummer = sum(hspoy.map(m => perc[m - 1]));
 
         for (let m = 1; m <= 12; m++) {
+            if (m === 1){
+                driestWinter = wettestWinter = wettestSummer = driestSummer = oborine[0];
+                
+            }
             if (!hspoy.includes(m)) {
                 //high sun part of the year - summer
                 driestSummer = Math.min(driestSummer, oborine[m - 1]);
@@ -234,6 +238,8 @@ export const koppenClimateFormula = {
         oborineummerPosto = oborineummer / sum(oborine) * 100;
         percWinterPosto = percWinter / sum(oborine) * 100;
 
+        console.log("driest", driestSummer, driestWinter);
+        console.log("wettest", wettestSummer, wettestWinter);
 
         //Izračun formule
         if ((oborineummerPosto >= 70.0 && average(oborine) < 2 * average(temperatura) + 28) ||
