@@ -558,7 +558,7 @@ export const thornthwaiteWaterBalance = {
 
         // console.log(thornthwaite_pet_monthly);
 
-        for (let m = 0; m < oborine.length; m++) {
+        for (let m = 0; m < ob.length; m++) {
             const o = ob[m];
             const pet = thornthwaite_pet_monthly[m]
             const razlika_o_pet = round(o - pet, 2);
