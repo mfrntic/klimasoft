@@ -81,11 +81,13 @@ const calculate = function (month_matrix, calc_month = 0, calc_type = "sum", rou
     for (const row of month_matrix) {
         row.forEach((cell, i) => {
             if (i > 0 && !!cell) {
-                data.push({
-                    label: row[0],
-                    month: i,
-                    value: cell
-                })
+                if (isNumber(cell)) {
+                    data.push({
+                        label: row[0],
+                        month: i,
+                        value: cell
+                    });
+                }
             }
         });
     }

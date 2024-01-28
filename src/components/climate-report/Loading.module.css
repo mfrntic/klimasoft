@@ -1,0 +1,16 @@
+.spinner {
+    animation: spin infinite 2.5s linear;
+    padding: 1em;
+    /*You can increase or decrease the timer (5s) to 
+     increase or decrease the speed of the spinner*/
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

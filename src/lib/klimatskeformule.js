@@ -218,9 +218,9 @@ export const koppenClimateFormula = {
         // oborineummer = sum(hspoy.map(m => perc[m - 1]));
 
         for (let m = 1; m <= 12; m++) {
-            if (m === 1){
+            if (m === 1) {
                 driestWinter = wettestWinter = wettestSummer = driestSummer = oborine[0];
-                
+
             }
             if (!hspoy.includes(m)) {
                 //high sun part of the year - summer
@@ -487,44 +487,72 @@ export const thornthwaitePET = {
         else {
             temp = temperatura;
         }
-        // console.log("temperatura", temp);
+        //  console.log("temperatura", temperatura);
 
         let year_from = 0, year_to = 0;
-        if (year_from === 0) year_from = new Date().getFullYear();
-        if (year_to === 0) year_to = new Date().getFullYear();
-        let I = 0;
-        for (let m = 1; m <= 12; m++) {
-            if (temp[m - 1] > 0) {
-                I += Math.pow(temp[m - 1] / 5, 1.514);
-            }
-        }
-        const a = 0.000000675 * Math.pow(I, 3) - 0.0000771 * Math.pow(I, 2) + 0.01792 * I + 0.49239;
-        const pe_monthly = [], kf = [];
-        for (let m = 1; m <= 12; m++) {
-            let pe = 0;
-            let korektFakt = 1;
-            if (temp[m - 1] > 0) {
-                korektFakt = pet_faktori.find(a => a.month === m && a.year_from === year_from && a.year_to === year_to && a.lat === lat && a.lon === lon);
-                if (!korektFakt) {
-                    korektFakt = (MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon) / 12) * (new Date(2000, m - 1, 0).getDate() / 30);
-                    pet_faktori.push({month: m, year_from, year_to, lat, lon, korektFakt})
-                }
-                else{
-                    korektFakt = korektFakt.korektFakt;
-                }
-                // console.log("korektFakt " + m, korektFakt, MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon));
+        // if (year_from === 0) year_from = new Date().getFullYear();
+        // if (year_to === 0) year_to = new Date().getFullYear();
+        const godine = temperatura.map(a => Number(a[0])).filter(a => a !== 0);
 
-                pe = (16 * Math.pow(10 * temp[m - 1] / I, a)) * korektFakt;
+        if (year_from === 0) year_from = Math.min(...godine);
+        if (year_to === 0) year_to = Math.max(...godine);
+        if (!isNumber(year_from)) year_from = 0;
+        if (!isNumber(year_to)) year_to = 0;
+
+        const res = [];
+
+        function c(temp, yf, yt) {
+
+            const pe_monthly = [], kf = [];
+
+            let I = 0;
+            for (let m = 1; m <= 12; m++) {
+                if (temp[m - 1] > 0) {
+                    I += Math.pow(temp[m - 1] / 5, 1.514);
+                }
             }
-            kf.push(round(korektFakt, 2));
-            pe_monthly.push(round(pe, 2));
+            const a = 0.000000675 * Math.pow(I, 3) - 0.0000771 * Math.pow(I, 2) + 0.01792 * I + 0.49239;
+
+            for (let m = 1; m <= 12; m++) {
+                let pe = 0;
+                let korektFakt = 1;
+                if (temp[m - 1] > 0) {
+                    korektFakt = pet_faktori.find(a => a.month === m && a.year_from === yf && a.year_to === yt && a.lat === lat && a.lon === lon);
+                    if (!korektFakt) {
+                        korektFakt = (MoonSunCalc.getAverageDaylight(m, yf, yt, lat, lon) / 12) * (new Date(yt, m - 1, 0).getDate() / 30);
+                        pet_faktori.push({ month: m, yt, yf, lat, lon, korektFakt });
+                    }
+                    else {
+                        korektFakt = korektFakt.korektFakt;
+                    }
+                    // console.log("korektFakt " + m, korektFakt, MoonSunCalc.getAverageDaylight(m, year_from, year_to, lat, lon));
+
+                    pe = (16 * Math.pow(10 * temp[m - 1] / I, a)) * korektFakt;
+                }
+                kf.push(round(korektFakt, 3));
+                pe_monthly.push(round(pe, 2));
+            }
+
+            return [kf, pe_monthly];
         }
+
+        if (temp !== temperatura) {
+            let i = 0;
+            for (var god of godine) {
+                const t2 = c(temperatura[i].slice(1, 13), god, god);
+                if (t2 && t2[1]) {
+                    res.push([god.toString(), ...t2[1]]);
+                }
+                i++;
+            }
+        }
+        const resUk = c(temp, year_from, year_to)
         // console.log("pe_monthly", pe_monthly);
         // const result = `PET: ${month === 0 ? sum(pe_monthly) : pe_monthly[month - 1]} | ${month === 0 ? "total" : `month (${month})`}`;
 
         return {
-            value: pe_monthly,
-            result: [["t", ...temp], ["KF", ...kf], ["PET", ...pe_monthly]]
+            value: resUk[1],
+            result: [...res, ["t", ...temp], ["KF", ...resUk[0]], ["PET", ...resUk[1]]]
         }
     },
     name: "thornthwaitePET",
@@ -934,55 +962,177 @@ export const drySeasonDuration = {
     description: "Gausen 1954., UNESCO 1963"
 }
 
+// export const rainfallAnomalyIndex = {
+//     calculate: function (oborine) {
+//         // console.log("rai-ulaz-oborine", oborine);
+
+//         const oborine_agg = oborine
+//             .filter(a => a.reduce((a, b) => a + b) !== "") //izbaci sve prazne redove
+//             .map(a => {
+//                 const godina = a[0];
+//                 const value = round(sum(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
+//                 return { godina, value }
+//             });
+
+//         let low = [...oborine_agg];
+//         low.sort((a, b) => a.value - b.value);
+//         low = low.slice(0, 10).map(a => a.value);
+
+//         let high = [...oborine_agg]
+//         high.sort((a, b) => b.value - a.value);
+//         high = high.slice(0, 10).map(a => a.value);
+
+//         const p_avg = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
+//         const high_avg = round(average(high), 2);
+//         const low_avg = round(average(low), 2);
+//         console.log(high, low);
+//         console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
+
+//         const res = [];
+//         for (const p of oborine_agg) {
+
+//             const anom = round(p.value - p_avg, 1);
+//             // console.log("anomaly", anom);
+
+//             let ind;
+//             if (anom < 0) {
+//                 ind = -3 * (anom / (low_avg - p_avg));
+//                 //ind = -3 * anom / (high_avg - p_avg);
+//             }
+//             else {
+//                 ind = 3 * anom / (high_avg - p_avg);
+//             }
+
+//             // console.log("p/anomaly/rai", p, anom, round(ind, 2));
+//             if (!isNaN(p.value)) {
+//                 res.push([p.godina, p.value, anom, round(ind, 2)]);
+//             }
+//             else {
+//                 res.push([p.godina, "", "", ""]);
+//             }
+//         }
+
+//         console.log("rai-res", res);
+//         return {
+//             value: round(average(res[3]), 2),
+//             result: res
+//         }
+//     },
+//     name: "rainfallAnomalyIndex",
+//     parameters: ["oborine"],
+//     title: "Rainfall Anomaly Index [RAI]",
+//     group: "Vodni režim",
+//     type: "MultiValueAverage",
+//     description: "RAI (Rainfall Anomaly Index) is an incorporation of ranking procedure to assign magnitudes to positive and negative precipitation anomalies"
+// }
+
+
 export const rainfallAnomalyIndex = {
     calculate: function (oborine) {
-        // console.log("rai-ulaz-oborine", oborine);
 
-        const oborine_agg = oborine.map(a => {
-            const godina = a[0];
-            const value = round(sum(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
-            return { godina, value }
-        });
+        oborine = oborine
+            .filter(a => a.reduce((a, b) => a + b) !== ""); //izbaci sve prazne redove
 
-        let low = [...oborine_agg];
-        low.sort((a, b) => a.value - b.value);
-        low = low.slice(0, 10).map(a => a.value);
+        const oborine_mj = [];
 
-        let high = [...oborine_agg]
-        high.sort((a, b) => b.value - a.value);
-        high = high.slice(0, 10).map(a => a.value);
-
-        const p_avg = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
-        const high_avg = round(average(high), 2);
-        const low_avg = round(average(low), 2);
-        console.log(high, low);
-         console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
-
+        for (let i = 1; i <= 12; i++) {
+            const ob_mj = [];
+            for (const ob of oborine) {
+                ob_mj.push({ godina: ob[0], mjesec: i, value: ob[i] });
+            }
+            oborine_mj.push(ob_mj);
+        }
+        // console.log("oborine-mj", oborine_mj);
         const res = [];
-        for (const p of oborine_agg) {
 
-            const anom = round(p.value - p_avg, 1);
-            // console.log("anomaly", anom);
+        // console.log("rai-ulaz-oborine", oborine);
+        //godišnje oborine = zbroj mjesečnih
+        const oborine_agg = oborine
+            .map(a => {
+                const godina = a[0];
+                const value = round(sum(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
+                return { godina, value }
+            });
 
-            let ind;
-            if (anom < 0) {
-                ind = -3 * (anom / (low_avg - p_avg));
-                //ind = -3 * anom / (high_avg - p_avg);
+        function calculateHL(oborine_agg) {
+            let low = [...oborine_agg.filter(a => isNumber(a.value))];
+            low.sort((a, b) => a.value - b.value);
+            low = low.slice(0, 10).map(a => a.value);
+
+            let high = [...oborine_agg.filter(a => isNumber(a.value))]
+            high.sort((a, b) => b.value - a.value);
+            high = high.slice(0, 10).map(a => a.value);
+
+            const high_avg = round(average(high), 2);
+            const low_avg = round(average(low), 2);
+            return { high_avg, low_avg };
+        }
+
+        function calculateRAI(oborine_agg, value) {
+            const p_avg = round(average(oborine_agg.filter(a => isNumber(a.value)).map(a => a.value)), 2);
+            const { high_avg, low_avg } = calculateHL(oborine_agg);
+            if (!isNaN(value)) {
+                const anom = round(value - p_avg, 1);
+                // console.log("anomaly", anom);
+
+                let ind;
+                if (anom < 0) {
+                    ind = -3 * (anom / (low_avg - p_avg));
+                    //ind = -3 * anom / (high_avg - p_avg);
+                }
+                else {
+                    ind = 3 * anom / (high_avg - p_avg);
+                }
+
+                // console.log("p/anomaly/rai", p, anom, round(ind, 2));
+                if (!isNumber(ind)) {
+                    ind = null;
+                }
+
+                return { value: value, anomaly: anom, rai: ind && round(ind, 2) }
             }
             else {
-                ind = 3 * anom / (high_avg - p_avg);
-            }
-
-            // console.log("p/anomaly/rai", p, anom, round(ind, 2));
-            if (!isNaN(p.value)) {
-                res.push([p.godina, p.value, anom, round(ind, 2)]);
-            }
-            else {
-                res.push([p.godina, "", "", ""]);
+                return { value: value, anomaly: null, rai: null };
             }
         }
 
+        //izračun mjesečnog RAI-a
+
+        const mjeseci_rai = [];
+        // let mjesec = 0;
+        for (const m of oborine_mj) {
+
+            for (const v of m) {
+                const { rai: rai_mj } = calculateRAI(m, v.value);
+                mjeseci_rai.push({ godina: v.godina, mjesec: v.mjesec, value: v.value, rai_mj });
+            }
+            // mjesec++;
+        }
+
+        console.log("mjeseci_rai", mjeseci_rai);;
+        // console.log("pavg, high_avg, low_avg", p_avg, high_avg, low_avg);
+
+        //izračun godišnjeg RAI-a
+        for (const p of oborine_agg) {
+            const { value, anomaly, rai } = calculateRAI(oborine_agg, p.value);
+
+            const mj = [];
+            for (let i = 1; i <= 12; i++) {
+                const h = mjeseci_rai.find(a => a.mjesec === i && a.godina === p.godina);
+                mj.push(h.rai_mj);
+            }
+
+            res.push([
+                p.godina,
+                ...mj,
+                value,
+                anomaly,
+                rai
+            ]);
+        }
+
         console.log("rai-res", res);
+
         return {
             value: round(average(res[3]), 2),
             result: res
@@ -992,43 +1142,113 @@ export const rainfallAnomalyIndex = {
     parameters: ["oborine"],
     title: "Rainfall Anomaly Index [RAI]",
     group: "Vodni režim",
-    type: "MultiValueAverage",
+    type: "MultiValue",
     description: "RAI (Rainfall Anomaly Index) is an incorporation of ranking procedure to assign magnitudes to positive and negative precipitation anomalies"
 }
 
 export const percentOfNormalPercipitation = {
-    calculate: function (oborine) {
+    calculate: function (oborine, reference_from, reference_to) {
 
-        const oborine_agg = oborine.map(a => {
-            const godina = a[0];
-            const value = round(average(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
-            return { godina, value }
-        });
+        //reference_from, reference_to > Ovo je referentni period, dakle podaci se računaju samo za ostale godine, a ove godine služe kao referentni period
+        // console.log("reference", reference_from, reference_to);
+        // oborine =  oborine.filter(a => a.reduce((x, y) => x + y.value, "").trim() !== ""); //izbaci prazne redove
 
-        // console.log("oborine_agg", oborine_agg);
-        const meanP = round(average(oborine_agg.filter(a => !isNaN(a.value)).map(a => a.value)), 2);
+        oborine = oborine
+            .filter(a => a.reduce((a, b) => a + b) !== ""); //izbaci sve prazne redove
 
-        const resArr = [];
-        for (const p of oborine_agg) {
-            if (!isNaN(p.value)) {
-                resArr.push([p.godina, p.value, round(p.value / meanP * 100, 2)]);
+        const godine = oborine.map(arr => Number(arr[0]));
+        const unique = [...new Set(godine)].filter(a => a > 0);
+        unique.sort();
+
+        if (reference_from === 0) reference_from = Math.min(...unique);
+        if (reference_to === -1) reference_to = Math.max(...unique) - 5 >= reference_from ? Math.max(...unique) - 5 : reference_from;
+
+        const oborine_mj = [];
+        for (let i = 1; i <= 12; i++) {
+            const ob_mj = [];
+            for (const ob of oborine) {
+                ob_mj.push({ godina: ob[0], mjesec: i, value: ob[i] });
             }
-            else {
-                resArr.push([p.godina, "", ""]);
+            oborine_mj.push(ob_mj);
+        }
+        // // console.log("oborine-mj", oborine_mj);
+
+
+        const oborine_reference = oborine
+            .filter(a => {
+                const godina = Number(a[0]);
+                console.log("godina-reffrom", godina, reference_from, reference_to);
+                return godina >= reference_from && godina <= reference_to;
+            })
+            .map(a => {
+                const godina = a[0];
+                const value = round(average(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
+                return { godina, value }
+            });
+
+        const oborine_calc = oborine
+            .filter(a => {
+                const godina = Number(a[0]);
+                return !(godina >= reference_from && godina <= reference_to);
+            })
+            .map(a => {
+                const godina = a[0];
+                const value = round(average(a.slice(1, 13).filter(a => Number(a) > 0)), 2);
+                return { godina, value }
+            });
+
+
+
+        //izračun mjesečnog PET-a
+        const mjeseci_pet = [];
+        // let mjesec = 0;
+        for (const m of oborine_mj) {
+            const meanM = round(average(m.filter(a => a.godina >= reference_from && a.godina <= reference_to && isNumber(a.value)).map(a => a.value)), 2);
+
+            for (const v of m) {
+                mjeseci_pet.push({
+                    godina: v.godina,
+                    mjesec: v.mjesec,
+                    value: v.value,
+                    pet_mj: round(v.value / meanM * 100, 2)
+                });
             }
+            // mjesec++;
         }
 
+        console.log("mjeseci_pet", mjeseci_pet);
+
+
+        //izračun godišnjeg PET-a
+        // console.log("oborine_agg", oborine_agg);
+        const meanP = round(average(oborine_reference.filter(a => isNumber(a.value)).map(a => a.value)), 2);
+
+        const resArr = [];
+        for (const p of oborine_calc) {
+            if (isNumber(p.value)) {
+                resArr.push([p.godina, ...mjeseci_pet.filter(a=>a.godina === p.godina).map(m=>m.pet_mj), p.value, round(p.value / meanP * 100, 2)]);
+            }
+            // else {
+            //     resArr.push([p.godina, "", ""]);
+            // }
+        }
+
+        //the end
         return {
             value: round(average(resArr), 2),
             result: resArr
         }
     },
     name: "percentOfNormalPercipitation",
-    parameters: ["oborine"],
+    parameters: ["oborine", "reference_from", "reference_to"],
     title: "Percent of Normal Percipitation [PN]",
     group: "Vodni režim",
-    type: "MultiValueAverage",
-    description: "Postotak od normalne oborine (engl. Percent of Normal, PN) ili anomalija oborina zasniva se na odnosu mjesečnih oborina i prosječne mjesečne oborine promatranog razdoblja."
+    type: "MultiValue",
+    description: "Postotak od normalne oborine (engl. Percent of Normal, PN) ili anomalija oborina zasniva se na odnosu mjesečnih oborina i prosječne mjesečne oborine promatranog razdoblja.",
+    defaultParamValues: {
+        reference_from: 0,
+        reference_to: -1
+    },
 }
 
 export const hydrothermicIndexSeljaninov = {

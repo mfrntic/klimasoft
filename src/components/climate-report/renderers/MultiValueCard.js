@@ -1,5 +1,5 @@
 import jspreadsheet from "jspreadsheet-ce";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { Measures } from "../../../data/Measures";
@@ -14,7 +14,6 @@ function MultiValueCard({ calculation }) {
     const jRef = useRef(null);
     const station = useSelector(a => a.project.header.station);
 
-
     useEffect(() => {
         if (!jRef.current) return;
         if (!jRef.current.jspreadsheet) {
@@ -28,10 +27,21 @@ function MultiValueCard({ calculation }) {
             ];
             if (calculation.name === "percentOfNormalPercipitation") {
                 cols = [
-                    // { title: ' ', width: 80 },
-                    { title: 'Godina', width: 106 },
-                    { title: 'Oborine', width: 106 },
-                    { title: 'PN', width: 106 },
+                    { title: 'Godina', width: 80 },
+                    { title: 'sij', width: 80 },
+                    { title: 'velj', width: 80 },
+                    { title: 'ožu', width: 80 },
+                    { title: 'tra', width: 80 },
+                    { title: 'svi', width: 80 },
+                    { title: 'lip', width: 80 },
+                    { title: 'srp', width: 80 },
+                    { title: 'kol', width: 80 },
+                    { title: 'ruj', width: 80 },
+                    { title: 'lis', width: 80 },
+                    { title: 'stu', width: 80 },
+                    { title: 'pro', width: 80 },  
+                    { title: 'Oborine uk.', width: 80 },
+                    { title: 'PN god.', width: 80 },
                 ]
             }
             else if (calculation.name === "drySeasonDuration") {
@@ -44,7 +54,9 @@ function MultiValueCard({ calculation }) {
             }
             else if (calculation.name === "drySeasonWaterDeficit" ||
                 calculation.name === "thornthwaiteWaterBalance" ||
-                calculation.name === "thornthwaitePET") {
+                calculation.name === "thornthwaitePET"
+            //    ||  calculation.name === "rainfallAnomalyIndex"
+                ) {
                 cols = [
                     { title: ' ', width: 80 },
                     { title: 'sij', width: 80 },
@@ -61,6 +73,27 @@ function MultiValueCard({ calculation }) {
                     { title: 'pro', width: 80 },
                 ]
             }
+            else if (  calculation.name === "rainfallAnomalyIndex"
+            ) {
+            cols = [
+                { title: 'Godina', width: 80 },
+                { title: 'sij', width: 80 },
+                { title: 'velj', width: 80 },
+                { title: 'ožu', width: 80 },
+                { title: 'tra', width: 80 },
+                { title: 'svi', width: 80 },
+                { title: 'lip', width: 80 },
+                { title: 'srp', width: 80 },
+                { title: 'kol', width: 80 },
+                { title: 'ruj', width: 80 },
+                { title: 'lis', width: 80 },
+                { title: 'stu', width: 80 },
+                { title: 'pro', width: 80 }, 
+                { title: 'Oborine uk.', width: 80 },
+                { title: 'Anomaly', width: 80 },
+                { title: 'RAI god.', width: 80 },
+            ]
+        }
 
 
             const options = {
@@ -77,6 +110,8 @@ function MultiValueCard({ calculation }) {
     }, [calculation.name])
 
     useEffect(() => {
+
+
         if (data) {
             // console.log("MultiValueCard", data,calculation.parameters);
             // const finalResult = [];
@@ -100,14 +135,13 @@ function MultiValueCard({ calculation }) {
                 }
             });
             const func = klimasoft[calculation.name].calculate;
+
             const res = func(...parameters);
 
-            // console.log("final", parameters, res.result);
+            jRef.current.jspreadsheet.setData(res.result);
 
             // if (Array.isArray(res.result) && Array.isArray(res.value)) {
 
-
-            jRef.current.jspreadsheet.setData(res.result);
             // }
             // else {
             //     jRef.current.jspreadsheet.setData([[...res.result, res.value]]);
@@ -115,21 +149,15 @@ function MultiValueCard({ calculation }) {
         }
     }, [calculation.name, calculation.parameters, data, station.Latitude, station.Longitude])
 
-
     return (
-        <div>
-            <h3>{calculation.title}</h3>
-            <p className={style.description}>{klimasoft[calculation.name].description}</p>
-            <div ref={jRef} className={style.gridtotal}>
-                <GridToolbar jRef={jRef} />
-            </div>
-
-        </div>
-
-    )
-
-
-
+            <div>
+                <h3>{calculation.title}</h3>
+                <p className={style.description}>{klimasoft[calculation.name].description}</p>
+                <div ref={jRef} className={style.gridtotal}>
+                    <GridToolbar jRef={jRef} />
+                </div>
+            </div>       
+    );
 }
 
 export default MultiValueCard;

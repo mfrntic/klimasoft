@@ -51,7 +51,7 @@ export function getCalculations() {
 
   return formule.map((f) => {
     const params = f.parameters;
-    console.log("PARAMS", params);
+    // console.log("PARAMS", params);
     return {
       selected: false,
       name: f.name,
@@ -61,7 +61,9 @@ export function getCalculations() {
         // console.log("param", p);
         return {
           parameter: p,
-          value: p === "oborine" ? "percipitation" : p === "temperatura" ? "meanTemp" : (f.defaultParamValues ? f.defaultParamValues[p] : "")
+          value:  p === "oborine" ? "percipitation" : 
+                  p === "temperatura" ? "meanTemp" : 
+                  (f.defaultParamValues ? f.defaultParamValues[p] : "")
         };
       }),
     };

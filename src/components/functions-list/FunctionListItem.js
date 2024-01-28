@@ -51,7 +51,9 @@ function FunctionListItem({ climateFunction }) {
           {climateFunction.parameters?.length > 0 && <div className={style.parameters}>
             <h4>Parametri:</h4>
             {climateFunction.parameters?.map((a) => {
-              return <ParameterItem key={a.parameter} parameter={a} functionName={funkcija.name} />
+              return <ParameterItem key={a.parameter}
+                parameter={a}
+                functionName={funkcija.name} />
             })}
           </div>}
         </div>
