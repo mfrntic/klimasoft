@@ -39,7 +39,7 @@ function MultiValueCard({ calculation }) {
                     { title: 'ruj', width: 80 },
                     { title: 'lis', width: 80 },
                     { title: 'stu', width: 80 },
-                    { title: 'pro', width: 80 },  
+                    { title: 'pro', width: 80 },
                     { title: 'Oborine uk.', width: 80 },
                     { title: 'PN god.', width: 80 },
                 ]
@@ -53,10 +53,9 @@ function MultiValueCard({ calculation }) {
                 ]
             }
             else if (calculation.name === "drySeasonWaterDeficit" ||
-                calculation.name === "thornthwaiteWaterBalance" ||
-                calculation.name === "thornthwaitePET"
-            //    ||  calculation.name === "rainfallAnomalyIndex"
-                ) {
+                calculation.name === "thornthwaiteWaterBalance"
+                //    ||  calculation.name === "rainfallAnomalyIndex"
+            ) {
                 cols = [
                     { title: ' ', width: 80 },
                     { title: 'sij', width: 80 },
@@ -73,27 +72,46 @@ function MultiValueCard({ calculation }) {
                     { title: 'pro', width: 80 },
                 ]
             }
-            else if (  calculation.name === "rainfallAnomalyIndex"
+            else if (calculation.name === "thornthwaitePET") {
+                cols = [
+                    { title: ' ', width: 80 },
+                    { title: 'sij', width: 80 },
+                    { title: 'velj', width: 80 },
+                    { title: 'ožu', width: 80 },
+                    { title: 'tra', width: 80 },
+                    { title: 'svi', width: 80 },
+                    { title: 'lip', width: 80 },
+                    { title: 'srp', width: 80 },
+                    { title: 'kol', width: 80 },
+                    { title: 'ruj', width: 80 },
+                    { title: 'lis', width: 80 },
+                    { title: 'stu', width: 80 },
+                    { title: 'pro', width: 80 },
+                    { title: 'ukupno', width: 80 },
+                    
+                ]
+            }
+            else if (calculation.name === "rainfallAnomalyIndex"
             ) {
-            cols = [
-                { title: 'Godina', width: 80 },
-                { title: 'sij', width: 80 },
-                { title: 'velj', width: 80 },
-                { title: 'ožu', width: 80 },
-                { title: 'tra', width: 80 },
-                { title: 'svi', width: 80 },
-                { title: 'lip', width: 80 },
-                { title: 'srp', width: 80 },
-                { title: 'kol', width: 80 },
-                { title: 'ruj', width: 80 },
-                { title: 'lis', width: 80 },
-                { title: 'stu', width: 80 },
-                { title: 'pro', width: 80 }, 
-                { title: 'Oborine uk.', width: 80 },
-                { title: 'Anomaly', width: 80 },
-                { title: 'RAI god.', width: 80 },
-            ]
-        }
+                cols = [
+                    { title: 'Godina', width: 80 },
+                    { title: 'sij', width: 80 },
+                    { title: 'velj', width: 80 },
+                    { title: 'ožu', width: 80 },
+                    { title: 'tra', width: 80 },
+                    { title: 'svi', width: 80 },
+                    { title: 'lip', width: 80 },
+                    { title: 'srp', width: 80 },
+                    { title: 'kol', width: 80 },
+                    { title: 'ruj', width: 80 },
+                    { title: 'lis', width: 80 },
+                    { title: 'stu', width: 80 },
+                    { title: 'pro', width: 80 },
+                    { title: 'Oborine uk.', width: 80 },
+                    { title: 'Anomaly', width: 80 },
+                    { title: 'RAI god.', width: 80 },
+                ]
+            }
 
 
             const options = {
@@ -150,13 +168,13 @@ function MultiValueCard({ calculation }) {
     }, [calculation.name, calculation.parameters, data, station.Latitude, station.Longitude])
 
     return (
-            <div>
-                <h3>{calculation.title}</h3>
-                <p className={style.description}>{klimasoft[calculation.name].description}</p>
-                <div ref={jRef} className={style.gridtotal}>
-                    <GridToolbar jRef={jRef} />
-                </div>
-            </div>       
+        <div>
+            <h3>{calculation.title}</h3>
+            <p className={style.description}>{klimasoft[calculation.name].description}</p>
+            <div ref={jRef} className={style.gridtotal}>
+                <GridToolbar jRef={jRef} />
+            </div>
+        </div>
     );
 }
 

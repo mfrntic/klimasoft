@@ -541,7 +541,7 @@ export const thornthwaitePET = {
             for (var god of godine) {
                 const t2 = c(temperatura[i].slice(1, 13), god, god);
                 if (t2 && t2[1]) {
-                    res.push([god.toString(), ...t2[1]]);
+                    res.push([god.toString(), ...t2[1], round(sum(t2[1]), 2)]);
                 }
                 i++;
             }
@@ -552,7 +552,7 @@ export const thornthwaitePET = {
 
         return {
             value: resUk[1],
-            result: [...res, ["t", ...temp], ["KF", ...resUk[0]], ["PET", ...resUk[1]]]
+            result: [...res, ["t", ...temp, round(average(temp), 2)], ["KF", ...resUk[0], ""], ["PET", ...resUk[1], round(sum(resUk[1].map(a => Number(a))), 2)]]
         }
     },
     name: "thornthwaitePET",
@@ -1226,7 +1226,7 @@ export const percentOfNormalPercipitation = {
         const resArr = [];
         for (const p of oborine_calc) {
             if (isNumber(p.value)) {
-                resArr.push([p.godina, ...mjeseci_pet.filter(a=>a.godina === p.godina).map(m=>m.pet_mj), p.value, round(p.value / meanP * 100, 2)]);
+                resArr.push([p.godina, ...mjeseci_pet.filter(a => a.godina === p.godina).map(m => m.pet_mj), p.value, round(p.value / meanP * 100, 2)]);
             }
             // else {
             //     resArr.push([p.godina, "", ""]);
